@@ -1,0 +1,10 @@
+.DS_Store
+.build/
+build/
+dist/
+*.log
+.swiftpm/
+*.llmbo-backup
+CLAUDE.md
+Social/
+Design/prompt-antigravity.md

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Vigia do LlMBO: o próprio executável do app com --watchdog, a cada 20 s (Watchdog.swift).
+     Vai para Contents/Library/LaunchAgents e é registrado pelo app com SMAppService.agent. -->
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.llmbo.app.watchdog</string>
+	<key>BundleProgram</key>
+	<string>Contents/MacOS/LlMBO</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>LlMBO</string>
+		<string>--watchdog</string>
+	</array>
+	<key>AssociatedBundleIdentifiers</key>
+	<array>
+		<string>com.llmbo.app</string>
+	</array>
+	<key>StartInterval</key>
+	<integer>20</integer>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>ProcessType</key>
+	<string>Background</string>
+</dict>
+</plist>

@@ -1,0 +1,237 @@
+#!/bin/sh
+# LlMBO — avisa o app sobre o estado de um agente.
+# uso: llmbo-signal <agente|auto> <busy|idle> [--stdin] [kind]
+# Com --stdin, lê o JSON do hook (Claude Code / Antigravity / Gemini) para separar sessões simultâneas.
+support="$HOME/Library/Application Support/LlMBO"
+
+# Barra de status do Claude Code (opcional, aba Uso): guarda o JSON que ela recebe, com os limites de uso
+# (rate_limits.five_hour / seven_day: used_percentage e resets_at), e repassa para a barra que o usuário já
+# tinha (statusline-chain); sem uma, mostra os limites numa linha curta.
+if [ "$1" = "statusline" ]; then
+  mkdir -p "$support/usage"
+  input=$(cat)
+  printf '%s' "$input" > "$support/usage/claude-statusline.json.tmp" &&
+    mv -f "$support/usage/claude-statusline.json.tmp" "$support/usage/claude-statusline.json"
+  if [ -s "$support/statusline-chain" ]; then
+    printf '%s' "$input" | /bin/sh -c "$(cat "$support/statusline-chain")"
+    exit $?
+  fi
+  pct() { printf '%s' "$input" | plutil -extract "rate_limits.$1.used_percentage" raw -o - - 2>/dev/null | cut -d. -f1; }
+  five=$(pct five_hour)
+  week=$(pct seven_day)
+  line=""
+  [ -n "$five" ] && line="5h $five%"
+  [ -n "$week" ] && line="${line:+$line · }7d $week%"
+  [ -n "$line" ] && printf '%s\n' "$line"
+  exit 0
+fi
+
+# Tarefas longas (build, render, download…): segura o Mac acordado enquanto elas rodam, mesmo sem agente.
+#   llmbo-signal hold [--name NOME] -- comando args…   roda o comando e segura até ele terminar
+#   llmbo-signal hold --pid PID [--name NOME]          segura enquanto um processo que já roda existir
+#   llmbo-signal hold --minutes N [--name NOME]        segura por N minutos (máx. 1440)
+#   llmbo-signal release [ID]                          solta (sem ID, todas)
+# Cada tarefa é um arquivo JSON em holds/; o app solta sozinho quando o processo morre ou o prazo vence.
+if [ "$1" = "hold" ]; then
+  shift
+  name=""; pid=""; minutes=""
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --name) name="$2"; shift 2 ;;
+      --pid) pid=$(printf '%s' "$2" | tr -cd '0-9'); shift 2 ;;
+      --minutes) minutes=$(printf '%s' "$2" | tr -cd '0-9'); shift 2 ;;
+      --) shift; break ;;
+      *) break ;;
+    esac
+  done
+  mkdir -p "$support/holds"
+  now=$(date +%s)
+  write_hold() {   # arquivo, nome, pid, até
+    clean=$(printf '%s' "$2" | tr -d '"\\' | tr '\n\t' '  ' | cut -c1-80)
+    printf '{"name":"%s","pid":%s,"until":%s,"source":"cli","started":%s}\n' \
+      "$clean" "${3:-null}" "${4:-null}" "$now" > "$1"
+  }
+  if [ $# -gt 0 ]; then
+    f="$support/holds/cmd-$$"
+    write_hold "$f" "${name:-$*}" "$$" ""
+    trap 'rm -f "$f"' EXIT
+    trap 'exit 130' INT TERM HUP
+    "$@"
+    exit $?
+  fi
+  if [ -n "$pid" ]; then
+    kill -0 "$pid" 2>/dev/null || { echo "llmbo-signal: processo $pid não existe" >&2; exit 1; }
+    write_hold "$support/holds/pid-$pid" "${name:-PID $pid}" "$pid" ""
+    echo "pid-$pid"
+    exit 0
+  fi
+  if [ -n "$minutes" ] && [ "$minutes" -gt 0 ]; then
+    [ "$minutes" -gt 1440 ] && minutes=1440
+    id="timer-$now"
+    write_hold "$support/holds/$id" "${name:-$minutes min}" "" "$((now + minutes * 60))"
+    echo "$id"
+    exit 0
+  fi
+  echo "uso: llmbo-signal hold [--name NOME] (-- comando… | --pid PID | --minutes N)" >&2
+  exit 2
+fi
+if [ "$1" = "release" ]; then
+  if [ -n "$2" ]; then rm -f "$support/holds/$(printf '%s' "$2" | tr -cd 'A-Za-z0-9-_')"
+  else rm -f "$support/holds/"*; fi
+  exit 0
+fi
+
+agent="$1"
+state="$2"
+dir="$support/signals"
+mkdir -p "$dir"
+
+payload=""
+session=""
+if [ "$3" = "--stdin" ]; then
+  payload=$(cat)
+elif [ "$3" = "--session" ]; then
+  # Plugin do OpenCode: o id da sessão vem como argumento
+  session=$(printf '%s' "$4" | tr -cd 'A-Za-z0-9-_')
+  shift 2
+fi
+
+# Qual Antigravity está acima deste processo (ou vazio): "Antigravity IDE.app/" → IDE, "Antigravity.app/" → app,
+# "/.gemini/bin/agy" → CLI.
+# Sobe a árvore inteira: o agy do IDE (agy --hub) é filho do IDE, então só é "CLI" se nenhum app/IDE aparecer acima.
+antigravity_ancestor() {
+  pid=$PPID
+  i=0
+  agy=""
+  while [ "$pid" -gt 1 ] 2>/dev/null && [ $i -lt 14 ]; do
+    cmd=$(ps -o args= -p "$pid" 2>/dev/null)
+    case "$cmd" in
+      *"Antigravity IDE.app/"*) echo "antigravity-ide"; return ;;
+      *"Antigravity.app/"*) echo "antigravity"; return ;;
+      *"/.gemini/bin/agy"* | *"/bin/agy"* | *" agy "* | *" agy"*) agy="antigravity-cli" ;;
+    esac
+    pid=$(ps -o ppid= -p "$pid" 2>/dev/null | tr -d ' ')
+    i=$((i + 1))
+  done
+  echo "$agy"
+}
+
+# O Copilot do VS Code pode ler os hooks do Claude Code (~/.claude/settings.json) e do Copilot CLI. Se não há um
+# processo "claude"/"copilot" acima deste e há VS Code, o sinal é do Copilot do VS Code. (A extensão do Claude
+# Code e o CLI no terminal do VS Code rodam o próprio "claude", então continuam como Claude Code.)
+vscode_owner() {
+  want="$1"
+  pid=$PPID
+  i=0
+  vs=""
+  while [ "$pid" -gt 1 ] 2>/dev/null && [ $i -lt 14 ]; do
+    cmd=$(ps -o args= -p "$pid" 2>/dev/null)
+    exe=$(ps -o comm= -p "$pid" 2>/dev/null)
+    case "$cmd" in
+      *llmbo-signal*) ;;   # o shell que roda este próprio hook ("… llmbo-signal claude busy") não conta
+      *)
+        # É o agente se o executável se chama assim, ou se é "node …/claude" (1º ou 2º item do comando).
+        first=$(printf '%s' "$cmd" | awk '{print $1}')
+        second=$(printf '%s' "$cmd" | awk '{print $2}')
+        if [ "${exe##*/}" = "$want" ] || [ "${first##*/}" = "$want" ] || [ "${second##*/}" = "$want" ]; then
+          return
+        fi
+        ;;
+    esac
+    case "$cmd" in *"Visual Studio Code"*".app/"*) vs=1 ;; esac
+    pid=$(ps -o ppid= -p "$pid" 2>/dev/null | tr -d ' ')
+    i=$((i + 1))
+  done
+  [ -n "$vs" ] && echo "copilot-vscode"
+}
+
+if [ "$agent" = "claude" ] || [ "$agent" = "copilot" ]; then
+  found=$(vscode_owner "$agent")
+  [ -n "$found" ] && agent="$found"
+fi
+
+# O Gemini CLI e o Antigravity CLI dividem a pasta ~/.gemini: se o hook "gemini" foi chamado de dentro de um
+# Antigravity, o sinal é do Antigravity.
+if [ "$agent" = "gemini" ]; then
+  found=$(antigravity_ancestor)
+  [ -n "$found" ] && agent="$found"
+fi
+
+# "auto" vem do ~/.gemini/config/hooks.json, que o Antigravity (app), o Antigravity IDE e o Antigravity CLI
+# dividem. Quem chamou o hook é descoberto subindo a árvore de processos: um ancestral dentro de
+# "Antigravity IDE.app" é o IDE; dentro de "Antigravity.app", o app; senão, o CLI (agy no terminal).
+if [ "$agent" = "auto" ]; then
+  found=$(antigravity_ancestor)
+  agent="${found:-antigravity-cli}"
+fi
+
+name="$agent"
+[ -n "$session" ] && name="$agent.$session"
+if [ -n "$payload" ]; then
+  # Id da sessão: session_id (Claude), conversationId (Antigravity), sessionId (Copilot), conversation_id (Cursor)
+  sid=$(printf '%s' "$payload" | tr -d '\n' | sed -E -n 's/.*"(session_id|conversationId|sessionId|conversation_id)"[[:space:]]*:[[:space:]]*"([^"]*)".*/\2/p' | tr -cd 'A-Za-z0-9-_')
+  [ -n "$sid" ] && name="$agent.$sid"
+fi
+
+# Pedindo aprovação não é fim de trabalho — o agente só continua depois da sua resposta. Vira "waiting", e o
+# app decide se segura o Mac acordado para você aprovar à distância ("Esperar acordado por aprovações").
+# Claude Code / Qwen Code: Notification "permission_prompt" (ou "elicitation_dialog", pergunta de um MCP);
+# Gemini CLI: Notification "ToolPermission".
+if [ "$state" = "idle" ] && [ -n "$payload" ] && printf '%s' "$payload" | tr -d '\n' |
+  grep -Eq '"notification_type"[[:space:]]*:[[:space:]]*"(permission_prompt|elicitation_dialog|ToolPermission)"'; then
+  state="waiting"
+fi
+# Claude Code bateu no limite de uso (StopFailure "rate_limit"): ele espera o reset e continua sozinho
+# (autoContinueAtUsageLimit). Vira "quota", e o app decide se acorda o Mac antes do reset ("Quando bater no limite").
+# Ao continuar, a Notification "quota_auto_resume_fired" marca trabalho de novo.
+if [ -n "$payload" ]; then
+  flat=$(printf '%s' "$payload" | tr -d '\n')
+  if printf '%s' "$flat" | grep -Eq '"hook_event_name"[[:space:]]*:[[:space:]]*"StopFailure"' &&
+     printf '%s' "$flat" | grep -Eq '"error"[[:space:]]*:[[:space:]]*"rate_limit"'; then
+    state="quota"
+  elif printf '%s' "$flat" | grep -Eq '"notification_type"[[:space:]]*:[[:space:]]*"quota_auto_resume_fired"'; then
+    state="busy"
+  fi
+fi
+# Antigravity: as ferramentas ask_permission e ask_question pedem autorização ou resposta do usuário e bloqueiam a execução (PreToolUse).
+# Ao estourar a cota (Stop com erro 429 / RESOURCE_EXHAUSTED / individual quota reached), vira "quota".
+case "$agent" in antigravity*)
+  if [ "$state" = "busy" ] && [ "$4" = "pre-tool" ] && [ -n "$payload" ] && printf '%s' "$payload" | grep -Eq 'ask_permission|ask_question'; then
+    state="waiting"
+  elif [ "$state" = "idle" ] && [ "$4" = "stop" ] && [ -n "$payload" ]; then
+    flat=$(printf '%s' "$payload" | tr -d '\n')
+    if printf '%s' "$flat" | grep -Eq '"terminationReason"[[:space:]]*:[[:space:]]*"(ERROR|MAX_TOKEN_BUDGET_EXCEEDED)"' &&
+       printf '%s' "$flat" | grep -Eq 'RESOURCE_EXHAUSTED|check quota|code 429|individual quota reached|MODEL_CAPACITY_EXHAUSTED'; then
+      state="quota"
+    fi
+  fi ;;
+esac
+
+# Grava ao lado e troca com mv: a troca avisa o LlMBO na hora (ele vigia a pasta) e ele nunca lê o arquivo pela metade.
+printf '%s %s\n' "$state" "$(date +%s)" > "$dir/.$name.$$" && mv -f "$dir/.$name.$$" "$dir/$name"
+# Histórico curto dos limites estourados (só hora, agente e estado, nada da conversa), para conferir depois
+# como o LlMBO reagiu: o arquivo de sinal é sobrescrito a cada aviso.
+if [ "$state" = "quota" ]; then
+  printf '%s %s quota\n' "$(date '+%Y-%m-%d %H:%M:%S')" "$agent" >> "$support/quota-events.log"
+  tail -n 50 "$support/quota-events.log" > "$support/quota-events.tmp" && mv "$support/quota-events.tmp" "$support/quota-events.log"
+fi
+
+# Retorna JSON para Antigravity/Gemini não bloquearem o loop de execução
+kind="$4"
+if [ "$kind" = "silent" ]; then
+  # Codex/Qwen: texto no stdout vira contexto do modelo; não imprime nada
+  :
+elif [ "$kind" = "continue" ]; then
+  # Cursor (beforeSubmitPrompt): sem isso o prompt é bloqueado
+  printf '{"continue":true}\n'
+elif [ "$kind" = "pre-tool" ]; then
+  printf '{"decision":"allow"}\n'
+elif [ -n "$kind" ]; then
+  printf '{}\n'
+elif [ -n "$payload" ] && echo "$payload" | grep -q '"toolCall"'; then
+  printf '{"decision":"allow"}\n'
+else
+  printf '{}\n'
+fi
+
+exit 0

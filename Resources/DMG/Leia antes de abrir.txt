@@ -1,0 +1,34 @@
+LlMBO — Leia antes de abrir  ·  Read me before opening
+======================================================
+
+PORTUGUÊS
+
+1. Arraste o LlMBO para a pasta Aplicativos.
+2. Abra o LlMBO. O macOS vai mostrar um aviso dizendo que não pode verificar o app
+   ou o desenvolvedor, e vai deixar só "Concluído" ou "Mover para o Lixo".
+   Clique em "Concluído". Isso é esperado: o LlMBO é grátis e de código aberto,
+   e não paga a assinatura anual da Apple (Apple Developer Program) que tira esse aviso.
+3. Abra Ajustes do Sistema › Privacidade e Segurança, role até o fim
+   e clique em "Abrir Mesmo Assim" ao lado do LlMBO. Confirme com a sua senha.
+4. Pronto. Isso só é preciso uma vez; as atualizações seguintes chegam pelo próprio app.
+
+Prefere o Terminal? Este comando baixa e instala sem o aviso:
+   curl -fsSL https://raw.githubusercontent.com/fcknferreira/LlMBO/main/install.sh | bash
+
+Código-fonte: https://github.com/fcknferreira/LlMBO
+
+
+ENGLISH
+
+1. Drag LlMBO to the Applications folder.
+2. Open LlMBO. macOS will say it can't verify the app or its developer, offering only
+   "Done" or "Move to Trash". Click "Done". This is expected: LlMBO is free and open
+   source, and doesn't pay for Apple's yearly signing program that removes this warning.
+3. Open System Settings › Privacy & Security, scroll to the bottom and click
+   "Open Anyway" next to LlMBO. Confirm with your password.
+4. Done. You only do this once; later updates come through the app itself.
+
+Prefer the Terminal? This command downloads and installs without the warning:
+   curl -fsSL https://raw.githubusercontent.com/fcknferreira/LlMBO/main/install.sh | bash
+
+Source code: https://github.com/fcknferreira/LlMBO

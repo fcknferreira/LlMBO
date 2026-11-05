@@ -1,0 +1,8 @@
+{
+ "_comment": "Espanhol da América Latina: só as diferenças em relação ao espanhol (es). A Apple usa “Configuración” onde a Espanha usa “Ajustes”.",
+ "k121": "macOS necesita tu aprobación en Configuración del Sistema › Ítems de inicio.",
+ "k123": "Abrir Configuración…",
+ "k369": "Activa LlMBO en Configuración del Sistema › Privacidad y seguridad › Grabación de pantalla y audio del sistema (en la parte de audio del sistema). Mientras tanto, el volumen de las otras apps también sube durante el aviso.",
+ "k371": "Denegado en Configuración del Sistema. Hasta que lo permitas, el volumen de las otras apps también sube durante el aviso.",
+ "k396": "Sin el permiso, los avisos llegan por el Editor de Scripts, con su nombre e icono. Permite LlMBO en Configuración del Sistema › Notificaciones."
+}
