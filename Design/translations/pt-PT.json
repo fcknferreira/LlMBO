@@ -409,8 +409,8 @@
  "k408": "Versão %@ disponível. Atualize no separador Acerca.",
  "k409": "Tudo corre neste Mac: o LlMBO não recolhe nem envia dados. Só lê os processos e as pastas dos agentes e, com a sua autorização, liga e desliga o repouso. A única ligação é a consulta ao GitHub por versões novas, que pode desligar acima.",
  "k410": "Atualizações",
- "k411": "Procurar automaticamente uma vez por dia",
- "k412": "O LlMBO pergunta ao GitHub qual é a última versão publicada. Só isso sai do Mac: nenhum dado seu vai junto. Atualizar é sempre com o seu clique, e a versão nova só é aceite se tiver a mesma assinatura desta.",
+ "k411": "Atualização automática",
+ "k412": "Uma vez por dia o LlMBO pergunta ao GitHub se há versão nova. Se houver, descarrega-a, verifica se tem a mesma assinatura desta e instala-a sozinho assim que nenhum agente estiver a trabalhar, sem abrir janelas; recebe um aviso. Só a pergunta sai do Mac: nenhum dado seu vai junto. Desligado, não procura; use Procurar atualizações.",
  "k413": "Encontrou um problema?",
  "k414": "Abre uma issue nova no GitHub já com a versão do LlMBO, do macOS, o modelo do Mac e o fim do registo de erros (com o seu nome de utilizador escondido). Revê e edita tudo antes de enviar.",
  "k415": "Versão %@ disponível",
@@ -437,5 +437,9 @@
  "k436": "O ficheiro descarregado não é o LlMBO.",
  "k437": "O ficheiro descarregado está danificado.",
  "k438": "Sem permissão para substituir a app em %@.",
- "k439": "O LlMBO não recolhe dados pessoais. Só lê os processos e as pastas dos agentes; a única ligação é a consulta ao GitHub por versões novas, que pode desligar."
+ "k439": "O LlMBO não recolhe dados pessoais. Só lê os processos e as pastas dos agentes; a única ligação é a consulta ao GitHub por versões novas, que pode desligar.",
+ "k440": "Site",
+ "k441": "Redes sociais",
+ "k442": "Versão de testes: por enquanto o LlMBO foi testado em poucos Macs e com poucos agentes. Se algo correr mal, use Comunicar problema.",
+ "k443": "Atualizado para a versão %@."
 }

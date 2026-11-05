@@ -52,6 +52,7 @@ struct IconChoice: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .handCursor()
         .help(String(localized: "Ícone \(style.title.lowercased())"))
         .accessibilityLabel(String(localized: "Ícone \(style.title.lowercased())"))
         .accessibilityAddTraits(selected ? .isSelected : [])

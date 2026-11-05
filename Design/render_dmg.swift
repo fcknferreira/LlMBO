@@ -81,19 +81,23 @@ func render(scale: CGFloat, to file: String) {
 
     draw("Antes de abrir · Before you open", at: CGPoint(x: 40, y: y(246) - 14),
          font: .systemFont(ofSize: 10, weight: .semibold), color: bronze1)
-    let steps: [(String, String)] = [
-        ("Arraste o LlMBO para Aplicativos e abra.", "Drag LlMBO to Applications and open it."),
-        ("O macOS vai dizer que não pode verificar o app. É normal: o LlMBO é grátis e não paga a assinatura da Apple.",
-         "macOS will say it can't verify the app. That's expected: LlMBO is free and doesn't pay for Apple's signing."),
-        ("Ajustes do Sistema › Privacidade e Segurança › Abrir Mesmo Assim.",
-         "System Settings › Privacy & Security › Open Anyway."),
+    // O passo 2 vai em vermelho: o macOS destaca "Mover para o Lixo" e não oferece mais "Abrir" no aviso.
+    let warn = color(0xC0392B)
+    let steps: [(String, String, Bool)] = [
+        ("Arraste o LlMBO para Aplicativos e abra.", "Drag LlMBO to Applications and open it.", false),
+        ("O macOS vai sugerir \u{201C}Mover para o Lixo\u{201D}. NÃO clique: clique em \u{201C}Concluído\u{201D}. O aviso só existe porque o LlMBO é grátis e não paga a Apple.",
+         "macOS will suggest \u{201C}Move to Trash\u{201D}. DON\u{2019}T click it: click \u{201C}Done\u{201D}. The warning is only there because LlMBO is free and doesn\u{2019}t pay Apple.", true),
+        ("Ajustes do Sistema › Privacidade e Segurança › Abrir Mesmo Assim (aparece por ~1 h) e a senha.",
+         "System Settings › Privacy & Security › Open Anyway (shown for ~1 hour), then your password.", false),
     ]
     var top: CGFloat = 268
     for (i, s) in steps.enumerated() {
-        draw("\(i + 1)", at: CGPoint(x: 40, y: y(top) - 18), font: serif(19, italic: true), color: bronze2)
-        draw(s.0, at: CGPoint(x: 62, y: y(top)), font: .systemFont(ofSize: 11.5), color: text, width: W - 110)
-        draw(s.1, at: CGPoint(x: 62, y: y(top + 16) - (i == 1 ? 14 : 0)), font: .systemFont(ofSize: 10.5), color: muted, width: W - 110)
-        top += i == 1 ? 48 : 34
+        draw("\(i + 1)", at: CGPoint(x: 40, y: y(top) - 18), font: serif(19, italic: true), color: s.2 ? warn : bronze2)
+        draw(s.0, at: CGPoint(x: 62, y: y(top)), font: .systemFont(ofSize: 11.5, weight: s.2 ? .semibold : .regular),
+             color: s.2 ? warn : text, width: W - 110)
+        draw(s.1, at: CGPoint(x: 62, y: y(top + 16) - (i == 1 ? 14 : 0)), font: .systemFont(ofSize: 10.5),
+             color: s.2 ? warn.withAlphaComponent(0.8) : muted, width: W - 110)
+        top += i == 1 ? 62 : 34
     }
     ctx.restoreGState()
     NSGraphicsContext.restoreGraphicsState()

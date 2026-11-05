@@ -400,8 +400,8 @@
  "k408": "Đã có phiên bản %@. Cập nhật trong tab Giới thiệu.",
  "k409": "Mọi thứ chạy trên máy Mac này: LlMBO không thu thập hay gửi dữ liệu. Nó chỉ đọc tiến trình và thư mục của các agent và, khi bạn cho phép, bật tắt chế độ ngủ. Kết nối duy nhất là kiểm tra phiên bản mới trên GitHub, bạn có thể tắt ở trên.",
  "k410": "Cập nhật",
- "k411": "Tự kiểm tra mỗi ngày một lần",
- "k412": "LlMBO hỏi GitHub phiên bản mới nhất đã phát hành. Chỉ có vậy rời khỏi máy Mac: không dữ liệu nào của bạn đi kèm. Cập nhật luôn cần bạn bấm, và phiên bản mới chỉ được chấp nhận nếu có cùng chữ ký với bản này.",
+ "k411": "Tự động cập nhật",
+ "k412": "Mỗi ngày một lần LlMBO hỏi GitHub xem có phiên bản mới không. Nếu có, nó tải về, kiểm tra chữ ký giống bản này và tự cài khi không có agent nào đang làm việc, không mở cửa sổ; bạn sẽ nhận thông báo. Chỉ câu hỏi đó rời khỏi máy Mac, không có dữ liệu nào của bạn. Khi tắt, nó không kiểm tra; hãy dùng Kiểm tra bản cập nhật.",
  "k413": "Gặp sự cố?",
  "k414": "Mở một issue mới trên GitHub, điền sẵn phiên bản LlMBO và macOS, mẫu máy Mac và phần cuối nhật ký lỗi (đã ẩn tên người dùng). Bạn xem và sửa mọi thứ trước khi gửi.",
  "k415": "Đã có phiên bản %@",
@@ -428,5 +428,9 @@
  "k436": "Tệp đã tải không phải LlMBO.",
  "k437": "Tệp đã tải bị hỏng.",
  "k438": "Không có quyền thay ứng dụng trong %@.",
- "k439": "LlMBO không thu thập dữ liệu cá nhân. Nó chỉ đọc tiến trình và thư mục của các agent; kết nối duy nhất là kiểm tra phiên bản mới trên GitHub, có thể tắt."
+ "k439": "LlMBO không thu thập dữ liệu cá nhân. Nó chỉ đọc tiến trình và thư mục của các agent; kết nối duy nhất là kiểm tra phiên bản mới trên GitHub, có thể tắt.",
+ "k440": "Trang web",
+ "k441": "Mạng xã hội",
+ "k442": "Bản thử nghiệm: đến nay LlMBO mới được thử trên vài máy Mac và vài agent. Nếu có trục trặc, hãy dùng Báo cáo sự cố.",
+ "k443": "Đã cập nhật lên phiên bản %@."
 }

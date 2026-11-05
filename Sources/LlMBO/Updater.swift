@@ -13,6 +13,9 @@ enum Project {
     /// um pacote assinado por ele: quem tomasse a conta do GitHub não conseguiria entregar outro app.
     static let signingLeaf = "9e652604d46ed9ddec648e1beeb56bf92d869d77"
 
+    /// Selo "BETA" ao lado da versão (aba Sobre). Tirar quando o LlMBO tiver sido testado além do Mac do autor.
+    static let beta = true
+
     static var version: String { Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0" }
     static var build: String { Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "0" }
 }
@@ -110,12 +113,42 @@ final class Updater: ObservableObject {
     var available: Release? { if case .available(let r) = state { return r }; return nil }
 
     private var timer: Timer?
+    private var autoInstallPending = false
+    /// Marca deixada antes de uma atualização automática: a versão nova abre sem janela e avisa que atualizou.
+    private static let autoMarker = Paths.support.appendingPathComponent("auto-updated")
+
+    /// Com a atualização automática ligada, instala a versão achada em segundo plano quando o Mac está livre:
+    /// nenhum agente trabalhando, nenhuma tarefa longa e o LlMBO sem segurar o repouso.
+    func tryAutoInstall() {
+        guard autoInstallPending, autoCheck, Self.isInstalledCopy, let release = available else { return }
+        let engine = Engine.shared
+        // LLMBO_TEST_AUTOUPDATE_ANYTIME: só para teste (a sessão que testa é ela mesma um agente trabalhando).
+        let anytime = ProcessInfo.processInfo.environment["LLMBO_TEST_AUTOUPDATE_ANYTIME"] != nil
+        guard anytime || (!engine.holding && engine.holds.isEmpty && !engine.statuses.contains(where: \.active)) else { return }
+        autoInstallPending = false
+        AppLog.write("atualização automática: \(Project.version) → \(release.version)")
+        try? release.version.write(to: Self.autoMarker, atomically: true, encoding: .utf8)
+        Task {
+            await install()
+            // Falhou (o app continua aberto): tira a marca; tenta de novo na próxima consulta, no dia seguinte.
+            if case .failed = state { try? FileManager.default.removeItem(at: Self.autoMarker) }
+        }
+    }
+
+    /// Ao abrir: se a abertura veio de uma atualização automática (marca com menos de 10 min), apaga a marca e
+    /// devolve true — o app não abre a janela e só avisa.
+    static func consumeAutoMarker() -> Bool {
+        guard let m = (try? FileManager.default.attributesOfItem(atPath: autoMarker.path))?[.modificationDate] as? Date
+        else { return false }
+        try? FileManager.default.removeItem(at: autoMarker)
+        return Date().timeIntervalSince(m) < 600
+    }
     private static let lastCheckKey = "updateLastCheck"
 
     /// Chamado ao abrir: confere uma vez por dia (se a opção estiver ligada), sem incomodar quando não há nada.
     func start() {
-        timer = Timer.scheduledTimer(withTimeInterval: 3600, repeats: true) { _ in
-            Task { @MainActor in Updater.shared.checkIfDue() }
+        timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { _ in
+            Task { @MainActor in Updater.shared.checkIfDue(); Updater.shared.tryAutoInstall() }
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 20) { Updater.shared.checkIfDue() }
     }
@@ -149,9 +182,10 @@ final class Updater: ObservableObject {
             let page = (json["html_url"] as? String).flatMap(URL.init(string:)) ?? Project.releasesURL
             if Self.isNewer(version, than: Project.version), let zip, let zipURL = URL(string: zip) {
                 let release = Release(version: version, notes: json["body"] as? String ?? "", zip: zipURL, page: page)
-                let wasNew = available != release
                 state = .available(release)
-                if wasNew && !manual { Notifier.shared.updateAvailable(version) }
+                // Atualização automática: instala sozinho assim que nenhum agente estiver trabalhando (tryAutoInstall,
+                // a cada minuto). Achada pelo botão, espera o clique da pessoa, que está olhando.
+                if !manual { autoInstallPending = true; tryAutoInstall() }
             } else {
                 state = manual ? .upToDate : .idle
             }

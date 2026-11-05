@@ -409,8 +409,8 @@
  "k408": "Versione %@ disponibile. Aggiorna nella scheda Info.",
  "k409": "Tutto gira su questo Mac: LlMBO non raccoglie né invia dati. Legge solo i processi e le cartelle degli agenti e, con il tuo permesso, attiva e disattiva lo stop. L’unica connessione è il controllo delle nuove versioni su GitHub, che puoi disattivare qui sopra.",
  "k410": "Aggiornamenti",
- "k411": "Controlla automaticamente una volta al giorno",
- "k412": "LlMBO chiede a GitHub qual è l’ultima versione pubblicata. Solo questo esce dal Mac: nessun tuo dato. L’aggiornamento avviene sempre con un tuo clic, e la nuova versione è accettata solo se ha la stessa firma di questa.",
+ "k411": "Aggiornamenti automatici",
+ "k412": "Una volta al giorno LlMBO chiede a GitHub se c’è una nuova versione. Se c’è, la scarica, controlla che abbia la stessa firma di questa e la installa da solo appena nessun agente sta lavorando, senza aprire finestre; ricevi un avviso. Dal Mac esce solo la domanda: nessun tuo dato. Disattivato, non cerca; usa Controlla aggiornamenti.",
  "k413": "Hai trovato un problema?",
  "k414": "Apre una nuova issue su GitHub già compilata con le versioni di LlMBO e macOS, il modello del Mac e la fine del registro errori (con il tuo nome utente nascosto). Rivedi e modifichi tutto prima di inviare.",
  "k415": "Versione %@ disponibile",
@@ -437,5 +437,9 @@
  "k436": "Il file scaricato non è LlMBO.",
  "k437": "Il file scaricato è danneggiato.",
  "k438": "Nessun permesso per sostituire l’app in %@.",
- "k439": "LlMBO non raccoglie dati personali. Legge solo i processi e le cartelle degli agenti; l’unica connessione è il controllo delle nuove versioni su GitHub, che puoi disattivare."
+ "k439": "LlMBO non raccoglie dati personali. Legge solo i processi e le cartelle degli agenti; l’unica connessione è il controllo delle nuove versioni su GitHub, che puoi disattivare.",
+ "k440": "Sito web",
+ "k441": "Social",
+ "k442": "Versione di prova: finora LlMBO è stato provato su pochi Mac e con pochi agenti. Se qualcosa va storto, usa Segnala un problema.",
+ "k443": "Aggiornato alla versione %@."
 }

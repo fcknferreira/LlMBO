@@ -409,8 +409,8 @@
  "k408": "Versie %@ beschikbaar. Werk bij op het tabblad Over.",
  "k409": "Alles draait op deze Mac: LlMBO verzamelt en verstuurt geen gegevens. Het leest alleen de processen en mappen van de agents en zet met je toestemming de sluimerstand aan en uit. De enige verbinding is het zoeken naar nieuwe versies op GitHub, wat je hierboven kunt uitzetten.",
  "k410": "Updates",
- "k411": "Eén keer per dag automatisch zoeken",
- "k412": "LlMBO vraagt GitHub welke versie het laatst is gepubliceerd. Alleen dat verlaat de Mac: geen van je gegevens gaat mee. Bijwerken gebeurt altijd pas na jouw klik, en de nieuwe versie wordt alleen geaccepteerd met dezelfde handtekening als deze.",
+ "k411": "Automatische updates",
+ "k412": "Eén keer per dag vraagt LlMBO aan GitHub of er een nieuwe versie is. Zo ja, dan downloadt het die, controleert of de handtekening dezelfde is als deze en installeert hem zelf zodra er geen agent werkt, zonder venster; je krijgt een melding. Alleen de vraag verlaat je Mac, geen van je gegevens. Uitgeschakeld zoekt het niet; gebruik Zoek naar updates.",
  "k413": "Een probleem gevonden?",
  "k414": "Opent een nieuwe issue op GitHub, al ingevuld met de versies van LlMBO en macOS, het Mac-model en het einde van het foutenlog (met je gebruikersnaam verborgen). Je bekijkt en bewerkt alles voordat je het verstuurt.",
  "k415": "Versie %@ beschikbaar",
@@ -437,5 +437,9 @@
  "k436": "Het gedownloade bestand is niet LlMBO.",
  "k437": "Het gedownloade bestand is beschadigd.",
  "k438": "Geen toestemming om de app in %@ te vervangen.",
- "k439": "LlMBO verzamelt geen persoonlijke gegevens. Het leest alleen de processen en mappen van de agents; de enige verbinding is het zoeken naar nieuwe versies op GitHub, wat je kunt uitzetten."
+ "k439": "LlMBO verzamelt geen persoonlijke gegevens. Het leest alleen de processen en mappen van de agents; de enige verbinding is het zoeken naar nieuwe versies op GitHub, wat je kunt uitzetten.",
+ "k440": "Website",
+ "k441": "Sociale media",
+ "k442": "Testversie: LlMBO is tot nu toe op maar een paar Macs en met weinig agents getest. Gaat er iets mis, gebruik dan Meld een probleem.",
+ "k443": "Bijgewerkt naar versie %@."
 }

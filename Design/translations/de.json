@@ -409,8 +409,8 @@
  "k408": "Version %@ verfügbar. Aktualisiere im Tab „Über“.",
  "k409": "Alles läuft auf diesem Mac: LlMBO sammelt und sendet keine Daten. Es liest nur die Prozesse und Ordner der Agenten und schaltet mit deiner Erlaubnis den Ruhezustand ein und aus. Die einzige Verbindung ist die Suche nach neuen Versionen auf GitHub, die du oben ausschalten kannst.",
  "k410": "Updates",
- "k411": "Einmal täglich automatisch suchen",
- "k412": "LlMBO fragt GitHub nach der zuletzt veröffentlichten Version. Nur das verlässt den Mac – keine deiner Daten. Aktualisiert wird immer erst auf deinen Klick, und die neue Version wird nur mit derselben Signatur wie diese akzeptiert.",
+ "k411": "Automatische Updates",
+ "k412": "Einmal am Tag fragt LlMBO bei GitHub nach einer neuen Version. Gibt es eine, lädt es sie, prüft, ob sie dieselbe Signatur wie diese hat, und installiert sie selbst, sobald kein Agent arbeitet – ohne Fenster; du bekommst eine Mitteilung. Nur die Frage verlässt den Mac, keine deiner Daten. Ausgeschaltet sucht es nicht; nutze „Nach Updates suchen“.",
  "k413": "Ein Problem gefunden?",
  "k414": "Öffnet ein neues Issue auf GitHub, schon ausgefüllt mit LlMBO- und macOS-Version, Mac-Modell und dem Ende des Fehlerprotokolls (dein Benutzername ist ausgeblendet). Du prüfst und bearbeitest alles vor dem Senden.",
  "k415": "Version %@ verfügbar",
@@ -437,5 +437,9 @@
  "k436": "Die geladene Datei ist nicht LlMBO.",
  "k437": "Die geladene Datei ist beschädigt.",
  "k438": "Keine Berechtigung, die App in %@ zu ersetzen.",
- "k439": "LlMBO sammelt keine persönlichen Daten. Es liest nur die Prozesse und Ordner der Agenten; die einzige Verbindung ist die Suche nach neuen Versionen auf GitHub, die du ausschalten kannst."
+ "k439": "LlMBO sammelt keine persönlichen Daten. Es liest nur die Prozesse und Ordner der Agenten; die einzige Verbindung ist die Suche nach neuen Versionen auf GitHub, die du ausschalten kannst.",
+ "k440": "Website",
+ "k441": "Soziale Medien",
+ "k442": "Testversion: Bisher wurde LlMBO nur auf wenigen Macs und mit wenigen Agenten getestet. Wenn etwas schiefgeht, nutze „Problem melden“.",
+ "k443": "Auf Version %@ aktualisiert."
 }

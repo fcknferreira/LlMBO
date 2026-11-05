@@ -400,8 +400,8 @@
  "k408": "Versi %@ tersedia. Perbarui di tab Tentang.",
  "k409": "Semuanya berjalan di Mac ini: LlMBO tidak mengumpulkan atau mengirim data. Ia hanya membaca proses dan folder agen dan, dengan izinmu, menyalakan dan mematikan mode tidur. Satu-satunya koneksi adalah pengecekan versi baru di GitHub, yang bisa kamu matikan di atas.",
  "k410": "Pembaruan",
- "k411": "Periksa otomatis sekali sehari",
- "k412": "LlMBO menanyakan versi terbaru yang diterbitkan ke GitHub. Hanya itu yang keluar dari Mac: tidak ada datamu yang ikut. Pembaruan selalu lewat klikmu, dan versi baru hanya diterima jika tanda tangannya sama dengan versi ini.",
+ "k411": "Pembaruan otomatis",
+ "k412": "Sekali sehari LlMBO bertanya ke GitHub apakah ada versi baru. Jika ada, ia mengunduhnya, memeriksa tanda tangannya sama dengan versi ini, lalu memasangnya sendiri begitu tidak ada agen yang bekerja, tanpa membuka jendela; kamu mendapat pemberitahuan. Hanya pertanyaan itu yang keluar dari Mac, tidak ada datamu. Jika dimatikan, ia tidak memeriksa; gunakan Periksa Pembaruan.",
  "k413": "Menemukan masalah?",
  "k414": "Membuka issue baru di GitHub yang sudah berisi versi LlMBO dan macOS, model Mac, dan akhir log galat (nama penggunamu disembunyikan). Kamu meninjau dan menyunting semuanya sebelum mengirim.",
  "k415": "Versi %@ tersedia",
@@ -428,5 +428,9 @@
  "k436": "Berkas yang diunduh bukan LlMBO.",
  "k437": "Berkas yang diunduh rusak.",
  "k438": "Tidak ada izin untuk mengganti app di %@.",
- "k439": "LlMBO tidak mengumpulkan data pribadi. Ia hanya membaca proses dan folder agen; satu-satunya koneksi adalah pengecekan versi baru di GitHub, yang bisa dimatikan."
+ "k439": "LlMBO tidak mengumpulkan data pribadi. Ia hanya membaca proses dan folder agen; satu-satunya koneksi adalah pengecekan versi baru di GitHub, yang bisa dimatikan.",
+ "k440": "Situs web",
+ "k441": "Media sosial",
+ "k442": "Versi uji: sejauh ini LlMBO baru diuji di sedikit Mac dan dengan sedikit agen. Jika ada masalah, gunakan Laporkan Masalah.",
+ "k443": "Diperbarui ke versi %@."
 }

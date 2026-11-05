@@ -4,15 +4,22 @@ LlMBO — Leia antes de abrir  ·  Read me before opening
 PORTUGUÊS
 
 1. Arraste o LlMBO para a pasta Aplicativos.
-2. Abra o LlMBO. O macOS vai mostrar um aviso dizendo que não pode verificar o app
-   ou o desenvolvedor, e vai deixar só "Concluído" ou "Mover para o Lixo".
-   Clique em "Concluído". Isso é esperado: o LlMBO é grátis e de código aberto,
-   e não paga a assinatura anual da Apple (Apple Developer Program) que tira esse aviso.
-3. Abra Ajustes do Sistema › Privacidade e Segurança, role até o fim
-   e clique em "Abrir Mesmo Assim" ao lado do LlMBO. Confirme com a sua senha.
+2. Abra o LlMBO. O macOS vai dizer que não conseguiu verificar o app e vai
+   destacar o botão "Mover para o Lixo".
+
+   >>> NÃO CLIQUE EM "MOVER PARA O LIXO". <<<
+
+   Clique em "Concluído". O aviso aparece só porque o LlMBO é grátis e de código
+   aberto e não paga a assinatura anual da Apple (Apple Developer Program) —
+   não porque haja algo de errado com ele. Nas versões recentes do macOS o aviso
+   nem oferece mais o botão "Abrir": o caminho é o passo 3.
+3. Abra Ajustes do Sistema › Privacidade e Segurança, role até o fim e clique
+   em "Abrir Mesmo Assim" ao lado do LlMBO. Confirme "Abrir Mesmo Assim" de novo
+   e digite a sua senha. Esse botão só aparece por cerca de uma hora depois da
+   tentativa de abrir; se sumiu, tente abrir o LlMBO de novo e volte aqui.
 4. Pronto. Isso só é preciso uma vez; as atualizações seguintes chegam pelo próprio app.
 
-Prefere o Terminal? Este comando baixa e instala sem o aviso:
+Mais fácil (recomendado): este comando no Terminal baixa e instala sem aviso nenhum:
    curl -fsSL https://raw.githubusercontent.com/fcknferreira/LlMBO/main/install.sh | bash
 
 Código-fonte: https://github.com/fcknferreira/LlMBO
@@ -21,14 +28,22 @@ Código-fonte: https://github.com/fcknferreira/LlMBO
 ENGLISH
 
 1. Drag LlMBO to the Applications folder.
-2. Open LlMBO. macOS will say it can't verify the app or its developer, offering only
-   "Done" or "Move to Trash". Click "Done". This is expected: LlMBO is free and open
-   source, and doesn't pay for Apple's yearly signing program that removes this warning.
+2. Open LlMBO. macOS will say it couldn't verify the app and highlight the
+   "Move to Trash" button.
+
+   >>> DO NOT CLICK "MOVE TO TRASH". <<<
+
+   Click "Done". The warning only shows up because LlMBO is free and open source
+   and doesn't pay for Apple's yearly signing program — not because anything is
+   wrong with it. Recent macOS versions no longer offer an "Open" button in that
+   warning: step 3 is the way.
 3. Open System Settings › Privacy & Security, scroll to the bottom and click
-   "Open Anyway" next to LlMBO. Confirm with your password.
+   "Open Anyway" next to LlMBO. Confirm "Open Anyway" again and enter your
+   password. That button only shows for about an hour after you try to open the
+   app; if it's gone, try opening LlMBO again and come back.
 4. Done. You only do this once; later updates come through the app itself.
 
-Prefer the Terminal? This command downloads and installs without the warning:
+Easiest (recommended): this Terminal command downloads and installs with no warning at all:
    curl -fsSL https://raw.githubusercontent.com/fcknferreira/LlMBO/main/install.sh | bash
 
 Source code: https://github.com/fcknferreira/LlMBO

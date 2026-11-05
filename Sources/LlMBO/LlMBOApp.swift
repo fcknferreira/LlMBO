@@ -53,7 +53,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if ProcessInfo.processInfo.environment["LLMBO_TEST_NOTIFY"] != nil { Notifier.shared.selfTest() }
         // A janela abre junto com o app, para ele não ficar "invisível"
         // (o ícone da barra de menus pode ficar escondido atrás do notch ou do Bartender).
-        if OnboardingModel.needed { showOnboarding() } else { showMainWindow() }
+        // Aberto por uma atualização automática: fica só na barra de menus e avisa (não abre a janela no meio
+        // do que a pessoa estiver fazendo).
+        let autoUpdated = Updater.consumeAutoMarker()
+        if OnboardingModel.needed { showOnboarding() } else if !autoUpdated { showMainWindow() }
+        if autoUpdated {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) { Notifier.shared.updated(to: Project.version) }
+        }
         AppLog.write("aberto: LlMBO \(Project.version) (\(Project.build)) em \(AppLog.redact(Bundle.main.bundlePath))")
         Updater.shared.start()
         if ProcessInfo.processInfo.environment["LLMBO_TEST_UPDATE"] != nil {

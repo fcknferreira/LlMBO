@@ -287,6 +287,7 @@ private struct AgentsStep: View {
                             }
                         }
                         .toggleStyle(.checkbox)
+                        .handCursor()
                         .padding(.horizontal, 14)
                         .padding(.vertical, 9)
                     }
@@ -409,6 +410,7 @@ private struct PreferencesStep: View {
                     } else {
                         Toggle(String(localized: "Abrir ao iniciar sessão"), isOn: $engine.launchAtLogin)
                             .toggleStyle(.switch)
+                            .handCursor()
                             .labelsHidden()
                     }
                 }
@@ -425,6 +427,7 @@ private struct PreferencesStep: View {
                         }
                         Toggle(String(localized: "Receber notificações"), isOn: $notifier.enabled)
                             .toggleStyle(.switch)
+                            .handCursor()
                             .labelsHidden()
                             .tint(Theme.control)
                     }
@@ -446,6 +449,7 @@ private struct PreferencesStep: View {
                             }
                             Toggle(String(localized: "Não mudar o volume de outros apps"), isOn: keepOthers)
                                 .toggleStyle(.switch)
+                                .handCursor()
                                 .labelsHidden()
                                 .tint(Theme.control)
                         }

@@ -409,8 +409,8 @@
  "k408": "Dostępna wersja %@. Uaktualnij na karcie Informacje.",
  "k409": "Wszystko działa na tym Macu: LlMBO nie zbiera ani nie wysyła danych. Odczytuje tylko procesy i foldery agentów oraz, za twoją zgodą, włącza i wyłącza usypianie. Jedyne połączenie to sprawdzanie nowych wersji na GitHubie, które możesz wyłączyć powyżej.",
  "k410": "Uaktualnienia",
- "k411": "Sprawdzaj automatycznie raz dziennie",
- "k412": "LlMBO pyta GitHuba, która wersja została opublikowana jako ostatnia. Tylko to opuszcza Maca: żadne twoje dane. Uaktualnienie zawsze wymaga twojego kliknięcia, a nowa wersja jest przyjmowana tylko z taką samą sygnaturą jak ta.",
+ "k411": "Automatyczne uaktualnienia",
+ "k412": "Raz dziennie LlMBO pyta GitHuba, czy jest nowa wersja. Jeśli jest, pobiera ją, sprawdza, czy ma taką samą sygnaturę jak ta, i instaluje sama, gdy żaden agent nie pracuje, bez otwierania okien; dostajesz powiadomienie. Z Maca wychodzi tylko pytanie, żadne twoje dane. Wyłączone nie sprawdza; użyj Sprawdź uaktualnienia.",
  "k413": "Masz problem?",
  "k414": "Otwiera nowe zgłoszenie na GitHubie, już wypełnione wersją LlMBO i macOS, modelem Maca i końcówką dziennika błędów (z ukrytą nazwą użytkownika). Przed wysłaniem wszystko przejrzysz i poprawisz.",
  "k415": "Dostępna wersja %@",
@@ -437,5 +437,9 @@
  "k436": "Pobrany plik to nie LlMBO.",
  "k437": "Pobrany plik jest uszkodzony.",
  "k438": "Brak uprawnień do zastąpienia aplikacji w %@.",
- "k439": "LlMBO nie zbiera danych osobowych. Odczytuje tylko procesy i foldery agentów; jedyne połączenie to sprawdzanie nowych wersji na GitHubie, które możesz wyłączyć."
+ "k439": "LlMBO nie zbiera danych osobowych. Odczytuje tylko procesy i foldery agentów; jedyne połączenie to sprawdzanie nowych wersji na GitHubie, które możesz wyłączyć.",
+ "k440": "Strona",
+ "k441": "Media społecznościowe",
+ "k442": "Wersja testowa: na razie LlMBO przetestowano na kilku Macach i z kilkoma agentami. Jeśli coś pójdzie nie tak, użyj Zgłoś problem.",
+ "k443": "Uaktualniono do wersji %@."
 }

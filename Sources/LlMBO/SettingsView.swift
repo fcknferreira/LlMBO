@@ -124,6 +124,7 @@ private struct TabBar: View {
                     .contentShape(Capsule())
                 }
                 .buttonStyle(.plain)
+                .handCursor()
                 .help(tab.title)
             }
         }
@@ -405,6 +406,7 @@ private struct HeroCard: View {
                 Spacer()
                 Toggle("Liberar tampa fechada", isOn: engine.armedBinding)
                     .toggleStyle(.switch)
+                    .handCursor()
                     .labelsHidden()
                     .tint(Theme.control)
                     .disabled(!engine.helperInstalled)
@@ -639,6 +641,7 @@ private struct AgentListRow: View {
                 Image(systemName: "pencil.circle").font(.system(size: 14)).foregroundStyle(Theme.muted)
             }
             .buttonStyle(.plain)
+            .handCursor()
             .help(String(localized: "Editar \(agent.name)"))
         }
         .padding(.horizontal, 16)
@@ -876,6 +879,7 @@ private struct StepButton: View {
                 .contentShape(Circle())
         }
         .buttonStyle(.plain)
+        .handCursor()
         .disabled(!enabled)
         .opacity(enabled ? 1 : 0.35)
         .onHover { hover.on = $0 }
@@ -902,10 +906,13 @@ struct AboutTab: View {
                     .frame(width: 76, height: 76)
                     .shadow(color: Theme.bronze2.opacity(0.25), radius: 22, y: 8)
                 Text("LlMBO").font(Theme.serif(36)).foregroundStyle(Theme.text)
-                Text("Versão \(version)")
-                    .font(.system(size: 11))
-                    .foregroundStyle(Theme.faint)
-                    .textSelection(.enabled)
+                HStack(spacing: 6) {
+                    Text("Versão \(version)")
+                        .font(.system(size: 11))
+                        .foregroundStyle(Theme.faint)
+                        .textSelection(.enabled)
+                    if Project.beta { BetaBadge() }
+                }
                 Text("Deixa o MacBook trabalhar de tampa fechada enquanto seus agentes de IA rodam, e põe o Mac para dormir quando todos terminam.")
                     .font(.system(size: 13, weight: .light))
                     .foregroundStyle(Theme.muted)
@@ -917,14 +924,6 @@ struct AboutTab: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 6)
-
-            CardSection(title: String(localized: "Como funciona")) {
-                AboutLine(number: 1, text: "Com a tampa fechada liberada, o repouso do sistema fica desligado só enquanto há agentes trabalhando.")
-                CardDivider()
-                AboutLine(number: 2, text: "Cada agente é acompanhado por hooks, arquivos de sessão e uso de CPU.")
-                CardDivider()
-                AboutLine(number: 3, text: "Quando todos ficam quietos, o repouso volta e, de tampa fechada, o Mac dorme.")
-            }
 
             UpdatesCard()
 
@@ -941,8 +940,10 @@ struct AboutTab: View {
                         .buttonStyle(.pill)
                     }
                     CardDivider()
-                    Row(title: "@_llm_bo") {
+                    Row(title: String(localized: "Redes sociais")) {
                         HStack(spacing: 14) {
+                            SocialIconButton(name: "llm-bo.com", icon: "globe", url: "https://llm-bo.com")
+                            SocialIconButton(name: "GitHub", icon: "github", url: Project.repoURL.absoluteString)
                             SocialIconButton(name: "Instagram", icon: "instagram",
                                              url: "https://www.instagram.com/_llm_bo/")
                             SocialIconButton(name: "Threads", icon: "threads",
@@ -980,8 +981,8 @@ private struct UpdatesCard: View {
                 }
             }
             CardDivider()
-            ToggleRow(title: String(localized: "Procurar sozinho uma vez por dia"),
-                      info: String(localized: "O LlMBO pergunta ao GitHub qual é a última versão publicada. Só isso sai do Mac: nenhum dado seu vai junto. Atualizar é sempre com o seu clique, e a versão nova só é aceita se tiver a mesma assinatura desta."),
+            ToggleRow(title: String(localized: "Atualização automática"),
+                      info: String(localized: "Uma vez por dia o LlMBO pergunta ao GitHub se há versão nova. Se houver, baixa, confere se ela tem a mesma assinatura desta e instala sozinho assim que nenhum agente estiver trabalhando, sem abrir janela; você recebe um aviso. Só a pergunta sai do Mac: nenhum dado seu vai junto. Desligado, ele não procura; use Procurar atualizações."),
                       isOn: $updater.autoCheck)
             CardDivider()
             Row(title: String(localized: "Encontrou um problema?"),
@@ -1004,28 +1005,6 @@ private struct UpdatesCard: View {
         case .failed(let m): return m
         default: return nil
         }
-    }
-}
-
-/// Passo numerado em serifa itálica bronze, como a seção "Como funciona" do site.
-private struct AboutLine: View {
-    let number: Int
-    let text: LocalizedStringKey
-
-    var body: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 12) {
-            Text(verbatim: "\(number)")
-                .font(Theme.serif(17, italic: true))
-                .foregroundStyle(Theme.bronze2)
-                .frame(width: 14)
-            Text(text)
-                .font(.system(size: 12.5))
-                .foregroundStyle(Theme.text.opacity(0.85))
-                .fixedSize(horizontal: false, vertical: true)
-            Spacer(minLength: 0)
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 11)
     }
 }
 
@@ -1054,6 +1033,7 @@ struct SocialIconButton: View {
                     .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
+            .handCursor()
             .onHover { hover.on = $0 }
             .help(name)
             .accessibilityLabel(name)

@@ -95,7 +95,7 @@ struct AgentEditor: View {
                         }
                     }
                     HStack {
-                        Button("Testar agora") { runProbe() }
+                        Button("Testar agora") { runProbe() }.handCursor()
                         if let p = draft.probe {
                             Text(p).font(.callout).foregroundStyle(.secondary)
                         }
@@ -110,7 +110,7 @@ struct AgentEditor: View {
                 Section {
                     HStack {
                         TextField("Pastas", text: $draft.folders, prompt: Text("opcional"))
-                        Button("Escolher…") { chooseFolder() }
+                        Button("Escolher…") { chooseFolder() }.handCursor()
                     }
                 } header: {
                     Text("Arquivos de sessão")
@@ -127,6 +127,7 @@ struct AgentEditor: View {
                         NSPasteboard.general.clearContents()
                         NSPasteboard.general.setString(hookCommands, forType: .string)
                     }
+                    .handCursor()
                 } header: {
                     Text("Avisar na hora (opcional)")
                 } footer: {
@@ -144,15 +145,18 @@ struct AgentEditor: View {
                         engine.removeAgent(id)
                         model.draft = nil
                     }
+                    .handCursor()
                 }
                 Spacer()
                 Button("Cancelar") { model.draft = nil }
                     .keyboardShortcut(.cancelAction)
+                    .handCursor()
                 Button(draft.isNew ? String(localized: "Adicionar") : String(localized: "Salvar")) {
                     engine.saveAgent(config)
                     model.draft = nil
                 }
                 .keyboardShortcut(.defaultAction)
+                .handCursor()
                 .disabled(!valid)
             }
             .padding(16)

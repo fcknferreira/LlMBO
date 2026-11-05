@@ -153,6 +153,7 @@ struct ToggleRow: View {
         Row(title: title, subtitle: subtitle, info: info) {
             Toggle(title, isOn: $isOn)
                 .toggleStyle(.switch)
+                .handCursor()
                 .labelsHidden()
                 .tint(Theme.control)
         }
@@ -196,6 +197,7 @@ struct PillButtonStyle: ButtonStyle {
                 .background(Capsule().fill(fill))
                 .overlay(Capsule().strokeBorder(kind == .primary ? Color.clear : Theme.line))
                 .contentShape(Capsule())
+                .handCursor()
                 .opacity(enabled ? (configuration.isPressed ? 0.7 : 1) : 0.4)
         }
 
@@ -248,6 +250,7 @@ struct InfoButton: View {
                 .foregroundStyle(warning || popover.shown ? Theme.bronze2 : Theme.muted)
         }
         .buttonStyle(.plain)
+        .handCursor()
         .help(String(localized: "Mais informações"))
         .popover(isPresented: $popover.shown, arrowEdge: .bottom) {
             Text(text)
@@ -320,5 +323,74 @@ struct ThemedSlider: View {
             }
             onEnd()
         }
+    }
+}
+
+// MARK: - Cursor
+
+/// Mão de link sobre o que é clicável: botões, interruptores e listas do SwiftUI no macOS não trocam o cursor
+/// sozinhos. Uma NSView transparente por cima (não recebe cliques) segue o mouse com uma área de rastreio
+/// `.activeAlways` — vale também no popover da barra, que abre sem ativar o app. Some com o controle apagado.
+struct HandCursor: ViewModifier {
+    @Environment(\.isEnabled) private var enabled
+
+    func body(content: Content) -> some View {
+        content.overlay(enabled ? HandCursorArea() : nil)
+    }
+}
+
+extension View {
+    func handCursor() -> some View { modifier(HandCursor()) }
+}
+
+private struct HandCursorArea: NSViewRepresentable {
+    func makeNSView(context: Context) -> HandCursorNSView { HandCursorNSView() }
+    func updateNSView(_ view: HandCursorNSView, context: Context) {}
+    static func dismantleNSView(_ view: HandCursorNSView, coordinator: ()) { view.leave() }
+}
+
+final class HandCursorNSView: NSView {
+    private var inside = false
+
+    override func hitTest(_ point: NSPoint) -> NSView? { nil }
+
+    override func updateTrackingAreas() {
+        super.updateTrackingAreas()
+        trackingAreas.forEach(removeTrackingArea)
+        addTrackingArea(NSTrackingArea(rect: .zero,
+                                       options: [.mouseEnteredAndExited, .mouseMoved, .cursorUpdate, .activeAlways, .inVisibleRect],
+                                       owner: self, userInfo: nil))
+    }
+
+    override func mouseEntered(with event: NSEvent) { inside = true; NSCursor.pointingHand.set() }
+    override func mouseMoved(with event: NSEvent) { if inside { NSCursor.pointingHand.set() } }
+    override func cursorUpdate(with event: NSEvent) { NSCursor.pointingHand.set() }
+    override func mouseExited(with event: NSEvent) { leave() }
+
+    /// Sai da área (ou o controle some debaixo do mouse, como ao trocar de aba): volta a seta.
+    func leave() {
+        if inside { NSCursor.arrow.set() }
+        inside = false
+    }
+
+    override func viewWillMove(toWindow newWindow: NSWindow?) {
+        if newWindow == nil { leave() }
+        super.viewWillMove(toWindow: newWindow)
+    }
+}
+
+
+/// Selo pequeno "BETA" em bronze ao lado da versão; a dica explica o porquê.
+struct BetaBadge: View {
+    var body: some View {
+        Text(verbatim: "BETA")
+            .font(.system(size: 8.5, weight: .bold))
+            .tracking(0.8)
+            .foregroundStyle(Theme.bronze2)
+            .padding(.horizontal, 5)
+            .padding(.vertical, 1.5)
+            .background(RoundedRectangle(cornerRadius: 4).fill(Theme.bronze2.opacity(0.10)))
+            .overlay(RoundedRectangle(cornerRadius: 4).strokeBorder(Theme.bronze2.opacity(0.55), lineWidth: 0.8))
+            .help(String(localized: "Versão de testes: por enquanto o LlMBO foi testado em poucos Macs e com poucos agentes. Se algo der errado, use Relatar problema."))
     }
 }

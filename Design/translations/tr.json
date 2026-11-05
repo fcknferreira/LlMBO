@@ -409,8 +409,8 @@
  "k408": "%@ sürümü hazır. Hakkında sekmesinden güncelle.",
  "k409": "Her şey bu Mac’te çalışır: LlMBO veri toplamaz ve göndermez. Yalnızca ajanların işlemlerini ve klasörlerini okur ve iznini alarak uykuyu açıp kapatır. Tek bağlantı, GitHub’da yeni sürüm kontrolüdür; yukarıdan kapatabilirsin.",
  "k410": "Güncellemeler",
- "k411": "Günde bir kez otomatik denetle",
- "k412": "LlMBO, GitHub’a en son yayımlanan sürümü sorar. Mac’ten çıkan tek şey budur: hiçbir verin gitmez. Güncelleme her zaman senin tıklamanla olur ve yeni sürüm yalnızca bununla aynı imzaya sahipse kabul edilir.",
+ "k411": "Otomatik güncelleme",
+ "k412": "LlMBO günde bir kez GitHub’a yeni sürüm olup olmadığını sorar. Varsa indirir, bununla aynı imzaya sahip olduğunu denetler ve hiçbir ajan çalışmadığı anda pencere açmadan kendisi kurar; bildirim alırsın. Mac’ten yalnızca soru çıkar, hiçbir verin gitmez. Kapalıyken aramaz; Güncellemeleri Denetle’yi kullan.",
  "k413": "Bir sorun mu buldun?",
  "k414": "GitHub’da LlMBO ve macOS sürümleri, Mac modeli ve hata kaydının sonuyla (kullanıcı adın gizlenmiş olarak) doldurulmuş yeni bir issue açar. Göndermeden önce her şeyi gözden geçirip düzenlersin.",
  "k415": "%@ sürümü hazır",
@@ -437,5 +437,9 @@
  "k436": "İndirilen dosya LlMBO değil.",
  "k437": "İndirilen dosya bozuk.",
  "k438": "%@ içindeki uygulamayı değiştirme izni yok.",
- "k439": "LlMBO kişisel veri toplamaz. Yalnızca ajanların işlemlerini ve klasörlerini okur; tek bağlantı GitHub’da yeni sürüm kontrolüdür ve kapatılabilir."
+ "k439": "LlMBO kişisel veri toplamaz. Yalnızca ajanların işlemlerini ve klasörlerini okur; tek bağlantı GitHub’da yeni sürüm kontrolüdür ve kapatılabilir.",
+ "k440": "Web sitesi",
+ "k441": "Sosyal medya",
+ "k442": "Test sürümü: LlMBO şimdilik yalnızca birkaç Mac’te ve birkaç ajanla denendi. Bir sorun olursa Sorun Bildir’i kullan.",
+ "k443": "%@ sürümüne güncellendi."
 }

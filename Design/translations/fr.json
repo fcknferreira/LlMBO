@@ -409,8 +409,8 @@
  "k408": "Version %@ disponible. Mettez à jour dans l’onglet À propos.",
  "k409": "Tout fonctionne sur ce Mac : LlMBO ne collecte ni n’envoie aucune donnée. Il lit seulement les processus et les dossiers des agents et, avec votre autorisation, active et désactive la veille. La seule connexion est la vérification des nouvelles versions sur GitHub, désactivable ci-dessus.",
  "k410": "Mises à jour",
- "k411": "Vérifier automatiquement une fois par jour",
- "k412": "LlMBO demande à GitHub quelle est la dernière version publiée. C’est tout ce qui quitte le Mac : aucune de vos données. La mise à jour se fait toujours d’un clic de votre part, et la nouvelle version n’est acceptée que si elle a la même signature que celle-ci.",
+ "k411": "Mises à jour automatiques",
+ "k412": "Une fois par jour, LlMBO demande à GitHub s’il existe une nouvelle version. Si oui, il la télécharge, vérifie qu’elle a la même signature que celle-ci et l’installe tout seul dès qu’aucun agent ne travaille, sans ouvrir de fenêtre ; vous recevez une notification. Seule la question quitte le Mac : aucune de vos données. Désactivé, il ne cherche pas ; utilisez Rechercher des mises à jour.",
  "k413": "Un problème ?",
  "k414": "Ouvre une nouvelle issue sur GitHub déjà remplie avec les versions de LlMBO et de macOS, le modèle du Mac et la fin du journal d’erreurs (avec votre nom d’utilisateur masqué). Vous relisez et modifiez tout avant d’envoyer.",
  "k415": "Version %@ disponible",
@@ -437,5 +437,9 @@
  "k436": "Le fichier téléchargé n’est pas LlMBO.",
  "k437": "Le fichier téléchargé est endommagé.",
  "k438": "Pas l’autorisation de remplacer l’app dans %@.",
- "k439": "LlMBO ne collecte aucune donnée personnelle. Il lit seulement les processus et les dossiers des agents ; la seule connexion est la vérification des nouvelles versions sur GitHub, désactivable."
+ "k439": "LlMBO ne collecte aucune donnée personnelle. Il lit seulement les processus et les dossiers des agents ; la seule connexion est la vérification des nouvelles versions sur GitHub, désactivable.",
+ "k440": "Site web",
+ "k441": "Réseaux sociaux",
+ "k442": "Version de test : pour l’instant, LlMBO n’a été testé que sur quelques Mac et avec peu d’agents. En cas de souci, utilisez Signaler un problème.",
+ "k443": "Mis à jour vers la version %@."
 }

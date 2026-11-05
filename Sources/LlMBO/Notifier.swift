@@ -168,13 +168,13 @@ final class Notifier: NSObject, ObservableObject, UNUserNotificationCenterDelega
         }
     }
 
-    /// Versão nova no GitHub: aviso discreto, sem o som do aviso de dormir.
-    func updateAvailable(_ version: String) {
+    /// Atualizado sozinho: aviso discreto, sem o som do aviso de dormir.
+    func updated(to version: String) {
         guard enabled, status == .allowed else { return }
         let content = UNMutableNotificationContent()
         content.title = "LlMBO"
-        content.body = String(localized: "Versão \(version) disponível. Atualize na aba Sobre.")
-        center.add(UNNotificationRequest(identifier: "llmbo-update", content: content, trigger: nil))
+        content.body = String(localized: "Atualizado para a versão \(version).")
+        center.add(UNNotificationRequest(identifier: "llmbo-updated", content: content, trigger: nil))
     }
 
     private func postViaScript(_ body: String, done: (() -> Void)?) {

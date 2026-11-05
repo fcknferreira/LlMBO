@@ -29,15 +29,22 @@ Funciona com Claude Code, Codex, Antigravity (app, IDE e CLI), Gemini CLI, Qwen 
 
 ## Instalar
 
-**Pelo DMG:** baixe o [LlMBO.dmg](https://github.com/fcknferreira/LlMBO/releases/latest/download/LlMBO.dmg), arraste para Aplicativos e abra.
-
-> ⚠️ **Na primeira vez o macOS vai avisar que não pode verificar o app.** É esperado: o LlMBO é grátis e não paga os US$ 99 por ano do Apple Developer Program, que é o que tira esse aviso. Clique em **Concluído**, vá em **Ajustes do Sistema › Privacidade e Segurança**, role até o fim e clique em **Abrir Mesmo Assim**. Só uma vez — as atualizações seguintes chegam pelo próprio app.
-
-**Pelo Terminal** (sem o aviso, porque arquivos baixados pelo `curl` não ganham a marca de quarentena):
+**Pelo Terminal (mais fácil, recomendado)** — sem aviso nenhum, porque arquivos baixados pelo `curl` não ganham a marca de quarentena:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/fcknferreira/LlMBO/main/install.sh | bash
 ```
+
+**Pelo DMG:** baixe o [LlMBO.dmg](https://github.com/fcknferreira/LlMBO/releases/latest/download/LlMBO.dmg), arraste para Aplicativos e abra.
+
+> [!CAUTION]
+> **Na primeira vez o macOS vai sugerir "Mover para o Lixo". NÃO clique nesse botão.** Clique em **Concluído**. O aviso aparece só porque o LlMBO é grátis e não paga os US$ 99 por ano do Apple Developer Program — não porque haja algo de errado com ele (o código está todo aqui). Nas versões recentes do macOS o aviso nem oferece mais o botão "Abrir"; o caminho é este:
+>
+> 1. Abra **Ajustes do Sistema › Privacidade e Segurança** e role até o fim.
+> 2. Clique em **Abrir Mesmo Assim** ao lado do LlMBO, confirme **Abrir Mesmo Assim** de novo e digite a sua senha.
+> 3. Esse botão só aparece por cerca de uma hora depois da tentativa de abrir. Se sumiu, tente abrir o LlMBO de novo.
+>
+> Só uma vez — as atualizações seguintes chegam pelo próprio app.
 
 O script baixa a última versão, confere se ela tem a assinatura das Releases do LlMBO e instala em `/Applications`.
 
@@ -95,10 +102,15 @@ Instagram e Threads: [@_llm_bo](https://www.instagram.com/_llm_bo/)
 - Safety locks: minimum battery, maximum time awake, temperature, a watchdog that restores sleep if the app hangs.
 - Everything stays on your Mac. The only network request is a daily check on GitHub for new versions (can be turned off).
 
-**Install:** download [LlMBO.dmg](https://github.com/fcknferreira/LlMBO/releases/latest/download/LlMBO.dmg), drag it to Applications and open it. The first time, macOS will say it can't verify the app — LlMBO doesn't pay for Apple's $99/year signing program. Click **Done**, then go to **System Settings › Privacy & Security** and click **Open Anyway**. Or install from the Terminal, without the warning:
+**Install (easiest, recommended):** this Terminal command installs it with no warning at all:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/fcknferreira/LlMBO/main/install.sh | bash
 ```
+
+Or download [LlMBO.dmg](https://github.com/fcknferreira/LlMBO/releases/latest/download/LlMBO.dmg) and drag it to Applications.
+
+> [!CAUTION]
+> **The first time, macOS will suggest "Move to Trash". DO NOT click it.** Click **Done**. The warning only appears because LlMBO doesn't pay for Apple's $99/year signing program — not because anything is wrong with it. Recent macOS versions no longer offer an "Open" button there. Instead, go to **System Settings › Privacy & Security**, scroll down, click **Open Anyway** next to LlMBO, confirm **Open Anyway** again and enter your password. The button only shows for about an hour after you try to open the app.
 
 The app is available in 23 languages. License: [MIT](LICENSE).

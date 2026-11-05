@@ -23,6 +23,7 @@ struct MenuView: View {
                 Spacer(minLength: 8)
                 Toggle("Liberar tampa fechada", isOn: engine.armedBinding)
                     .toggleStyle(.switch)
+                    .handCursor()
                     .labelsHidden()
                     .tint(Theme.control)
                     .disabled(!engine.helperInstalled)
@@ -251,6 +252,7 @@ private struct MenuRow: View {
             .background(RoundedRectangle(cornerRadius: 7, style: .continuous).fill(hover ? Theme.cardHover : Color.clear))
         }
         .buttonStyle(.plain)
+        .handCursor()
         .onHover { hoverState.on = $0 }
     }
 }

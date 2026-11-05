@@ -33,6 +33,7 @@ struct Dropdown<ID: Hashable, Label: View>: View {
     var body: some View {
         Button { state.shown.toggle() } label: { label }
             .buttonStyle(.plain)
+            .handCursor()
             .popover(isPresented: $state.shown, arrowEdge: .bottom) {
                 DropdownList(groups: groups, selection: selection, width: width, footer: footer.map { f in
                     DropdownFooter(title: f.title, symbol: f.symbol) { close(then: f.action) }
@@ -169,6 +170,7 @@ private struct DropdownRow: View {
             .background(RoundedRectangle(cornerRadius: 7, style: .continuous).fill(hover.on ? Theme.cardHover : .clear))
         }
         .buttonStyle(.plain)
+        .handCursor()
         .onHover { hover.on = $0 }
     }
 }
