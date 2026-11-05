@@ -1,7 +1,7 @@
 import Combine
 import SwiftUI
 
-/// Assistente da primeira abertura: permissão, agentes, hooks e preferências.
+/// Assistente da primeira abertura: permissão, agentes, conexão com os agentes (hook + MCP) e preferências.
 /// Abre sozinho uma vez (UserDefaults "onboardingDone"); dá para reabrir na aba Geral.
 enum OnboardingStep: Int, CaseIterable {
     case welcome, permission, agents, hooks, preferences, done
@@ -23,14 +23,9 @@ struct OnboardingView: View {
     @EnvironmentObject var engine: Engine
     @ObservedObject var model: OnboardingModel
 
-    /// O passo de hooks só aparece se algum agente da lista aceita hooks.
+    /// O passo de conexão só aparece se algum agente da lista aceita hook ou MCP.
     private var steps: [OnboardingStep] {
-        OnboardingStep.allCases.filter { $0 != .hooks || !hookAgents.isEmpty }
-    }
-
-    private var hookAgents: [AgentConfig] {
-        let ids = Hooks.uniqueHooks(engine.agents.map(\.id).filter { Hooks.supported.contains($0) })
-        return engine.agents.filter { ids.contains($0.id) }
+        OnboardingStep.allCases.filter { $0 != .hooks || !engine.connections.isEmpty }
     }
 
     var body: some View {
@@ -40,7 +35,7 @@ struct OnboardingView: View {
                 case .welcome: WelcomeStep()
                 case .permission: PermissionStep()
                 case .agents: AgentsStep(model: model)
-                case .hooks: HooksStep(agents: hookAgents)
+                case .hooks: ConnectStep()
                 case .preferences: PreferencesStep()
                 case .done: DoneStep()
                 }
@@ -309,29 +304,27 @@ private struct AgentsStep: View {
     }
 }
 
-private struct HooksStep: View {
+private struct ConnectStep: View {
     @EnvironmentObject var engine: Engine
-    let agents: [AgentConfig]
-
-    private var pending: [AgentConfig] {
-        agents.filter { engine.hookStates[$0.id] == .notInstalled }
-    }
 
     var body: some View {
+        let list = engine.connections
+        let pending = list.filter { !engine.isConnected($0) }
         VStack(spacing: 0) {
-            StepHeader(symbol: "bolt.badge.clock", title: String(localized: "Avisos na hora (hooks)"),
-                       text: String(localized: "Alguns agentes avisam o LlMBO quando começam e terminam. É o sinal mais confiável: o Mac dorme logo depois do fim, sem esperar."))
-            VStack(spacing: 8) {
-                ForEach(agents, id: \.id) { a in
-                    let state = engine.hookStates[a.id] ?? .unsupported
-                    CheckRow(ok: state == .installed, title: Hooks.displayName(a.id, fallback: a.name),
-                             detail: detail(state, note: Hooks.note(a.id))) {
-                        if state == .notInstalled {
-                            Button("Instalar") { engine.installHooks(a.id) }.buttonStyle(.pill(.primary))
+            StepHeader(symbol: "bolt.badge.clock", title: String(localized: "Conectar os agentes"),
+                       text: String(localized: "O hook avisa na hora quando o agente começa e termina, e o Mac dorme logo depois do fim. O MCP deixa o agente pedir para segurar o Mac quando algo continua rodando depois da resposta, como um build."))
+            ScrollView {
+                VStack(spacing: 8) {
+                    ForEach(list) { c in
+                        CheckRow(ok: engine.isConnected(c), title: c.name, detail: detail(c)) {
+                            if !engine.isConnected(c) {
+                                Button(String(localized: "Conectar")) { engine.connect(c) }.buttonStyle(.pill(.primary))
+                            }
                         }
                     }
                 }
             }
+            .frame(maxHeight: 250)
             HStack {
                 Text("Só acrescenta entradas do LlMBO nos arquivos de configuração (com backup); as suas ficam intactas.")
                     .font(.system(size: 11))
@@ -339,22 +332,20 @@ private struct HooksStep: View {
                     .fixedSize(horizontal: false, vertical: true)
                 Spacer()
                 if pending.count > 1 {
-                    Button("Instalar todos") { pending.forEach { engine.installHooks($0.id) } }.buttonStyle(.pill)
+                    Button(String(localized: "Conectar todos")) { engine.connect(pending) }.buttonStyle(.pill)
                 }
             }
             .padding(.top, 12)
         }
     }
 
-    private func detail(_ s: Hooks.State, note: String?) -> String {
-        switch s {
-        case .installed:
-            let ok = String(localized: "Hooks instalados")
-            return note.map { "\(ok) · \($0)" } ?? ok
-        case .notInstalled: return String(localized: "Ainda não instalados")
-        case .conflict(let why): return why
-        case .unsupported: return String(localized: "Sem suporte a hooks")
+    private func detail(_ c: AgentConnection) -> String {
+        if engine.isConnected(c) {
+            let ok = String(localized: "Conectado")
+            return c.hookAgent.flatMap(Hooks.note).map { "\(ok) · \($0)" } ?? ok
         }
+        let pieces = [c.hookAgent != nil ? "hook" : nil, engine.mcpAvailable(c) ? "MCP" : nil].compactMap { $0 }
+        return String(localized: "Ainda não conectado (\(pieces.joined(separator: " + ")))")
     }
 }
 

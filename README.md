@@ -89,7 +89,13 @@ Precisa só das Command Line Tools (`xcode-select --install`).
 
 [Abra uma issue](https://github.com/fcknferreira/LlMBO/issues) ou use **Relatar problema…** na aba Sobre.
 
-Instagram e Threads: [@_llm_bo](https://www.instagram.com/_llm_bo/)
+Site: [llmbo.app](https://llmbo.app) · Instagram e Threads: [@llmbo.app](https://www.instagram.com/llmbo.app/)
+
+## Segurança
+
+O LlMBO usa uma regra do `sudo` para ligar e desligar o repouso. Se você achar uma falha de segurança, **não abra uma issue pública**: escreva pelo [formulário de contato](https://llmbo.app/contact.html), que chega só para o autor. Quando houver correção, ela sai numa versão nova e o aviso público vem depois.
+
+Para tirar tudo do Mac (inclusive a regra do `sudo`), use **Desinstalar o LlMBO…** na aba Sobre. Arrastar o app para o Lixo deixa a regra para trás.
 
 ---
 
@@ -113,4 +119,6 @@ Or download [LlMBO.dmg](https://github.com/fcknferreira/LlMBO/releases/latest/do
 > [!CAUTION]
 > **The first time, macOS will suggest "Move to Trash". DO NOT click it.** Click **Done**. The warning only appears because LlMBO doesn't pay for Apple's $99/year signing program — not because anything is wrong with it. Recent macOS versions no longer offer an "Open" button there. Instead, go to **System Settings › Privacy & Security**, scroll down, click **Open Anyway** next to LlMBO, confirm **Open Anyway** again and enter your password. The button only shows for about an hour after you try to open the app.
 
-The app is available in 23 languages. License: [MIT](LICENSE).
+The app is available in 23 languages. License: [MIT](LICENSE). Website: [llmbo.app](https://llmbo.app) · Instagram and Threads: [@llmbo.app](https://www.instagram.com/llmbo.app/)
+
+**Security:** LlMBO uses a `sudo` rule to turn sleep on and off. If you find a security issue, **please don't open a public issue**: write through the [contact form](https://llmbo.app/contact.html), which only reaches the author. To remove everything from your Mac (including the `sudo` rule), use **Uninstall LlMBO…** in the About tab; dragging the app to the Trash leaves the rule behind.

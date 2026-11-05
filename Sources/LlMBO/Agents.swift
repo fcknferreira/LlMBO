@@ -44,13 +44,14 @@ struct AgentConfig: Codable, Hashable {
     var hasRule: Bool { !executables.isEmpty || !argsContains.isEmpty || !(activityPaths ?? []).isEmpty }
 
     func matches(_ p: ProcInfo) -> Bool {
-        if let ex = argsExcludes, ex.contains(where: { p.args.contains($0) }) { return false }
+        // Roda para cada processo × agente a cada tick: nomes já vêm calculados e a busca é por bytes (memmem);
+        // String.contains do Foundation custava ~300 ms por tick com ~600 processos.
+        if let ex = argsExcludes, ex.contains(where: { bytesContain(p.args, $0) }) { return false }
         // Nome real do executável (o caminho pode ter espaços, então não dá para confiar só nos args).
-        if executables.contains((p.exe as NSString).lastPathComponent) { return true }
+        if executables.contains(p.exeName) { return true }
         // Scripts de node: "node /caminho/bin/claude …"
-        let tokens = p.args.split(separator: " ", maxSplits: 2)
-        if tokens.count > 1, executables.contains((String(tokens[1]) as NSString).lastPathComponent) { return true }
-        return argsContains.contains { p.args.contains($0) }
+        if let n = p.arg1Name, executables.contains(n) { return true }
+        return argsContains.contains { bytesContain(p.args, $0) }
     }
 
     static let defaults: [AgentConfig] = [
@@ -83,8 +84,10 @@ struct AgentConfig: Codable, Hashable {
         // IDEs com agente: a CPU da IDE parada é maior, por isso o limite mais alto.
         AgentConfig(id: "cursor", name: "Cursor",
                     executables: ["cursor-agent"], argsContains: ["Cursor.app/Contents/MacOS/"], cpuThreshold: 20),
+        // Windsurf virou Devin Desktop; o nome do pacote novo não está na doc (palpite: Devin.app).
         AgentConfig(id: "windsurf", name: "Windsurf",
-                    executables: [], argsContains: ["Windsurf.app/Contents/MacOS/"], cpuThreshold: 20),
+                    executables: [], argsContains: ["Windsurf.app/Contents/MacOS/", "Devin.app/Contents/MacOS/",
+                                                    "Devin Desktop.app/Contents/MacOS/"], cpuThreshold: 20),
         AgentConfig(id: "kiro", name: "Kiro",
                     executables: [], argsContains: ["Kiro.app/Contents/MacOS/"], cpuThreshold: 20),
         AgentConfig(id: "copilot", name: "GitHub Copilot CLI",
@@ -176,22 +179,48 @@ struct AgentConfig: Codable, Hashable {
         if let ids = extensionIDs, !ids.isEmpty {
             let dirs = ["~/.vscode/extensions", "~/.vscode-insiders/extensions", "~/.cursor/extensions"]
                 .map { ($0 as NSString).expandingTildeInPath }
-            return dirs.contains { dir in
+            if dirs.contains(where: { dir in
                 let names = (try? fm.contentsOfDirectory(atPath: dir)) ?? []
                 return names.contains { n in ids.contains { n.lowercased().hasPrefix($0.lowercased() + "-") } }
+            }) { return true }
+            // O VS Code novo já traz o Copilot embutido (extensions/copilot dentro do app), sem nada em ~/.vscode.
+            if id == "copilot-vscode" {
+                return ["Visual Studio Code", "Visual Studio Code - Insiders"].contains { app in
+                    ["/Applications", ("~/Applications" as NSString).expandingTildeInPath].contains {
+                        fm.fileExists(atPath: "\($0)/\(app).app/Contents/Resources/app/extensions/copilot")
+                    }
+                }
             }
+            return false
         }
         let appDirs = ["/Applications", "/Applications/Setapp", ("~/Applications" as NSString).expandingTildeInPath]
         let bundles = argsContains.compactMap { arg in arg.range(of: ".app/").map { String(arg[..<$0.lowerBound]) + ".app" } }
         if !bundles.isEmpty {
             // Agente que é um app: vale o app instalado (a pasta de dados pode ser de outro, ex.: app e IDE do Antigravity).
             if bundles.contains(where: { b in appDirs.contains { fm.fileExists(atPath: "\($0)/\(b)") } }) { return true }
-        } else if expandedActivityPaths.contains(where: { fm.fileExists(atPath: $0) }) {
+        } else if executables.isEmpty, expandedActivityPaths.contains(where: { fm.fileExists(atPath: $0) }) {
+            // Só para quem não tem comando: a pasta de dados de um CLI sobra depois de desinstalar (e o Copilot do
+            // VS Code cria a ~/.copilot, o Gemini CLI antigo deixou a ~/.gemini/tmp), então ela não prova que está instalado.
             return true
         }
-        let binDirs = ["/usr/local/bin", "/opt/homebrew/bin", "~/.local/bin", "~/.gemini/bin", "~/.bun/bin", "~/.npm-global/bin",
-                       "~/.volta/bin", "~/.cargo/bin", "~/go/bin"].map { ($0 as NSString).expandingTildeInPath }
-        return executables.contains { e in binDirs.contains { fm.isExecutableFile(atPath: "\($0)/\(e)") } }
+        // O Claude Code pode vir só dentro do app Claude, fora do PATH.
+        if id == "claude", MCPInstall.claudeCLI != nil { return true }
+        return executables.contains { e in Self.binDirs.contains { fm.isExecutableFile(atPath: "\($0)/\(e)") } }
+    }
+
+    /// Pastas onde os instaladores comuns põem comandos (Homebrew, npm, bun, pnpm, volta, nvm, fnm, mise, asdf, cargo, go).
+    static var binDirs: [String] {
+        let fm = FileManager.default
+        var dirs = ["/usr/local/bin", "/opt/homebrew/bin", "~/.local/bin", "~/bin", "~/.gemini/bin", "~/.bun/bin",
+                    "~/.npm-global/bin", "~/.volta/bin", "~/.cargo/bin", "~/go/bin", "~/Library/pnpm", "~/.local/share/pnpm",
+                    "~/.local/share/mise/shims", "~/.asdf/shims", "~/.yarn/bin"].map { ($0 as NSString).expandingTildeInPath }
+        // Gerenciadores de versão do Node: uma pasta bin por versão instalada.
+        for (root, sub) in [("~/.nvm/versions/node", "bin"), ("~/.local/share/fnm/node-versions", "installation/bin"),
+                            ("~/Library/Application Support/fnm/node-versions", "installation/bin")] {
+            let r = (root as NSString).expandingTildeInPath
+            for v in (try? fm.contentsOfDirectory(atPath: r)) ?? [] { dirs.append("\(r)/\(v)/\(sub)") }
+        }
+        return dirs
     }
 
     /// Caminhos de atividade já expandidos (sem ~).
@@ -290,30 +319,51 @@ struct ProcInfo {
     let args: String
     /// Caminho real do executável (proc_pidpath); vazio se não der para ler.
     let exe: String
+    /// Último componente de `exe`.
+    let exeName: String
+    /// Último componente do 2º item do comando ("node /caminho/bin/claude …" → "claude").
+    let arg1Name: String?
+
+    init(pid: Int32, ppid: Int32, cpu: Double, args: String, exe: String) {
+        self.pid = pid; self.ppid = ppid; self.cpu = cpu; self.args = args; self.exe = exe
+        exeName = exe.split(separator: "/").last.map(String.init) ?? exe
+        let tokens = args.split(separator: " ", maxSplits: 2)
+        arg1Name = tokens.count > 1 ? (tokens[1].split(separator: "/").last.map(String.init) ?? String(tokens[1])) : nil
+    }
 }
 
-private func executablePath(_ pid: Int32) -> String {
-    var buf = [CChar](repeating: 0, count: 4 * Int(MAXPATHLEN))
-    return proc_pidpath(pid, &buf, UInt32(buf.count)) > 0 ? String(cString: buf) : ""
+private func executablePath(_ pid: Int32, _ buf: inout [CChar]) -> String {
+    proc_pidpath(pid, &buf, UInt32(buf.count)) > 0 ? String(cString: buf) : ""
 }
 
-private let psRegex = try! NSRegularExpression(pattern: #"^\s*(\d+)\s+(\d+)\s+([\d.,]+)\s+(.*)$"#)
-
+/// Lista de processos pelo `ps`. Lida byte a byte (sem regex nem NSString): roda a cada tick.
 func processSnapshot() -> [ProcInfo] {
     let out = run("/bin/ps", ["-axww", "-o", "pid=,ppid=,pcpu=,args="]).output
+    var buf = [CChar](repeating: 0, count: 4 * Int(MAXPATHLEN))
     var result: [ProcInfo] = []
+    result.reserveCapacity(1024)
     for line in out.split(separator: "\n") {
-        let s = String(line)
-        let ns = s as NSString
-        guard let m = psRegex.firstMatch(in: s, range: NSRange(location: 0, length: ns.length)),
-              let pid = Int32(ns.substring(with: m.range(at: 1))),
-              let ppid = Int32(ns.substring(with: m.range(at: 2))),
-              let cpu = Double(ns.substring(with: m.range(at: 3)).replacingOccurrences(of: ",", with: "."))
+        // pid ppid pcpu args (os três primeiros alinhados com espaços; args pode ter espaços)
+        let f = line.split(separator: " ", maxSplits: 3, omittingEmptySubsequences: true)
+        guard f.count >= 3, let pid = Int32(f[0]), let ppid = Int32(f[1]),
+              let cpu = Double(f[2].replacingOccurrences(of: ",", with: "."))
         else { continue }
-        result.append(ProcInfo(pid: pid, ppid: ppid, cpu: cpu, args: ns.substring(with: m.range(at: 4)),
-                               exe: executablePath(pid)))
+        let args = f.count > 3 ? String(f[3]) : ""
+        result.append(ProcInfo(pid: pid, ppid: ppid, cpu: cpu, args: args, exe: executablePath(pid, &buf)))
     }
     return result
+}
+
+/// Busca de texto por bytes (memmem). Bem mais rápida que String.contains do Foundation em textos longos
+/// (linhas de comando, linhas de .jsonl); equivale a ela para os trechos ASCII que procuramos.
+func bytesContain<S: StringProtocol>(_ hay: S, _ needle: String) -> Bool {
+    let r: Bool?? = hay.utf8.withContiguousStorageIfAvailable { h in
+        needle.utf8.withContiguousStorageIfAvailable { n in
+            n.isEmpty || (h.count >= n.count && memmem(h.baseAddress, h.count, n.baseAddress, n.count) != nil)
+        }
+    }
+    if let r, let v = r { return v }
+    return hay.contains(needle)
 }
 
 // MARK: - Sinais dos hooks

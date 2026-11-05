@@ -28,6 +28,12 @@ final class GPUSampler {
     /// Tempo de GPU acumulado (ns) por pid.
     static func accumulated() -> [Int32: UInt64] {
         var out: [Int32: UInt64] = [:]
+        var clients = 0
+        defer {
+            // Há clientes da GPU, mas nenhum com "AppUsage": o macOS mudou as chaves e o sinal de GPU morreu.
+            Canaries.report("gpu", .agents, problem: clients > 0 && out.isEmpty
+                ? String(localized: "Não consigo mais ler o uso de GPU: o macOS mudou o jeito de informar. IA local passa a contar só pela CPU e pelos arquivos.") : nil)
+        }
         var services: io_iterator_t = 0
         guard IOServiceGetMatchingServices(kIOMainPortDefault, IOServiceMatching("IOAccelerator"), &services) == KERN_SUCCESS else { return out }
         defer { IOObjectRelease(services) }
@@ -37,6 +43,7 @@ final class GPUSampler {
             guard IORegistryEntryGetChildIterator(accel, kIOServicePlane, &children) == KERN_SUCCESS else { continue }
             while case let client = IOIteratorNext(children), client != 0 {
                 defer { IOObjectRelease(client) }
+                if property(client, "IOUserClientCreator") != nil { clients += 1 }
                 guard let creator = property(client, "IOUserClientCreator") as? String,
                       let pid = Int32(creator.dropFirst(4).prefix { $0.isNumber }),   // "pid 618, WindowServer"
                       let usage = property(client, "AppUsage") as? [[String: Any]] else { continue }

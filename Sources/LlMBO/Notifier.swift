@@ -243,7 +243,6 @@ final class Notifier: NSObject, ObservableObject, UNUserNotificationCenterDelega
 
     /// Uma linha por toque em sound.log (últimas 50): com a tampa fechada não dá para ouvir o que aconteceu.
     private func logSound(lidClosed: Bool, played: Bool) {
-        let url = Paths.support.appendingPathComponent("sound.log")
         let f = ISO8601DateFormatter()
         f.timeZone = .current
         let vol = SystemVolume.current().map { st in
@@ -286,38 +285,32 @@ final class Notifier: NSObject, ObservableObject, UNUserNotificationCenterDelega
     /// Com LLMBO_TEST_NOTIFY=1: pede a permissão, manda uma notificação de teste e grava o resultado em
     /// notify.log (para conferir se o macOS aceita notificações deste app, que não tem assinatura paga).
     func selfTest() {
-        var lines: [String] = []
-        let log = { (s: String) in
-            lines.append(s)
-            try? lines.joined(separator: "\n").write(to: Paths.support.appendingPathComponent("notify.log"),
-                                                     atomically: true, encoding: .utf8)
-        }
-        center.requestAuthorization(options: [.alert, .sound]) { granted, error in
-            Task { @MainActor in
-                log("permissão: \(granted) erro: \(error.map { "\($0)" } ?? "nenhum")")
-                let content = UNMutableNotificationContent()
-                content.title = "LlMBO"
-                content.body = String(localized: "Notificações")
-                let req = UNNotificationRequest(identifier: "llmbo-teste", content: content, trigger: nil)
-                self.center.add(req) { error in
-                    Task { @MainActor in
-                        log("envio: \(error.map { "\($0)" } ?? "ok")")
-                        self.center.getNotificationSettings { s in
-                            let st = s.authorizationStatus.rawValue, al = s.alertSetting.rawValue
-                            Task { @MainActor in
-                                log("status=\(st) alertas=\(al)")
-                                self.refresh()
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                    let via = self.status == .allowed ? "LlMBO" : "Editor de Scripts"
-                                    self.sendTest()
-                                    log("teste do app enviado por: \(via)")
-                                }
-                            }
-                        }
-                        self.refresh()
-                    }
-                }
+        Task { @MainActor in
+            var lines: [String] = []
+            func log(_ s: String) {
+                lines.append(s)
+                try? lines.joined(separator: "\n").write(to: Paths.support.appendingPathComponent("notify.log"),
+                                                         atomically: true, encoding: .utf8)
             }
+            do {
+                let granted = try await center.requestAuthorization(options: [.alert, .sound])
+                log("permissão: \(granted) erro: nenhum")
+            } catch {
+                log("permissão: false erro: \(error)")
+            }
+            let content = UNMutableNotificationContent()
+            content.title = "LlMBO"
+            content.body = String(localized: "Notificações")
+            let req = UNNotificationRequest(identifier: "llmbo-teste", content: content, trigger: nil)
+            do { try await center.add(req); log("envio: ok") } catch { log("envio: \(error)") }
+            refresh()
+            let s = await center.notificationSettings()
+            log("status=\(s.authorizationStatus.rawValue) alertas=\(s.alertSetting.rawValue)")
+            refresh()
+            try? await Task.sleep(nanoseconds: 1_000_000_000)
+            let via = status == .allowed ? "LlMBO" : "Editor de Scripts"
+            sendTest()
+            log("teste do app enviado por: \(via)")
         }
     }
 

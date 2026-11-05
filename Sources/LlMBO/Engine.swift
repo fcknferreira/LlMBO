@@ -107,6 +107,8 @@ final class Engine: ObservableObject {
     @Published private(set) var canScheduleWake = false
     /// Despertar agendado pelo LlMBO para o agente continuar depois do limite.
     @Published private(set) var scheduledWake: Date?
+    /// Último limite estourado já registrado no quota-events.log, por agente (uma linha por parada).
+    private var loggedQuota: [String: Date] = [:]
     /// Barra de status do Claude Code ligada ao LlMBO (lê os limites de uso).
     @Published private(set) var claudeStatusLine = Hooks.statusLineInstalled
     /// Tempo máximo acordado na tomada; 0 = sem limite.
@@ -131,6 +133,10 @@ final class Engine: ObservableObject {
     private var hotWarned = false
     /// Agentes cujo hook já mandou algum sinal: só então o hook passa a decidir sozinho
     /// (ex.: o Codex só roda hook novo depois que o usuário aprova em /hooks).
+    /// Canário do hook mudo: vezes seguidas em que o agente trabalhou (arquivos de sessão mexendo) sem nenhum sinal
+    /// do hook instalado, e quando foi a última. Um sinal do hook zera.
+    private var muteEpisodes: [String: Int] = [:]
+    private var muteEpisodeAt: [String: Date] = [:]
     private var hookSeen: Set<String> = [] {
         didSet { if hookSeen != oldValue { UserDefaults.standard.set(Array(hookSeen), forKey: "hookSeen") } }
     }
@@ -293,13 +299,39 @@ final class Engine: ObservableObject {
         return Date(timeIntervalSince1970: epoch)
     }
 
+    /// Canário: hook instalado, agente aberto e trabalhando (arquivos de sessão mexendo há menos de 2 min), mas nenhum
+    /// sinal do hook há 10 min ou mais. Três vezes seguidas (separadas por 10 min de calma) = o hook parou de chegar.
+    private func checkMuteHook(_ a: AgentConfig, hasHook: Bool, running: Bool, sigs: [HookSignal], now: Date) {
+        let id = "hook-" + a.id
+        guard hasHook, running else { return }
+        if let last = sigs.map(\.time).max(), now.timeIntervalSince(last) < 600 {
+            muteEpisodes[a.id] = 0
+            Canaries.shared.clear(id)
+            return
+        }
+        guard let w = watcher.lastWrite[a.id], now.timeIntervalSince(w) < 120 else { return }
+        if muteEpisodeAt[a.id].map({ now.timeIntervalSince($0) > 600 }) ?? true { muteEpisodes[a.id, default: 0] += 1 }
+        muteEpisodeAt[a.id] = now
+        guard muteEpisodes[a.id, default: 0] >= 3 else { return }
+        Canaries.shared.raise(id, .agents, a.id == "codex"
+            ? String(localized: "Não estou recebendo os sinais do Codex. Talvez ele precise aprovar o hook de novo: rode /hooks no Codex.")
+            : String(localized: "Não estou recebendo os sinais do \(a.name). Uma atualização dele pode ter mudado ou apagado o hook: remova e instale de novo na seção Hooks."))
+    }
+
     /// Agente trabalhando: desliga o repouso (inclusive com a tampa fechada).
     private func hold() {
         guard !holding else { return }
         guard Power.setSleepDisabled(true) else {
             message = String(localized: "Não consegui desativar o repouso.")
+            // Com a regra instalada, o sudo passou a pedir senha: uma atualização do macOS pode ter mexido nela.
+            if helperInstalled, Canaries.shared.issues["sudo"] == nil {
+                let text = String(localized: "A permissão de administrador parou de funcionar e o Mac pode dormir com a tampa fechada. Reinstale a permissão no assistente (aba Sistema).")
+                Canaries.shared.raise("sudo", .system, text)
+                Notifier.shared.post(text, force: true)
+            }
             return
         }
+        Canaries.shared.clear("sudo")
         holding = true
         holdingSince = Date()
         Watchdog.setHolding(true)
@@ -336,19 +368,6 @@ final class Engine: ObservableObject {
 
     var watcherDiagnostics: [String] { watcher.diagnosticLines }
 
-    func installHooks(_ agent: String) {
-        switch Hooks.install(agent) {
-        case .success: agentMessage = String(localized: "Hooks instalados. Valem para as próximas sessões do agente.")
-        case .failure(let e): agentMessage = String(localized: "Hooks: \(e.localizedDescription)")
-        }
-        refreshHooks()
-    }
-
-    func uninstallHooks(_ agent: String) {
-        if case .failure(let e) = Hooks.uninstall(agent) { agentMessage = String(localized: "Hooks: \(e.localizedDescription)") }
-        refreshHooks()
-    }
-
     private func refreshHooks() {
         var m: [String: Hooks.State] = [:]
         for a in agents { m[a.id] = Hooks.state(a.id) }
@@ -364,16 +383,100 @@ final class Engine: ObservableObject {
         let isNew = !list.contains { $0.id == a.id }
         if let i = list.firstIndex(where: { $0.id == a.id }) { list[i] = a } else { list.append(a) }
         commit(list)
-        if isNew { linkHook(a) }
+        if isNew { link(a) }
     }
 
-    private func linkHook(_ a: AgentConfig) {
-        guard Hooks.supported.contains(a.id), a.isPresentOnMac, Hooks.state(a.id) == .notInstalled else { return }
-        switch Hooks.install(a.id) {
-        case .success: agentMessage = String(localized: "\(a.name) adicionado, com hook ligado.")
-        case .failure(let e): agentMessage = String(localized: "\(a.name) adicionado, mas o hook falhou: \(e.localizedDescription)")
+    /// Agente novo que está no Mac já sai conectado: hook e servidor MCP, o que ele aceitar.
+    private func link(_ a: AgentConfig) {
+        guard a.isPresentOnMac, let c = connections.first(where: { $0.agentIDs.contains(a.id) }), !isConnected(c) else { return }
+        let errors = install(c)
+        agentMessage = errors.isEmpty ? String(localized: "\(a.name) adicionado e conectado.")
+                                      : String(localized: "\(a.name) adicionado, mas a conexão falhou: \(errors.joined(separator: "; "))")
+    }
+
+    // MARK: Conexão com os agentes (hook + MCP)
+
+    /// Uma linha por arquivo de configuração: agentes que dividem hook e MCP (os três Antigravity, o Copilot CLI e o
+    /// do VS Code) aparecem juntos. Inclui servidores MCP já instalados de agentes fora da lista, para poder tirar.
+    var connections: [AgentConnection] {
+        var out: [AgentConnection] = []
+        var seen = Set<String>()
+        for a in agents {
+            let key = Hooks.familyKey(a.id)
+            let target = MCPInstall.targets.first { $0.agentIDs.contains(a.id) }
+            let hook = Hooks.supported.contains(a.id) ? a.id : nil
+            guard hook != nil || target != nil else { continue }
+            if let i = out.firstIndex(where: { $0.id == key }) {
+                out[i].agentIDs.insert(a.id)
+                if out[i].hookAgent == nil { out[i].hookAgent = hook }
+                continue
+            }
+            seen.insert(key)
+            out.append(AgentConnection(id: key, name: Hooks.displayName(a.id, fallback: a.name), hookAgent: hook, mcp: target,
+                                       agentIDs: [a.id]))
+        }
+        for t in MCPInstall.targets where mcpInstalled.contains(t.id) && !out.contains(where: { $0.mcp?.id == t.id }) && !seen.contains(t.id) {
+            out.append(AgentConnection(id: t.id, name: t.name, hookAgent: nil, mcp: t, agentIDs: t.agentIDs))
+        }
+        return out
+    }
+
+    func hookState(_ c: AgentConnection) -> Hooks.State {
+        guard let h = c.hookAgent else { return .unsupported }
+        return hookStates[h] ?? Hooks.state(h)
+    }
+
+    /// O Claude Code instala o MCP pelo próprio CLI: sem ele, a parte do MCP fica de fora.
+    func mcpAvailable(_ c: AgentConnection) -> Bool {
+        guard let t = c.mcp else { return false }
+        return t.id != "claude" || MCPInstall.claudeCLI != nil || mcpInstalled.contains(t.id)
+    }
+
+    func mcpOn(_ c: AgentConnection) -> Bool { c.mcp.map { mcpInstalled.contains($0.id) } ?? false }
+
+    /// Tudo o que o agente aceita está instalado (hook em conflito não conta).
+    func isConnected(_ c: AgentConnection) -> Bool {
+        let hook = hookState(c)
+        let hookOK = hook == .installed || hook == .unsupported || { if case .conflict = hook { return true }; return false }()
+        return hookOK && (!mcpAvailable(c) || mcpOn(c))
+    }
+
+    func anyPieceOn(_ c: AgentConnection) -> Bool { hookState(c) == .installed || mcpOn(c) }
+
+    /// Instala o que falta; devolve os erros.
+    @discardableResult
+    private func install(_ c: AgentConnection) -> [String] {
+        var errors: [String] = []
+        if let h = c.hookAgent, hookState(c) == .notInstalled, case .failure(let e) = Hooks.install(h) {
+            errors.append(String(localized: "hook: \(e.localizedDescription)"))
+        }
+        if let t = c.mcp, mcpAvailable(c), !mcpInstalled.contains(t.id) {
+            do { try MCPInstall.install(t) } catch { errors.append("MCP: \(error.localizedDescription)") }
         }
         refreshHooks()
+        mcpInstalled = Set(MCPInstall.targets.filter(MCPInstall.isInstalled).map(\.id))
+        return errors
+    }
+
+    func connect(_ c: AgentConnection) { connect([c]) }
+
+    func connect(_ list: [AgentConnection]) {
+        let errors = list.flatMap { c in install(c).map { "\(c.name): \($0)" } }
+        agentMessage = errors.isEmpty ? String(localized: "Conectado. Vale para as próximas sessões do agente.")
+                                      : errors.joined(separator: "\n")
+    }
+
+    func disconnect(_ c: AgentConnection) {
+        var errors: [String] = []
+        if let h = c.hookAgent, hookState(c) == .installed, case .failure(let e) = Hooks.uninstall(h) {
+            errors.append(String(localized: "hook: \(e.localizedDescription)"))
+        }
+        if let t = c.mcp, mcpInstalled.contains(t.id) {
+            do { try MCPInstall.remove(t) } catch { errors.append("MCP: \(error.localizedDescription)") }
+        }
+        refreshHooks()
+        mcpInstalled = Set(MCPInstall.targets.filter(MCPInstall.isInstalled).map(\.id))
+        agentMessage = errors.isEmpty ? String(localized: "Desconectado.") : "\(c.name): " + errors.joined(separator: "; ")
     }
 
     /// Pré-cadastrados que ainda não estão na lista (o menu "Adicionar agente").
@@ -381,12 +484,19 @@ final class Engine: ObservableObject {
         AgentConfig.catalog.filter { c in !agents.contains { $0.id == c.id } }
     }
 
-    /// Tira da lista e desliga o hook dele (só as entradas do LlMBO).
+    /// Tira da lista e desconecta (hook e MCP, só as entradas do LlMBO).
     func removeAgent(_ id: String) {
-        // Agentes que dividem o mesmo hook (os três Antigravity): só desliga quando o último sai da lista.
-        let sharing = Hooks.sharedWith(id).subtracting([id])
-        let othersRemain = agents.contains { sharing.contains($0.id) }
-        if Hooks.supported.contains(id), !othersRemain, Hooks.state(id) == .installed { Hooks.uninstall(id) }
+        // Agentes que dividem o mesmo arquivo (os três Antigravity; Copilot CLI e do VS Code): só desliga
+        // quando o último sai da lista.
+        let remaining = Set(agents.map(\.id)).subtracting([id])
+        if Hooks.supported.contains(id), remaining.isDisjoint(with: Hooks.sharingFile(id)), Hooks.state(id) == .installed {
+            Hooks.uninstall(id)
+        }
+        if let t = MCPInstall.targets.first(where: { $0.agentIDs.contains(id) }),
+           remaining.isDisjoint(with: t.agentIDs), mcpInstalled.contains(t.id) {
+            try? MCPInstall.remove(t)
+            mcpInstalled = Set(MCPInstall.targets.filter(MCPInstall.isInstalled).map(\.id))
+        }
         commit(agents.filter { $0.id != id })
     }
 
@@ -511,6 +621,10 @@ final class Engine: ObservableObject {
             let usageID = a.id.hasPrefix("antigravity") ? "antigravity" : a.id
             let quotaReset = quotaAt.flatMap { q in (UsageStore.shared.byAgent[usageID] ?? (a.id == "claude" ? UsageStore.shared.claude : nil))?.resetAfterLimit(hitAt: q) }
             let quotaHold = quotaAt.map { Self.quotaHolds(mode: quotaMode(for: a.id), hitAt: $0, reset: quotaReset, now: now) } ?? false
+            if let q = quotaAt, loggedQuota[a.id] != q, now.timeIntervalSince(q) < 600 {
+                loggedQuota[a.id] = q
+                QuotaLog.write("\(a.id) reação modo=\(quotaMode(for: a.id).logName) reset=\(quotaReset.map(QuotaLog.time) ?? "desconhecido") segura=\(quotaHold ? "sim" : "não")")
+            }
 
             // Um "idle" do hook encerra a espera na hora, desde que seja mais novo que a atividade
             // (com folga: o agente ainda grava a última mensagem logo depois do Stop).
@@ -538,7 +652,9 @@ final class Engine: ObservableObject {
             // Só depois de visto funcionando: hook instalado mas nunca disparado (não aprovado, sessão antiga…)
             // deixaria o agente invisível.
             let hasHook = hookStates[a.id] == .installed
-            let hookCapable = Hooks.supported.contains(a.id)
+            // O Copilot do VS Code só passa a "só hook" depois de visto: os hooks do VS Code estão em prévia e,
+            // se ele chamar um executável "copilot" por baixo, o sinal vai para o Copilot CLI.
+            let hookCapable = Hooks.supported.contains(a.id) && (a.id != "copilot-vscode" || hookSeen.contains(a.id))
             let hookOnly = (strictHooks && hookCapable)
                 || (Hooks.fullLifecycle.contains(a.id) && hasHook && hookSeen.contains(a.id))
             // Hierarquia: hook > arquivos de sessão > CPU.
@@ -561,6 +677,9 @@ final class Engine: ObservableObject {
             var status = AgentStatus(id: a.id, name: a.name, running: running, active: active, cpu: cpu,
                                      viaHook: hookBusy, reason: reason, hook: hookStates[a.id] ?? .unsupported)
             status.waitingHook = hookOnly && hasHook && running && sigs.isEmpty
+            // App, IDE e CLI do Antigravity dividem hook e pasta: sinal de qualquer um deles vale.
+            checkMuteHook(a, hasHook: hasHook, running: running,
+                          sigs: signals.filter { Hooks.sharedWith(a.id).contains($0.agent) }, now: now)
             status.waitingApproval = waitingApproval
             if let q = quotaAt, !hookBusy {
                 status.waitingQuota = quotaReset.map { $0 > now } ?? (now.timeIntervalSince(q) < 5 * 3600)
@@ -720,9 +839,16 @@ final class Engine: ObservableObject {
         }
         let target = candidates.min()
         guard target != scheduledWake else { return }
-        if let old = scheduledWake, old > now { Power.cancelWake(old) }
+        if let old = scheduledWake, old > now {
+            Power.cancelWake(old)
+            QuotaLog.write("despertar cancelado (era \(QuotaLog.time(old)))")
+        }
         scheduledWake = nil
-        if let t = target, Power.scheduleWake(t) { scheduledWake = t }
+        if let t = target {
+            let ok = Power.scheduleWake(t)
+            if ok { scheduledWake = t }
+            QuotaLog.write(ok ? "despertar agendado para \(QuotaLog.time(t))" : "despertar para \(QuotaLog.time(t)) falhou")
+        }
     }
 
     /// Instala ou remove o servidor MCP do LlMBO nos destinos dados (MCPInstall.targets).
@@ -744,11 +870,6 @@ final class Engine: ObservableObject {
         mcpInstalled = Set(MCPInstall.targets.filter(MCPInstall.isInstalled).map(\.id))
     }
 
-    /// Destinos de MCP dos agentes da lista (ou já instalados), na ordem da tabela.
-    var mcpTargets: [MCPTarget] {
-        let mine = Set(agents.map(\.id))
-        return MCPInstall.targets.filter { !$0.agentIDs.isDisjoint(with: mine) || mcpInstalled.contains($0.id) }
-    }
 
     /// "Ler limites de uso" do Claude Code (aba Uso): uma opção só para as duas leituras — o `/usage` (funciona também
     /// pelo app Claude, a cada 5 min) e a barra de status (na hora, só no Claude Code de terminal).
@@ -870,6 +991,40 @@ enum ThermalLimit: Int, CaseIterable, Identifiable {
 }
 
 /// O que fazer quando o Claude Code bate no limite de uso e fica esperando o reset para continuar sozinho.
+/// quota-events.log: o llmbo-signal grava "data hora agente quota" ao estourar o limite, e o app acrescenta como
+/// reagiu (modo, reset, se segura, despertar agendado). Só horários e ids, nada da conversa; últimas 50 linhas.
+enum QuotaLog {
+    private static let queue = DispatchQueue(label: "llmbo.quotalog")
+    private static var last = ""   // a mesma linha repetida (despertar que falha a cada tick) não enche o arquivo
+    static func time(_ d: Date) -> String {
+        let f = DateFormatter(); f.dateFormat = "yyyy-MM-dd HH:mm"; return f.string(from: d)
+    }
+    static func write(_ text: String) {
+        let url = Paths.support.appendingPathComponent("quota-events.log")
+        let f = DateFormatter(); f.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let line = "\(f.string(from: Date())) \(text)"
+        queue.async {
+            guard text != last else { return }
+            last = text
+            var lines = ((try? String(contentsOf: url, encoding: .utf8)) ?? "").split(separator: "\n").map(String.init)
+            lines.append(line)
+            if lines.count > 50 { lines.removeFirst(lines.count - 50) }
+            try? (lines.joined(separator: "\n") + "\n").write(to: url, atomically: true, encoding: .utf8)
+        }
+    }
+}
+
+/// Uma linha de "Conexão com os agentes": o hook (avisa começo e fim) e o servidor MCP (o agente pede para segurar o
+/// Mac em tarefas que continuam depois da resposta) de um agente, ou de uma família que divide os arquivos.
+struct AgentConnection: Identifiable, Equatable {
+    let id: String
+    let name: String
+    var hookAgent: String?
+    let mcp: MCPTarget?
+    var agentIDs: Set<String>
+    static func == (a: Self, b: Self) -> Bool { a.id == b.id && a.hookAgent == b.hookAgent && a.agentIDs == b.agentIDs }
+}
+
 enum QuotaMode: Int, CaseIterable, Identifiable {
     /// Deixa o Mac dormir e o acorda 2 min antes do reset (precisa da barra de status e da permissão nova).
     case wake = 0
@@ -879,6 +1034,8 @@ enum QuotaMode: Int, CaseIterable, Identifiable {
     case ignore = 2
 
     var id: Int { rawValue }
+    /// Nome fixo (sem tradução) para o quota-events.log.
+    var logName: String { switch self { case .wake: "acordar"; case .stayAwake: "acordado"; case .ignore: "nao-esperar" } }
 
     var title: String {
         switch self {

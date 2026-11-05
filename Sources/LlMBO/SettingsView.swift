@@ -348,6 +348,7 @@ struct SystemTab: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 22) {
+            CanaryNotes(area: .system)
             CardSection(title: String(localized: "Funcionamento")) {
                 ToggleRow(title: String(localized: "Abrir ao iniciar sessão"), isOn: $engine.launchAtLogin)
                 CardDivider()
@@ -448,6 +449,7 @@ struct AgentsTab: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 22) {
+            CanaryNotes(area: .agents)
             if engine.agents.isEmpty {
                 Card {
                     Text("Nenhum agente. Use “Adicionar agente” para escolher um da lista ou cadastrar o seu.")
@@ -462,26 +464,7 @@ struct AgentsTab: View {
             AgentSection(title: String(localized: "Extensões de IDE"), agents: engine.agents.filter(\.isIDEExtension), model: model)
             AgentSection(title: String(localized: "IA local"), agents: engine.agents.filter(\.isLocalAI), model: model)
 
-            let hookIDs = Hooks.uniqueHooks(engine.statuses.map(\.id).filter { Hooks.supported.contains($0) })
-            let hookable = engine.statuses.filter { hookIDs.contains($0.id) }
-            if !hookable.isEmpty {
-                VStack(alignment: .leading, spacing: 8) {
-                    CardSection(title: String(localized: "Hooks"),
-                                info: String(localized: "Os hooks avisam na hora quando o agente começa e termina. Os outros agentes são detectados pelos arquivos de sessão e pela CPU.")) {
-                        ForEach(Array(hookable.enumerated()), id: \.element.hookRowID) { i, s in
-                            if i > 0 { CardDivider() }
-                            HookRow(status: s)
-                        }
-                    }
-                    if let m = engine.agentMessage {
-                        Text(m)
-                            .font(.system(size: 11))
-                            .foregroundStyle(Theme.muted)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.horizontal, 4)
-                    }
-                }
-            }
+            ConnectionsSection()
 
             LongTasksSection()
 
@@ -503,48 +486,19 @@ struct AgentsTab: View {
 
 /// Tarefas longas: o comando `llmbo-signal hold` para o terminal e o servidor MCP para os agentes pedirem sozinhos.
 private struct LongTasksSection: View {
-    @EnvironmentObject var engine: Engine
-    private let claudeCLI = MCPInstall.claudeCLI
 
     var body: some View {
         CardSection(title: String(localized: "Tarefas longas"),
-                    info: String(localized: "Builds, testes, renders e downloads longos podem segurar o Mac acordado mesmo sem agente trabalhando: no terminal, ponha o comando depois de “llmbo-signal hold --”. Os agentes também podem pedir sozinhos pelo servidor MCP do LlMBO (ferramenta keep_mac_awake), por exemplo quando deixam um build rodando depois de responder. O Mac é solto quando o processo termina ou o prazo vence.")) {
+                    info: String(localized: "Builds, testes, renders e downloads longos podem segurar o Mac acordado mesmo sem agente trabalhando: no terminal, ponha o comando depois de “llmbo-signal hold --”. Os agentes conectados pedem sozinhos pelo MCP. O Mac é solto quando o processo termina ou o prazo vence.")) {
             Row(title: String(localized: "Comando no terminal"), subtitle: "llmbo-signal hold -- npm run build") {
                 Button(String(localized: "Copiar")) { copy("\"\(Paths.signalScript.path)\" hold -- ") }
                     .buttonStyle(.pill)
             }
-            // Um destino por agente da lista (o Antigravity e o Copilot dividem o arquivo entre app, IDE e CLI).
-            let targets = engine.mcpTargets
-            let missing = targets.filter { !engine.mcpInstalled.contains($0.id) && ($0.id != "claude" || claudeCLI != nil) }
-            if missing.count > 1 {
-                CardDivider()
-                Row(title: String(localized: "Servidor MCP nos agentes")) {
-                    Button(String(localized: "Instalar em todos")) { engine.setMCP(missing.map(\.id), true) }
-                        .buttonStyle(.pill(.primary))
-                }
-            }
-            ForEach(targets) { t in
-                CardDivider()
-                let installed = engine.mcpInstalled.contains(t.id)
-                let noCLI = t.id == "claude" && claudeCLI == nil
-                Row(title: String(localized: "MCP no \(t.name)"),
-                    subtitle: noCLI ? String(localized: "Claude Code não encontrado neste Mac.") : nil) {
-                    mcpButton(t.id, installed: installed).disabled(noCLI && !installed)
-                }
-            }
             CardDivider()
             Row(title: String(localized: "MCP em outros agentes"),
-                subtitle: String(localized: "Configuração em JSON para colar no agente.")) {
+                subtitle: String(localized: "Para agentes fora da lista: configuração em JSON para colar no agente.")) {
                 Button(String(localized: "Copiar")) { copy(MCPInstall.json) }.buttonStyle(.pill)
             }
-        }
-    }
-
-    @ViewBuilder private func mcpButton(_ id: String, installed: Bool) -> some View {
-        if installed {
-            Button("Remover") { engine.setMCP([id], false) }.buttonStyle(.pill)
-        } else {
-            Button("Instalar") { engine.setMCP([id], true) }.buttonStyle(.pill(.primary))
         }
     }
 
@@ -656,36 +610,83 @@ private struct AgentListRow: View {
     }
 }
 
-private extension AgentStatus {
-    var hookRowID: String { "hook-" + id }
-}
-
-private struct HookRow: View {
+/// Conexão com os agentes: hook (avisa na hora quando o agente começa e termina) e servidor MCP (o agente pede para
+/// segurar o Mac em tarefas que continuam depois da resposta). Um botão liga os dois.
+private struct ConnectionsSection: View {
     @EnvironmentObject var engine: Engine
-    let status: AgentStatus
 
     var body: some View {
-        Row(title: Hooks.displayName(status.id, fallback: status.name), subtitle: detail) {
-            switch status.hook {
-            case .installed:
-                Button("Remover") { engine.uninstallHooks(status.id) }.buttonStyle(.pill)
-            case .notInstalled:
-                Button("Instalar") { engine.installHooks(status.id) }.buttonStyle(.pill(.primary))
-            case .conflict, .unsupported:
-                EmptyView()
+        let list = engine.connections
+        if !list.isEmpty {
+            let pending = list.filter { !engine.isConnected($0) }
+            VStack(alignment: .leading, spacing: 8) {
+                CardSection(title: String(localized: "Conexão com os agentes"),
+                            info: String(localized: "O LlMBO se conecta a cada agente de dois jeitos, e um completa o outro. O hook avisa na hora quando o agente começa e termina: é o sinal mais confiável para segurar o Mac e soltar logo depois do fim. O MCP dá ao agente a ferramenta keep_mac_awake, para ele pedir que o Mac fique acordado enquanto algo continua rodando depois da resposta (um build ou um download, por exemplo). Só são acrescentadas entradas do LlMBO nos arquivos de configuração, com backup. Agentes sem conexão são detectados pelos arquivos de sessão e pela CPU.")) {
+                    if pending.count > 1 {
+                        Row(title: String(localized: "Conectar todos os agentes da lista")) {
+                            Button(String(localized: "Conectar todos")) { engine.connect(pending) }
+                                .buttonStyle(.pill(.primary))
+                        }
+                        CardDivider()
+                    }
+                    ForEach(Array(list.enumerated()), id: \.element.id) { i, c in
+                        if i > 0 { CardDivider() }
+                        ConnectionRow(connection: c)
+                    }
+                }
+                if let m = engine.agentMessage {
+                    Text(m)
+                        .font(.system(size: 11))
+                        .foregroundStyle(Theme.muted)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.horizontal, 4)
+                }
+            }
+        }
+    }
+}
+
+private struct ConnectionRow: View {
+    @EnvironmentObject var engine: Engine
+    let connection: AgentConnection
+
+    var body: some View {
+        Row(title: connection.name, subtitle: ConnectionRow.detail(connection, engine)) {
+            if engine.isConnected(connection) {
+                if engine.anyPieceOn(connection) {
+                    Button(String(localized: "Desconectar")) { engine.disconnect(connection) }.buttonStyle(.pill)
+                }
+            } else {
+                Button(String(localized: "Conectar")) { engine.connect(connection) }.buttonStyle(.pill(.primary))
             }
         }
     }
 
-    private var detail: String {
-        switch status.hook {
-        case .installed:
-            let ok = String(localized: "Instalados ✓")
-            return (Hooks.note(status.id).map { "\(ok) · \($0)" } ?? ok) + "\n" + Self.approvalText(status.id)
-        case .notInstalled: return String(localized: "Não instalados")
-        case .conflict(let why): return why
-        case .unsupported: return String(localized: "Sem suporte")
+    /// "Hook ✓ · MCP ✓", o que falta, observações do agente e se avisa pedidos de aprovação.
+    static func detail(_ c: AgentConnection, _ engine: Engine) -> String {
+        var parts: [String] = []
+        let hook = engine.hookState(c)
+        switch hook {
+        case .installed: parts.append(String(localized: "Hook ✓"))
+        case .notInstalled: parts.append(String(localized: "Hook não instalado"))
+        case .conflict(let why): parts.append(why)
+        case .unsupported: parts.append(String(localized: "sem hook"))
         }
+        if engine.mcpAvailable(c) {
+            parts.append(engine.mcpOn(c) ? "MCP ✓" : String(localized: "MCP não instalado"))
+        } else if c.mcp?.id == "claude" {
+            parts.append(String(localized: "MCP precisa do Claude Code no Mac"))
+        } else {
+            parts.append(String(localized: "sem MCP"))
+        }
+        var lines = [parts.joined(separator: " · ")]
+        if hook == .installed {
+            var extra: [String] = []
+            if let h = c.hookAgent, let note = Hooks.note(h) { extra.append(note) }
+            if let h = c.hookAgent { extra.append(approvalText(h)) }
+            lines.append(extra.joined(separator: " · "))
+        }
+        return lines.joined(separator: "\n")
     }
 
     /// Se o hook avisa pedidos de aprovação ("Esperar acordado por aprovações").
@@ -891,12 +892,8 @@ private struct StepButton: View {
 struct AboutTab: View {
     @EnvironmentObject var engine: Engine
 
-    private var version: String {
-        let info = Bundle.main.infoDictionary ?? [:]
-        let short = info["CFBundleShortVersionString"] as? String ?? "?"
-        let build = info["CFBundleVersion"] as? String ?? "?"
-        return "\(short) (\(build))"
-    }
+    /// Só a versão pública ("0.2.1"); o número de build vai no "Relatar problema…", não na tela.
+    private var version: String { Project.version }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 22) {
@@ -927,6 +924,13 @@ struct AboutTab: View {
 
             UpdatesCard()
 
+            // Num cartão só dele, logo abaixo de "Encontrou um problema?": tira tudo do Mac.
+            Card {
+                Row(title: String(localized: "Desinstalar o LlMBO")) {
+                    Button("Desinstalar…") { Uninstaller.confirmAndRun(Engine.shared) }.buttonStyle(.pill(.destructive))
+                }
+            }
+
             VStack(alignment: .leading, spacing: 10) {
                 Card {
                     Row(title: String(localized: "Compatível com")) {
@@ -942,12 +946,12 @@ struct AboutTab: View {
                     CardDivider()
                     Row(title: String(localized: "Redes sociais")) {
                         HStack(spacing: 14) {
-                            SocialIconButton(name: "llm-bo.com", icon: "globe", url: "https://llm-bo.com")
+                            SocialIconButton(name: "llmbo.app", icon: "globe", url: "https://llmbo.app")
                             SocialIconButton(name: "GitHub", icon: "github", url: Project.repoURL.absoluteString)
                             SocialIconButton(name: "Instagram", icon: "instagram",
-                                             url: "https://www.instagram.com/_llm_bo/")
+                                             url: "https://www.instagram.com/llmbo.app/")
                             SocialIconButton(name: "Threads", icon: "threads",
-                                             url: "https://www.threads.com/@_llm_bo")
+                                             url: "https://www.threads.com/@llmbo.app")
                         }
                     }
                 }

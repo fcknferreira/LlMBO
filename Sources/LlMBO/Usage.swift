@@ -259,9 +259,14 @@ final class TokenScanner: @unchecked Sendable {
     /// aparece em várias linhas com o mesmo message.id, então conta uma vez só.
     func claudeTokens(root: URL, now: Date) -> (Int, Int, Int) {
         let urls = recentFiles(root, now: now)
+        var answers = 0, counted = 0
         for url in urls {
             var st = state(url)
-            for line in newLines(url, &st) where line.contains("\"usage\"") {
+            let lines = newLines(url, &st)
+            answers += lines.filter { bytesContain($0, "\"type\":\"assistant\"") }.count
+            let before = st.entries.count
+            defer { counted += st.entries.count - before }
+            for line in lines where bytesContain(line, "\"usage\"") {
                 guard let obj = try? JSONSerialization.jsonObject(with: Data(line.utf8)) as? [String: Any],
                       let msg = obj["message"] as? [String: Any],
                       let usage = msg["usage"] as? [String: Any],
@@ -273,6 +278,11 @@ final class TokenScanner: @unchecked Sendable {
                 st.entries.append((when, n))
             }
             files[url.path] = st
+        }
+        // Muitas respostas novas e nenhum token contado: o formato dos transcritos mudou.
+        if answers >= 20 {
+            Canaries.report("claude-tokens", .usage, problem: counted == 0
+                ? String(localized: "As conversas do Claude Code mudaram de formato: não consigo mais contar os tokens.") : nil)
         }
         return totals(now, urls.map(\.path))
     }
@@ -286,8 +296,8 @@ final class TokenScanner: @unchecked Sendable {
         for url in urls {
             var st = state(url)
             for line in newLines(url, &st)
-            where line.contains("token_count") || line.contains("session_meta") || line.contains("task_started")
-                || line.contains("usage_limit_exceeded") {
+            where bytesContain(line, "token_count") || bytesContain(line, "session_meta") || bytesContain(line, "task_started")
+                || bytesContain(line, "usage_limit_exceeded") {
                 guard let obj = try? JSONSerialization.jsonObject(with: Data(line.utf8)) as? [String: Any],
                       let payload = obj["payload"] as? [String: Any],
                       let when = date(obj["timestamp"] as? String) else { continue }
@@ -305,7 +315,7 @@ final class TokenScanner: @unchecked Sendable {
                 case "token_count":
                     break
                 default:
-                    if line.contains("usage_limit_exceeded") { st.lastLimitStop = when }
+                    if bytesContain(line, "usage_limit_exceeded") { st.lastLimitStop = when }
                     continue
                 }
                 if let info = payload["info"] as? [String: Any],
@@ -371,7 +381,7 @@ final class TokenScanner: @unchecked Sendable {
         for url in urls {
             var st = state(url)
             if url.pathExtension == "jsonl" {
-                for line in newLines(url, &st) where line.contains("\"tokens\"") {
+                for line in newLines(url, &st) where bytesContain(line, "\"tokens\"") {
                     if let msg = try? JSONSerialization.jsonObject(with: Data(line.utf8)) as? [String: Any] { record(msg, &st) }
                 }
             } else {

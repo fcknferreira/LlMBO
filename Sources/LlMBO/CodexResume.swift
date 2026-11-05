@@ -119,7 +119,7 @@ final class CodexResume: ObservableObject {
         }
         running[key] = proc
         // Segura o Mac enquanto a retomada roda e mostra em "Tarefas longas".
-        try? Holds.write(name: String(localized: "Codex · \(folder) (retomada)"), pid: proc.processIdentifier, minutes: nil, source: "codex")
+        _ = try? Holds.write(name: String(localized: "Codex · \(folder) (retomada)"), pid: proc.processIdentifier, minutes: nil, source: "codex")
         notify(String(localized: "O Codex voltou a trabalhar em \(folder), em segundo plano."))
     }
 }

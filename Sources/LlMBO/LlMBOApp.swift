@@ -69,6 +69,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if ProcessInfo.processInfo.environment["LLMBO_TEST_HOOKS"] != nil { Hooks.selfTest() }
         if ProcessInfo.processInfo.environment["LLMBO_TEST_QUOTA"] != nil { Engine.quotaSelfTest() }
         if ProcessInfo.processInfo.environment["LLMBO_TEST_MCP"] != nil { MCPInstall.selfTest() }
+        if ProcessInfo.processInfo.environment["LLMBO_TEST_UNINSTALL"] != nil { Uninstaller.selfTest() }
         if ProcessInfo.processInfo.environment["LLMBO_TEST_USAGE"] != nil { TokenScanner.selfTest() }
         if ProcessInfo.processInfo.environment["LLMBO_TEST_CODEX"] != nil { CodexResume.selfTest() }
         if ProcessInfo.processInfo.environment["LLMBO_TEST_AGQUOTA"] != nil { AntigravityQuota.selfTest() }

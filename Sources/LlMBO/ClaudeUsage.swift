@@ -35,6 +35,9 @@ enum ClaudeUsageCLI {
               let text = obj["result"] as? String else { return nil }
         var u = parse(text, now: now)
         u?.limitsAt = now
+        // O Claude Code respondeu, mas sem as linhas "Current session"/"Current week": o texto mudou (ou veio erro).
+        Canaries.report("claude-usage", .usage, problem: u == nil
+            ? String(localized: "Não consegui ler os limites do Claude Code: a resposta do /usage mudou ou veio com erro.") : nil)
         return u
     }
 
@@ -42,12 +45,14 @@ enum ClaudeUsageCLI {
     static func parse(_ text: String, now: Date) -> AgentUsage? {
         var u = AgentUsage()
         for line in text.split(separator: "\n").map(String.init) {
-            let parts = line.capturing(#"^Current (session|week[^:]*): (\d+(?:\.\d+)?)% used · resets (.+) \(([^)]+)\)"#)
+            // "Current session" virou "5-hour limit" em versões novas do Claude Code (changelog 2.1.30x);
+            // aceita os dois, com ou sem "Current".
+            let parts = line.capturing(#"^(?:Current )?(session|5-hour limit|week[^:]*): (\d+(?:\.\d+)?)% used · resets (.+) \(([^)]+)\)"#)
             guard parts.count == 4, let pct = Double(parts[1]),
                   let reset = resetDate(parts[2], tz: TimeZone(identifier: parts[3]) ?? .current, now: now),
                   reset > now else { continue }
             let w = LimitWindow(usedPercent: pct, resetsAt: reset)
-            if parts[0] == "session" { u.fiveHour = w }
+            if parts[0] == "session" || parts[0] == "5-hour limit" { u.fiveHour = w }
             else if parts[0].contains("all models") || u.weekly == nil { u.weekly = w }
         }
         return u.fiveHour == nil && u.weekly == nil ? nil : u
@@ -109,6 +114,8 @@ enum ClaudeUsageCLI {
         check("hora cheia", c(resetDate("Nov 3 at 1am", tz: tz, now: now)) == DateComponents(month: 11, day: 3, hour: 1, minute: 0))
         check("virada de ano", cal.component(.year, from: resetDate("Jan 2 at 3:00pm", tz: tz,
               now: cal.date(from: DateComponents(year: 2026, month: 12, day: 30))!)!) == 2027)
+        let renamed = parse("5-hour limit: 61% used · resets Nov 3 at 1:09am (America/Maceio)", now: now)
+        check("nome novo \"5-hour limit\"", renamed?.fiveHour?.usedPercent == 61, "\(renamed?.fiveHour?.usedPercent ?? -1)")
         check("sem limites = nil", parse("You are currently using an API key", now: now) == nil)
         if MCPInstall.claudeCLI != nil {
             let live = read(now: Date())

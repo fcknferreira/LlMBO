@@ -68,12 +68,21 @@ enum AntigravityQuota {
             defer { session.finishTasksAndInvalidate() }
             let done = DispatchSemaphore(value: 0)
             var body: Data?
+            var answered = false
             session.dataTask(with: req) { data, resp, _ in
+                answered = resp != nil
                 if (resp as? HTTPURLResponse)?.statusCode == 200 { body = data }
                 done.signal()
             }.resume()
             _ = done.wait(timeout: .now() + 6)
-            if let body, let groups = parse(body, now: now) { return groups }
+            if let body, let groups = parse(body, now: now) {
+                Canaries.report("antigravity-quota", .usage, problem: nil)
+                return groups
+            }
+            // O hub está vivo e respondeu, mas não como esperado: o endereço interno ou o formato mudou.
+            if answered {
+                Canaries.report("antigravity-quota", .usage, problem: String(localized: "O Antigravity respondeu, mas não consegui ler a cota: o formato mudou numa versão nova dele."))
+            }
         }
         return nil
     }

@@ -14,37 +14,57 @@ enum Hooks {
 
     /// Windsurf fica de fora: virou Devin Desktop e o formato antigo (~/.codeium/windsurf/hooks.json) não tem
     /// documentação confiável hoje.
-    static let supported: Set<String> = Set(["claude", "codex", "qwen", "gemini", "copilot", "cursor", "opencode", "aider", "crush"])
-        .union(antigravityFamily)
+    static let supported: Set<String> = Set(["claude", "codex", "qwen", "gemini", "cursor", "opencode", "aider", "crush"])
+        .union(antigravityFamily).union(copilotFamily)
 
     /// App, IDE e CLI do Antigravity leem o mesmo ~/.gemini/config/hooks.json: um hook só (`auto`), e o
     /// llmbo-signal descobre pela árvore de processos qual dos três chamou.
     static let antigravityFamily: Set<String> = ["antigravity", "antigravity-ide", "antigravity-cli"]
 
+    /// Copilot CLI e Copilot do VS Code leem o mesmo ~/.copilot/hooks/ (code.visualstudio.com/docs/copilot/customization/hooks,
+    /// em prévia): um arquivo só, e o llmbo-signal manda para "copilot-vscode" quando o VS Code está acima.
+    static let copilotFamily: Set<String> = ["copilot", "copilot-vscode"]
+
+    /// Chave do arquivo de hook: agentes da mesma família dividem um hook só.
+    static func familyKey(_ agent: String) -> String {
+        if antigravityFamily.contains(agent) { return "antigravity" }
+        if copilotFamily.contains(agent) { return "copilot" }
+        return agent
+    }
+
+    /// Agentes que dividem o mesmo arquivo de hook que `agent` (inclusive ele): só desliga quando o último sai.
+    static func sharingFile(_ agent: String) -> Set<String> {
+        if antigravityFamily.contains(agent) { return antigravityFamily }
+        if copilotFamily.contains(agent) { return copilotFamily }
+        return [agent]
+    }
+
     /// Nome para a linha do hook: os três Antigravity aparecem juntos, porque o hook é um só.
     static func displayName(_ agent: String, fallback: String) -> String {
-        antigravityFamily.contains(agent) ? String(localized: "Antigravity (Standard, IDE e CLI)") : fallback
+        if antigravityFamily.contains(agent) { return String(localized: "Antigravity (Standard, IDE e CLI)") }
+        if copilotFamily.contains(agent) { return String(localized: "GitHub Copilot (CLI e VS Code)") }
+        return fallback
     }
 
     /// Ids repetidos de um mesmo hook viram um só (mantém a ordem).
     static func uniqueHooks(_ ids: [String]) -> [String] {
         var seen = Set<String>()
         return ids.filter { id in
-            let key = antigravityFamily.contains(id) ? "antigravity-family" : id
-            return seen.insert(key).inserted
+            seen.insert(familyKey(id)).inserted
         }
     }
 
     /// Hooks que avisam começo E fim: com eles instalados (e já vistos funcionando), só o hook decide.
     /// O OpenCode e o Aider ficam de fora: o OpenCode tem começo aproximado, e o Aider só avisa o fim (idle).
-    static let fullLifecycle: Set<String> = Set(["claude", "codex", "qwen", "gemini", "copilot", "cursor", "crush"])
-        .union(antigravityFamily)
+    static let fullLifecycle: Set<String> = Set(["claude", "codex", "qwen", "gemini", "cursor", "crush"])
+        .union(antigravityFamily).union(copilotFamily)
 
     /// Observação mostrada na linha do hook, quando o agente pede um passo a mais.
     static func note(_ agent: String) -> String? {
         switch agent {
         case "codex": return String(localized: "No Codex, aprove uma vez com /hooks.")
         case "aider": return String(localized: "O Aider avisa quando termina; o início é pela CPU.")
+        case "copilot", "copilot-vscode": return String(localized: "No VS Code, os hooks ainda estão em prévia.")
         default: return nil
         }
     }
@@ -120,7 +140,7 @@ enum Hooks {
             return settingsInstalled(settingsHooks[agent]!, home) ? .installed : .notInstalled
         case "opencode": return opencodeInstalled(home) ? .installed : .notInstalled
         case _ where antigravityFamily.contains(agent): return antigravityInstalled(home) ? .installed : .notInstalled
-        case "copilot": return copilotInstalled(home) ? .installed : .notInstalled
+        case "copilot", "copilot-vscode": return copilotInstalled(home) ? .installed : .notInstalled
         case "cursor": return cursorInstalled(home) ? .installed : .notInstalled
         case "aider": return aiderState(home)
         case "crush": return crushInstalled(home) ? .installed : .notInstalled
@@ -137,7 +157,7 @@ enum Hooks {
                 try installSettings(settingsHooks[agent]!, home)
             case "opencode": try installOpenCode(home)
             case _ where antigravityFamily.contains(agent): try installAntigravity(home)
-            case "copilot": try installCopilot(home)
+            case "copilot", "copilot-vscode": try installCopilot(home)
             case "cursor": try installCursor(home)
             case "aider": try installAider(home)
             case "crush": try installCrush(home)
@@ -155,7 +175,7 @@ enum Hooks {
                 try uninstallSettings(settingsHooks[agent]!, home)
             case "opencode": try uninstallOpenCode(home)
             case _ where antigravityFamily.contains(agent): try uninstallAntigravity(home)
-            case "copilot": try uninstallCopilot(home)
+            case "copilot", "copilot-vscode": try uninstallCopilot(home)
             case "cursor": try uninstallCursor(home)
             case "aider": try uninstallAider(home)
             case "crush": try uninstallCrush(home)

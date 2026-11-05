@@ -22,6 +22,7 @@ struct UsageTab: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 22) {
+            CanaryNotes(area: .usage)
             // Primeiro o que fazer no limite, uma escolha por agente; depois o uso de cada um.
             CardSection(title: String(localized: "Ao bater no limite"),
                         info: String(localized: "Cada agente tem a sua escolha, porque nem todos continuam sozinhos quando o limite volta: o Claude Code continua; o Antigravity e o Codex não. As travas de segurança da aba Repouso continuam valendo: bateria no mínimo, tempo máximo e temperatura soltam o Mac e cancelam o despertar agendado. Com a bateria no mínimo, o Mac quente ou o LlMBO desligado, ele também não agenda despertar nem retoma o Codex.")) {

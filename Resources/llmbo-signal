@@ -119,6 +119,9 @@ antigravity_ancestor() {
 # O Copilot do VS Code pode ler os hooks do Claude Code (~/.claude/settings.json) e do Copilot CLI. Se não há um
 # processo "claude"/"copilot" acima deste e há VS Code, o sinal é do Copilot do VS Code. (A extensão do Claude
 # Code e o CLI no terminal do VS Code rodam o próprio "claude", então continuam como Claude Code.)
+# O Devin Desktop (ex-Windsurf) e o Devin CLI também leem os hooks do ~/.claude/settings.json por padrão
+# (read_config_from.claude, docs.devin.ai/cli/extensibility/hooks): sem "claude" acima e com Devin acima, o sinal
+# é do Windsurf/Devin. Vale o hospedeiro mais próximo.
 vscode_owner() {
   want="$1"
   pid=$PPID
@@ -138,11 +141,19 @@ vscode_owner() {
         fi
         ;;
     esac
-    case "$cmd" in *"Visual Studio Code"*".app/"*) vs=1 ;; esac
+    if [ -z "$vs" ]; then
+      case "$cmd" in
+        *"Visual Studio Code"*".app/"*) vs="copilot-vscode" ;;
+        *"Devin.app/"* | *"Devin Desktop.app/"* | *"Windsurf.app/"*) vs="windsurf" ;;
+      esac
+      [ -z "$vs" ] && [ "${exe##*/}" = "devin" ] && vs="windsurf"
+    fi
     pid=$(ps -o ppid= -p "$pid" 2>/dev/null | tr -d ' ')
     i=$((i + 1))
   done
-  [ -n "$vs" ] && echo "copilot-vscode"
+  # O Devin só lê os hooks do Claude, não os do Copilot CLI.
+  [ "$vs" = "windsurf" ] && [ "$want" != "claude" ] && return
+  [ -n "$vs" ] && echo "$vs"
 }
 
 if [ "$agent" = "claude" ] || [ "$agent" = "copilot" ]; then
@@ -200,8 +211,9 @@ case "$agent" in antigravity*)
     state="waiting"
   elif [ "$state" = "idle" ] && [ "$4" = "stop" ] && [ -n "$payload" ]; then
     flat=$(printf '%s' "$payload" | tr -d '\n')
-    if printf '%s' "$flat" | grep -Eq '"terminationReason"[[:space:]]*:[[:space:]]*"(ERROR|MAX_TOKEN_BUDGET_EXCEEDED)"' &&
-       printf '%s' "$flat" | grep -Eq 'RESOURCE_EXHAUSTED|check quota|code 429|individual quota reached|MODEL_CAPACITY_EXHAUSTED'; then
+    # Sem diferenciar maiúsculas: a doc atual mostra "error" (minúsculas); versões antigas mandavam "ERROR".
+    if printf '%s' "$flat" | grep -Eiq '"terminationReason"[[:space:]]*:[[:space:]]*"(ERROR|MAX_TOKEN_BUDGET_EXCEEDED)"' &&
+       printf '%s' "$flat" | grep -Eiq 'RESOURCE_EXHAUSTED|check quota|code 429|individual quota reached|MODEL_CAPACITY_EXHAUSTED'; then
       state="quota"
     fi
   fi ;;
