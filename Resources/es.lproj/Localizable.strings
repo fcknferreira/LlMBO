@@ -53,6 +53,7 @@
 "aguardando aprovação" = "esperando aprobación";
 "limite de uso" = "límite de uso";
 "hook" = "hook";
+"tarefa em segundo plano" = "tarea en segundo plano";
 "arquivos %@" = "archivos %@";
 "GPU %lld%%" = "GPU %lld%%";
 "CPU %lld%%" = "CPU %lld%%";
@@ -72,6 +73,8 @@
 "Não estou recebendo os sinais do %@. Uma atualização dele pode ter mudado ou apagado o hook: remova e instale de novo na seção Hooks." = "No estoy recibiendo las señales de %@. Una actualización puede haber cambiado o borrado el hook: quítalo e instálalo de nuevo en la sección Hooks.";
 "Não consegui desativar o repouso." = "No se pudo desactivar el reposo.";
 "A permissão de administrador parou de funcionar e o Mac pode dormir com a tampa fechada. Reinstale a permissão no assistente (aba Sistema)." = "El permiso de administrador dejó de funcionar y el Mac puede dormir con la tapa cerrada. Vuelve a instalar el permiso en el asistente (pestaña Sistema).";
+"Outro app religou o repouso enquanto um agente trabalhava (o AlDente, por exemplo, tem uma função que mexe nisso). Desliguei de novo às %@." = "Otra app volvió a activar el reposo mientras un agente trabajaba (AlDente, por ejemplo, tiene una función que lo cambia). Lo desactivé de nuevo a las %@.";
+"Outro app religou o repouso várias vezes enquanto um agente trabalhava. Parei de desligar de novo para não brigar com ele, e o Mac pode dormir. Confira o AlDente ou outro app que controle o repouso." = "Otra app volvió a activar el reposo varias veces mientras un agente trabajaba. Dejé de desactivarlo de nuevo para no pelear con ella, y el Mac puede entrar en reposo. Revisa AlDente u otra app que controle el reposo.";
 "Permissão instalada." = "Permiso instalado.";
 "A permissão não foi instalada." = "El permiso no se instaló.";
 "Permissão removida." = "Permiso eliminado.";
@@ -113,6 +116,11 @@
 "Configurar o LlMBO" = "Configurar LlMBO";
 "LlMBO" = "LlMBO";
 "Outro agente (personalizado)…" = "Otro agente (personalizado)…";
+"Segurando o Mac" = "Manteniendo el Mac activo";
+"Limites de uso" = "Límites de uso";
+"Abra o LlMBO para ver os dados aqui." = "Abre LlMBO para ver los datos aquí.";
+"Se o LlMBO está segurando o Mac, por quê, e quando os agentes terminaram." = "Si LlMBO está manteniendo el Mac activo, por qué y cuándo terminaron los agentes.";
+"Quanto dos limites do Claude Code, do Codex e do Antigravity já foi usado, e quando eles voltam." = "Cuánto de los límites de Claude Code, Codex y Antigravity ya se usó, y cuándo vuelven.";
 "Não encontrei o Claude Code neste Mac." = "No encontré Claude Code en este Mac.";
 "Agentes" = "Agentes";
 "Nenhum agente aberto" = "Ningún agente abierto";
@@ -249,6 +257,8 @@
 "Funcionamento" = "Funcionamiento";
 "Religar ao abrir a tampa" = "Reactivar al abrir la tapa";
 "Se o LlMBO foi desligado, por você ou por bateria, tempo ou temperatura, volta a ligar quando a tampa é aberta." = "Si LlMBO se desactivó, por ti o por batería, tiempo o temperatura, vuelve a activarse al abrir la tapa.";
+"Apagar a tela com a tampa fechada" = "Apagar la pantalla con la tapa cerrada";
+"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "Con la tapa cerrada y el reposo desactivado, la pantalla integrada puede seguir encendida detrás de la tapa, gastando batería, calentándose y pudiendo quedar marcada. LlMBO apaga la pantalla sin poner el Mac en reposo y vuelve a comprobarlo cada minuto. Con un monitor externo conectado, no cambia nada. Al abrir la tapa, la pantalla vuelve con normalidad.";
 "Assistente de configuração" = "Asistente de configuración";
 "Abrir…" = "Abrir…";
 "Remover…" = "Eliminar…";
@@ -290,8 +300,6 @@
 "Sem limite" = "Sin límite";
 "Proteção de temperatura" = "Protección de temperatura";
 "Proteção de temperatura: ao atingir o nível escolhido com a tampa fechada, o LlMBO religa o repouso e põe o Mac para dormir na hora. Em “Quente”, o próprio macOS já está reduzindo o desempenho para esfriar." = "Protección de temperatura: al alcanzar el nivel elegido con la tapa cerrada, LlMBO vuelve a activar el reposo y pone el Mac en reposo al instante. En “Caliente”, el propio macOS ya está reduciendo el rendimiento para enfriarse.";
-"Apagar a tela com a tampa fechada" = "Apagar la pantalla con la tapa cerrada";
-"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "Con la tapa cerrada y el reposo desactivado, la pantalla integrada puede seguir encendida detrás de la tapa, gastando batería, calentándose y pudiendo quedar marcada. LlMBO apaga la pantalla sin poner el Mac en reposo y vuelve a comprobarlo cada minuto. Con un monitor externo conectado, no cambia nada. Al abrir la tapa, la pantalla vuelve con normalidad.";
 "Vigia contra travamento" = "Vigilante contra bloqueos";
 "Um processo do próprio LlMBO, separado da janela (aparece como LlMBO no Monitor de Atividade), confere a cada 10 s se o app continua respondendo. Se o LlMBO travar ou for fechado à força com o repouso desligado, o vigia religa o repouso em cerca de 1 minuto e, com a tampa fechada, põe o Mac para dormir." = "Un proceso del propio LlMBO, separado de la ventana (aparece como LlMBO en el Monitor de Actividad), comprueba cada 10 s que la app sigue respondiendo. Si LlMBO se bloquea o se cierra a la fuerza con el reposo desactivado, el vigilante vuelve a activar el reposo en cerca de 1 minuto y, con la tapa cerrada, pone el Mac en reposo.";
 "Ativo" = "Activo";
@@ -305,6 +313,8 @@
 "Esperar acordado por aprovações" = "Esperar activo las aprobaciones";
 "Quando um agente para pedindo sua aprovação, o Mac fica acordado por esse tempo, mesmo de tampa fechada, para você aprovar à distância (por exemplo, pelo controle remoto no celular) e o trabalho continuar. Se ninguém responder, ele dorme normalmente." = "Cuando un agente se detiene para pedir tu aprobación, el Mac permanece activo este tiempo, incluso con la tapa cerrada, para que puedas aprobar a distancia (por ejemplo, con el control remoto en el móvil) y el trabajo continúe. Si nadie responde, entra en reposo como siempre.";
 "Avisam: Claude Code, Codex, Qwen Code, Gemini CLI e OpenCode. Antigravity: só quando pede acesso a recursos. Copilot CLI, Cursor, Crush, Aider e agentes sem hook não avisam; um pedido de aprovação deles conta como parado. Cada linha da seção Hooks, na aba Agentes, mostra o que vale para aquele agente." = "Avisan: Claude Code, Codex, Qwen Code, Gemini CLI y OpenCode. Antigravity: solo cuando pide acceso a recursos. Copilot CLI, Cursor, Crush, Aider y los agentes sin hook no avisan; una solicitud de aprobación de ellos cuenta como detenido. Cada fila de la sección Hooks, en la pestaña Agentes, muestra lo que aplica a ese agente.";
+"Esperar tarefas em segundo plano" = "Esperar tareas en segundo plano";
+"O Claude Code pode terminar a resposta e deixar um comando rodando em segundo plano (um build, um teste, uma espera). Enquanto esse comando roda, o Mac fica acordado, até esse tempo contado desde que ele começou. O limite existe para um servidor esquecido aberto não segurar o Mac para sempre." = "Claude Code puede terminar la respuesta y dejar un comando ejecutándose en segundo plano (una compilación, una prueba, una espera). Mientras ese comando se ejecuta, el Mac permanece activo, hasta este tiempo contado desde que empezó. El límite existe para que un servidor olvidado abierto no mantenga el Mac activo para siempre.";
 "Atrasar o repouso" = "Retrasar el reposo";
 "Sem atraso" = "Sin retraso";
 "Depois que os agentes terminam, o Mac fica acordado por esse tempo, mesmo de tampa fechada, e então volta ao repouso normal do macOS. Se um agente voltar a trabalhar antes disso, a espera recomeça." = "Cuando los agentes terminan, el Mac permanece activo este tiempo, incluso con la tapa cerrada, y luego vuelve al reposo normal de macOS. Si un agente vuelve a trabajar antes, la espera se reinicia.";
@@ -381,7 +391,6 @@
 "Despertar agendado" = "Activación programada";
 "Retomada do Codex agendada" = "Reanudación de Codex programada";
 "Atualizar permissão" = "Actualizar permiso";
-"Limites de uso" = "Límites de uso";
 "Ler limites de uso" = "Leer límites de uso";
 "Ligado, o LlMBO lê os limites de 5 horas e da semana de dois jeitos. A cada 5 minutos, roda o comando /usage do Claude Code de terminal, que vem junto com o app Claude: funciona mesmo se você usa o Claude Code só pelo app Claude, não gasta tokens, não grava sessão nem dispara hooks. E vira a barra de status no rodapé do Claude Code de terminal, que recebe os limites a cada resposta: continua mostrando a barra que você já tinha (sem uma, mostra uma linha curta com os limites), e desligar devolve a anterior. Vale a leitura mais nova. Quem consulta a Anthropic é o Claude Code, com o login dele; o LlMBO não se conecta à internet e só lê o percentual e a hora em que cada limite volta." = "Activado, LlMBO lee los límites de 5 horas y semanal de dos formas. Cada 5 minutos ejecuta el comando /usage de Claude Code de terminal, que viene con la app Claude: funciona aunque uses Claude Code solo desde la app Claude, no gasta tokens, no guarda sesión ni dispara hooks. Y se convierte en la barra de estado al pie de Claude Code de terminal, que recibe los límites en cada respuesta: sigue mostrando la barra que ya tenías (sin una, muestra una línea corta con los límites), y al desactivarlo vuelve la anterior. Vale la lectura más reciente. Quien consulta a Anthropic es Claude Code, con su propio inicio de sesión; LlMBO no se conecta a internet y solo lee el porcentaje y la hora en que vuelve cada límite.";
 "Ler a cota pelo Antigravity aberto" = "Leer la cuota desde Antigravity abierto";
@@ -402,3 +411,12 @@
 "E mais %lld." = "Y %lld más.";
 "Religar o repouso" = "Reactivar el reposo";
 "Encerrar" = "Salir";
+"LlMBO desligado" = "LlMBO desactivado";
+"O Mac dorme como sempre." = "El Mac entra en reposo como siempre.";
+"Repouso normal" = "Reposo normal";
+"Agentes terminaram às %@" = "Los agentes terminaron a las %@";
+"Nenhum agente trabalhando." = "Ningún agente trabajando.";
+"Sem limites lidos ainda. Veja a aba Uso." = "Aún no se leyeron límites. Mira la pestaña Uso.";
+"Tarefa longa" = "Tarea larga";
+"5 h" = "5 h";
+"7 d" = "7 d";

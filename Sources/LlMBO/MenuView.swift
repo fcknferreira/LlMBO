@@ -46,12 +46,12 @@ struct MenuView: View {
                     .font(.system(size: 12))
                     .foregroundStyle(Theme.muted)
                     .padding(.horizontal, 14)
-                    .padding(.vertical, 3)
+                    .padding(.vertical, 4)
             }
             ForEach(open) { s in
                 AgentRow(status: s, compact: true)
                     .padding(.horizontal, 14)
-                    .padding(.vertical, 3)
+                    .padding(.vertical, 4)
             }
 
             if !engine.holds.isEmpty {
@@ -59,7 +59,7 @@ struct MenuView: View {
                 ForEach(engine.holds) { t in
                     HoldRow(task: t)
                         .padding(.horizontal, 14)
-                        .padding(.vertical, 3)
+                        .padding(.vertical, 4)
                 }
             }
 
@@ -84,7 +84,7 @@ struct MenuView: View {
                 }
             }
             .padding(.horizontal, 14)
-            .padding(.vertical, 2)
+            .padding(.vertical, 4)
 
             MenuDivider()
 
@@ -144,7 +144,7 @@ struct AgentRow: View {
             Text(compact ? status.shortLabel : status.label)
                 .font(.system(size: 11))
                 .lineLimit(1)
-                .foregroundStyle(status.active ? Theme.bronze2 : Theme.muted)
+                .foregroundStyle(status.active ? Theme.text.opacity(0.85) : Theme.muted)
                 .monospacedDigit()
         }
     }
@@ -162,7 +162,7 @@ struct HoldRow: View {
             Text(detail)
                 .font(.system(size: 11))
                 .lineLimit(1)
-                .foregroundStyle(Theme.bronze2)
+                .foregroundStyle(Theme.muted)
                 .monospacedDigit()
         }
     }
@@ -181,7 +181,7 @@ struct PermissionCallout: View {
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
             Image(systemName: "lock.shield")
-                .foregroundStyle(Theme.bronze2)
+                .foregroundStyle(Theme.muted)
                 .font(.system(size: 15))
             VStack(alignment: .leading, spacing: 8) {
                 Text("Para mexer no repouso, o LlMBO precisa de uma permissão de administrador (uma vez só).")
@@ -194,8 +194,8 @@ struct PermissionCallout: View {
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(Theme.bronze2.opacity(0.08)))
-        .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(Theme.bronze2.opacity(0.18)))
+        .background(RoundedRectangle(cornerRadius: 10, style: .continuous).fill(Theme.card))
+        .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous).strokeBorder(Theme.line))
     }
 }
 
@@ -204,10 +204,9 @@ private struct SectionLabel: View {
     init(_ text: String) { self.text = text }
 
     var body: some View {
-        Text(text.uppercased(with: Locale.current))
-            .font(.system(size: 10, weight: .medium))
-            .tracking(1.4)
-            .foregroundStyle(Theme.bronze2)
+        Text(text)
+            .font(.system(size: 11.5, weight: .medium))
+            .foregroundStyle(Theme.muted)
             .padding(.horizontal, 14)
             .padding(.top, 8)
             .padding(.bottom, 4)
@@ -216,7 +215,7 @@ private struct SectionLabel: View {
 
 private struct MenuDivider: View {
     var body: some View {
-        Rectangle().fill(Theme.line).frame(height: 1).padding(.horizontal, 14).padding(.vertical, 5)
+        Rectangle().fill(Theme.line).frame(height: 1).padding(.horizontal, 14).padding(.vertical, 4)
     }
 }
 
@@ -247,9 +246,9 @@ private struct MenuRow: View {
             .font(.system(size: 13))
             .foregroundStyle(Theme.text)
             .padding(.horizontal, 9)
-            .padding(.vertical, 5)
+            .padding(.vertical, 6)
             .contentShape(Rectangle())
-            .background(RoundedRectangle(cornerRadius: 7, style: .continuous).fill(hover ? Theme.cardHover : Color.clear))
+            .background(RoundedRectangle(cornerRadius: 8, style: .continuous).fill(hover ? Theme.cardHover : Color.clear))
         }
         .buttonStyle(.plain)
         .handCursor()

@@ -53,6 +53,7 @@
 "aguardando aprovação" = "ждёт подтверждения";
 "limite de uso" = "лимит использования";
 "hook" = "хук";
+"tarefa em segundo plano" = "фоновая задача";
 "arquivos %@" = "файлы %@";
 "GPU %lld%%" = "GPU %lld%%";
 "CPU %lld%%" = "ЦП %lld%%";
@@ -72,6 +73,8 @@
 "Não estou recebendo os sinais do %@. Uma atualização dele pode ter mudado ou apagado o hook: remova e instale de novo na seção Hooks." = "Сигналы от %@ не приходят. Обновление могло изменить или удалить хук: удалите его и установите снова в разделе «Хуки».";
 "Não consegui desativar o repouso." = "Не удалось отключить режим сна.";
 "A permissão de administrador parou de funcionar e o Mac pode dormir com a tampa fechada. Reinstale a permissão no assistente (aba Sistema)." = "Разрешение администратора перестало работать, и Mac может уснуть с закрытой крышкой. Установите разрешение заново в ассистенте (вкладка «Система»).";
+"Outro app religou o repouso enquanto um agente trabalhava (o AlDente, por exemplo, tem uma função que mexe nisso). Desliguei de novo às %@." = "Другое приложение снова включило сон, пока агент работал (например, у AlDente есть функция, которая его меняет). Я снова выключил его в %@.";
+"Outro app religou o repouso várias vezes enquanto um agente trabalhava. Parei de desligar de novo para não brigar com ele, e o Mac pode dormir. Confira o AlDente ou outro app que controle o repouso." = "Другое приложение несколько раз снова включало сон, пока агент работал. Я перестал выключать его, чтобы не спорить с ним, и Mac может уснуть. Проверьте AlDente или другое приложение, которое управляет сном.";
 "Permissão instalada." = "Разрешение установлено.";
 "A permissão não foi instalada." = "Разрешение не установлено.";
 "Permissão removida." = "Разрешение удалено.";
@@ -113,6 +116,11 @@
 "Configurar o LlMBO" = "Настройка LlMBO";
 "LlMBO" = "LlMBO";
 "Outro agente (personalizado)…" = "Другой агент (свой)…";
+"Segurando o Mac" = "Mac не засыпает";
+"Limites de uso" = "Лимиты использования";
+"Abra o LlMBO para ver os dados aqui." = "Откройте LlMBO, чтобы увидеть данные здесь.";
+"Se o LlMBO está segurando o Mac, por quê, e quando os agentes terminaram." = "Держит ли LlMBO Mac бодрствующим, почему и когда агенты закончили.";
+"Quanto dos limites do Claude Code, do Codex e do Antigravity já foi usado, e quando eles voltam." = "Сколько лимитов Claude Code, Codex и Antigravity уже использовано и когда они восстановятся.";
 "Não encontrei o Claude Code neste Mac." = "Claude Code не найден на этом Mac.";
 "Agentes" = "Агенты";
 "Nenhum agente aberto" = "Нет открытых агентов";
@@ -249,6 +257,8 @@
 "Funcionamento" = "Работа";
 "Religar ao abrir a tampa" = "Снова включать при открытии крышки";
 "Se o LlMBO foi desligado, por você ou por bateria, tempo ou temperatura, volta a ligar quando a tampa é aberta." = "Если LlMBO был выключен — вами или из-за заряда, времени или температуры, — он снова включится при открытии крышки.";
+"Apagar a tela com a tampa fechada" = "Выключать экран при закрытой крышке";
+"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "При закрытой крышке и выключенном сне встроенный экран может светиться под крышкой: тратит батарею, греется и может выгореть. LlMBO выключает экран, не усыпляя Mac, и проверяет снова каждую минуту. С подключённым внешним монитором ничего не меняется. Когда вы откроете крышку, экран включится как обычно.";
 "Assistente de configuração" = "Ассистент настройки";
 "Abrir…" = "Открыть…";
 "Remover…" = "Удалить…";
@@ -290,8 +300,6 @@
 "Sem limite" = "Без ограничения";
 "Proteção de temperatura" = "Защита от перегрева";
 "Proteção de temperatura: ao atingir o nível escolhido com a tampa fechada, o LlMBO religa o repouso e põe o Mac para dormir na hora. Em “Quente”, o próprio macOS já está reduzindo o desempenho para esfriar." = "Защита от перегрева: когда при закрытой крышке достигается выбранный уровень, LlMBO снова включает режим сна и сразу усыпляет Mac. На уровне «Горячий» macOS уже сама снижает производительность, чтобы остыть.";
-"Apagar a tela com a tampa fechada" = "Выключать экран при закрытой крышке";
-"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "При закрытой крышке и выключенном сне встроенный экран может светиться под крышкой: тратит батарею, греется и может выгореть. LlMBO выключает экран, не усыпляя Mac, и проверяет снова каждую минуту. С подключённым внешним монитором ничего не меняется. Когда вы откроете крышку, экран включится как обычно.";
 "Vigia contra travamento" = "Сторож от зависаний";
 "Um processo do próprio LlMBO, separado da janela (aparece como LlMBO no Monitor de Atividade), confere a cada 10 s se o app continua respondendo. Se o LlMBO travar ou for fechado à força com o repouso desligado, o vigia religa o repouso em cerca de 1 minuto e, com a tampa fechada, põe o Mac para dormir." = "Отдельный процесс LlMBO, не зависящий от окна (виден как LlMBO в Мониторинге системы), каждые 10 с проверяет, отвечает ли приложение. Если LlMBO зависнет или будет принудительно закрыт при выключенном сне, сторож примерно через 1 минуту снова включит сон и при закрытой крышке усыпит Mac.";
 "Ativo" = "Включён";
@@ -305,6 +313,8 @@
 "Esperar acordado por aprovações" = "Не спать в ожидании подтверждений";
 "Quando um agente para pedindo sua aprovação, o Mac fica acordado por esse tempo, mesmo de tampa fechada, para você aprovar à distância (por exemplo, pelo controle remoto no celular) e o trabalho continuar. Se ninguém responder, ele dorme normalmente." = "Когда агент останавливается, чтобы запросить подтверждение, Mac остаётся активным это время, даже с закрытой крышкой, чтобы вы могли подтвердить удалённо (например, через удалённое управление на телефоне) и работа продолжилась. Если никто не ответит, он заснёт как обычно.";
 "Avisam: Claude Code, Codex, Qwen Code, Gemini CLI e OpenCode. Antigravity: só quando pede acesso a recursos. Copilot CLI, Cursor, Crush, Aider e agentes sem hook não avisam; um pedido de aprovação deles conta como parado. Cada linha da seção Hooks, na aba Agentes, mostra o que vale para aquele agente." = "Сообщают: Claude Code, Codex, Qwen Code, Gemini CLI и OpenCode. Antigravity: только когда запрашивает доступ к ресурсам. Copilot CLI, Cursor, Crush, Aider и агенты без хука не сообщают; их запрос подтверждения считается остановкой. Каждая строка раздела «Хуки» на вкладке «Агенты» показывает, что действует для этого агента.";
+"Esperar tarefas em segundo plano" = "Ждать фоновые задачи";
+"O Claude Code pode terminar a resposta e deixar um comando rodando em segundo plano (um build, um teste, uma espera). Enquanto esse comando roda, o Mac fica acordado, até esse tempo contado desde que ele começou. O limite existe para um servidor esquecido aberto não segurar o Mac para sempre." = "Claude Code может закончить ответ и оставить команду работать в фоне (сборку, тест, ожидание). Пока эта команда работает, Mac не засыпает, но не дольше этого времени с момента её запуска. Ограничение нужно, чтобы забытый открытый сервер не держал Mac бодрствующим вечно.";
 "Atrasar o repouso" = "Отложить сон";
 "Sem atraso" = "Без задержки";
 "Depois que os agentes terminam, o Mac fica acordado por esse tempo, mesmo de tampa fechada, e então volta ao repouso normal do macOS. Se um agente voltar a trabalhar antes disso, a espera recomeça." = "Когда агенты закончат, Mac остаётся активным это время, даже с закрытой крышкой, а затем возвращается к обычному сну macOS. Если агент снова начнёт работать раньше, ожидание начнётся заново.";
@@ -381,7 +391,6 @@
 "Despertar agendado" = "Запланированное пробуждение";
 "Retomada do Codex agendada" = "Продолжение Codex запланировано";
 "Atualizar permissão" = "Обновить разрешение";
-"Limites de uso" = "Лимиты использования";
 "Ler limites de uso" = "Читать лимиты использования";
 "Ligado, o LlMBO lê os limites de 5 horas e da semana de dois jeitos. A cada 5 minutos, roda o comando /usage do Claude Code de terminal, que vem junto com o app Claude: funciona mesmo se você usa o Claude Code só pelo app Claude, não gasta tokens, não grava sessão nem dispara hooks. E vira a barra de status no rodapé do Claude Code de terminal, que recebe os limites a cada resposta: continua mostrando a barra que você já tinha (sem uma, mostra uma linha curta com os limites), e desligar devolve a anterior. Vale a leitura mais nova. Quem consulta a Anthropic é o Claude Code, com o login dele; o LlMBO não se conecta à internet e só lê o percentual e a hora em que cada limite volta." = "Когда включено, LlMBO читает 5‑часовой и недельный лимиты двумя способами. Каждые 5 минут он запускает команду /usage терминального Claude Code, который идёт вместе с приложением Claude: это работает, даже если вы пользуетесь Claude Code только через приложение Claude, не тратит токены, не сохраняет сессию и не запускает хуки. А ещё он становится строкой состояния внизу терминального Claude Code, которая получает лимиты с каждым ответом: ваша прежняя строка состояния продолжает показываться (если её нет — короткая строка с лимитами), а выключение возвращает прежнюю. Действует самое свежее чтение. К Anthropic обращается Claude Code со своим входом; LlMBO не подключается к интернету и читает только процент и время возврата каждого лимита.";
 "Ler a cota pelo Antigravity aberto" = "Читать квоту из открытого Antigravity";
@@ -402,3 +411,12 @@
 "E mais %lld." = "И ещё %lld.";
 "Religar o repouso" = "Снова включить сон";
 "Encerrar" = "Завершить";
+"LlMBO desligado" = "LlMBO выключен";
+"O Mac dorme como sempre." = "Mac засыпает как обычно.";
+"Repouso normal" = "Обычный сон";
+"Agentes terminaram às %@" = "Агенты закончили в %@";
+"Nenhum agente trabalhando." = "Ни один агент не работает.";
+"Sem limites lidos ainda. Veja a aba Uso." = "Лимиты пока не прочитаны. См. вкладку «Использование».";
+"Tarefa longa" = "Долгая задача";
+"5 h" = "5 ч";
+"7 d" = "7 д";

@@ -53,6 +53,7 @@
 "aguardando aprovação" = "czeka na zatwierdzenie";
 "limite de uso" = "limit użycia";
 "hook" = "hook";
+"tarefa em segundo plano" = "zadanie w tle";
 "arquivos %@" = "pliki %@";
 "GPU %lld%%" = "GPU %lld%%";
 "CPU %lld%%" = "CPU %lld%%";
@@ -72,6 +73,8 @@
 "Não estou recebendo os sinais do %@. Uma atualização dele pode ter mudado ou apagado o hook: remova e instale de novo na seção Hooks." = "Nie dostaję sygnałów z %@. Aktualizacja mogła zmienić lub usunąć hook: usuń go i zainstaluj ponownie w sekcji Hooki.";
 "Não consegui desativar o repouso." = "Nie udało się wyłączyć uśpienia.";
 "A permissão de administrador parou de funcionar e o Mac pode dormir com a tampa fechada. Reinstale a permissão no assistente (aba Sistema)." = "Uprawnienia administratora przestały działać i Mac może usnąć przy zamkniętej klapie. Zainstaluj uprawnienia ponownie w asystencie (karta System).";
+"Outro app religou o repouso enquanto um agente trabalhava (o AlDente, por exemplo, tem uma função que mexe nisso). Desliguei de novo às %@." = "Inna aplikacja ponownie włączyła usypianie, gdy agent pracował (na przykład AlDente ma funkcję, która to zmienia). Wyłączyłem je ponownie o %@.";
+"Outro app religou o repouso várias vezes enquanto um agente trabalhava. Parei de desligar de novo para não brigar com ele, e o Mac pode dormir. Confira o AlDente ou outro app que controle o repouso." = "Inna aplikacja kilka razy ponownie włączyła usypianie, gdy agent pracował. Przestałem je wyłączać, żeby się z nią nie przepychać, i Mac może zasnąć. Sprawdź AlDente lub inną aplikację, która steruje usypianiem.";
 "Permissão instalada." = "Uprawnienie zainstalowane.";
 "A permissão não foi instalada." = "Uprawnienie nie zostało zainstalowane.";
 "Permissão removida." = "Uprawnienie usunięte.";
@@ -113,6 +116,11 @@
 "Configurar o LlMBO" = "Skonfiguruj LlMBO";
 "LlMBO" = "LlMBO";
 "Outro agente (personalizado)…" = "Inny agent (własny)…";
+"Segurando o Mac" = "Mac nie zasypia";
+"Limites de uso" = "Limity użycia";
+"Abra o LlMBO para ver os dados aqui." = "Otwórz LlMBO, aby zobaczyć tu dane.";
+"Se o LlMBO está segurando o Mac, por quê, e quando os agentes terminaram." = "Czy LlMBO nie pozwala Macowi zasnąć, dlaczego i kiedy agenci skończyli.";
+"Quanto dos limites do Claude Code, do Codex e do Antigravity já foi usado, e quando eles voltam." = "Ile z limitów Claude Code, Codex i Antigravity już wykorzystano i kiedy wrócą.";
 "Não encontrei o Claude Code neste Mac." = "Nie znaleziono Claude Code na tym Macu.";
 "Agentes" = "Agenci";
 "Nenhum agente aberto" = "Brak otwartych agentów";
@@ -249,6 +257,8 @@
 "Funcionamento" = "Działanie";
 "Religar ao abrir a tampa" = "Włącz ponownie po otwarciu pokrywy";
 "Se o LlMBO foi desligado, por você ou por bateria, tempo ou temperatura, volta a ligar quando a tampa é aberta." = "Jeśli LlMBO został wyłączony, przez Ciebie lub z powodu baterii, czasu albo temperatury, włączy się ponownie po otwarciu pokrywy.";
+"Apagar a tela com a tampa fechada" = "Wyłącz ekran przy zamkniętej pokrywie";
+"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "Przy zamkniętej pokrywie i wyłączonym usypianiu wbudowany ekran może świecić pod pokrywą, zużywając baterię, grzejąc się i ryzykując wypalenie. LlMBO wyłącza ekran bez usypiania Maca i sprawdza ponownie co minutę. Z podłączonym monitorem zewnętrznym nic się nie zmienia. Po otwarciu pokrywy ekran wraca normalnie.";
 "Assistente de configuração" = "Asystent konfiguracji";
 "Abrir…" = "Otwórz…";
 "Remover…" = "Usuń…";
@@ -290,8 +300,6 @@
 "Sem limite" = "Bez limitu";
 "Proteção de temperatura" = "Ochrona temperatury";
 "Proteção de temperatura: ao atingir o nível escolhido com a tampa fechada, o LlMBO religa o repouso e põe o Mac para dormir na hora. Em “Quente”, o próprio macOS já está reduzindo o desempenho para esfriar." = "Ochrona temperatury: po osiągnięciu wybranego poziomu przy zamkniętej pokrywie LlMBO ponownie włącza uśpienie i od razu usypia Maca. Przy poziomie „Gorący” macOS sam już obniża wydajność, aby się schłodzić.";
-"Apagar a tela com a tampa fechada" = "Wyłącz ekran przy zamkniętej pokrywie";
-"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "Przy zamkniętej pokrywie i wyłączonym usypianiu wbudowany ekran może świecić pod pokrywą, zużywając baterię, grzejąc się i ryzykując wypalenie. LlMBO wyłącza ekran bez usypiania Maca i sprawdza ponownie co minutę. Z podłączonym monitorem zewnętrznym nic się nie zmienia. Po otwarciu pokrywy ekran wraca normalnie.";
 "Vigia contra travamento" = "Strażnik zawieszenia";
 "Um processo do próprio LlMBO, separado da janela (aparece como LlMBO no Monitor de Atividade), confere a cada 10 s se o app continua respondendo. Se o LlMBO travar ou for fechado à força com o repouso desligado, o vigia religa o repouso em cerca de 1 minuto e, com a tampa fechada, põe o Mac para dormir." = "Osobny proces LlMBO, niezależny od okna (widoczny jako LlMBO w Monitorze aktywności), co 10 s sprawdza, czy aplikacja nadal odpowiada. Jeśli LlMBO się zawiesi lub zostanie wymuszone zamknięcie przy wyłączonym uśpieniu, strażnik włączy uśpienie w ciągu około 1 minuty, a przy zamkniętej pokrywie uśpi Maca.";
 "Ativo" = "Aktywny";
@@ -305,6 +313,8 @@
 "Esperar acordado por aprovações" = "Czekaj aktywnie na zatwierdzenia";
 "Quando um agente para pedindo sua aprovação, o Mac fica acordado por esse tempo, mesmo de tampa fechada, para você aprovar à distância (por exemplo, pelo controle remoto no celular) e o trabalho continuar. Se ninguém responder, ele dorme normalmente." = "Gdy agent zatrzymuje się, by poprosić o zatwierdzenie, Mac pozostaje aktywny przez ten czas, nawet przy zamkniętej pokrywie, abyś mógł zatwierdzić zdalnie (np. przez zdalne sterowanie w telefonie) i praca trwała dalej. Jeśli nikt nie odpowie, Mac zaśnie normalnie.";
 "Avisam: Claude Code, Codex, Qwen Code, Gemini CLI e OpenCode. Antigravity: só quando pede acesso a recursos. Copilot CLI, Cursor, Crush, Aider e agentes sem hook não avisam; um pedido de aprovação deles conta como parado. Cada linha da seção Hooks, na aba Agentes, mostra o que vale para aquele agente." = "Zgłaszają: Claude Code, Codex, Qwen Code, Gemini CLI i OpenCode. Antigravity: tylko gdy prosi o dostęp do zasobów. Copilot CLI, Cursor, Crush, Aider i agenci bez hooka nie zgłaszają; ich prośba o zatwierdzenie liczy się jako zatrzymanie. Każdy wiersz sekcji Hooki na karcie Agenci pokazuje, co dotyczy danego agenta.";
+"Esperar tarefas em segundo plano" = "Czekaj na zadania w tle";
+"O Claude Code pode terminar a resposta e deixar um comando rodando em segundo plano (um build, um teste, uma espera). Enquanto esse comando roda, o Mac fica acordado, até esse tempo contado desde que ele começou. O limite existe para um servidor esquecido aberto não segurar o Mac para sempre." = "Claude Code może zakończyć odpowiedź i zostawić polecenie działające w tle (kompilację, test, oczekiwanie). Dopóki to polecenie działa, Mac nie zasypia, najwyżej przez ten czas liczony od jego uruchomienia. Limit sprawia, że zapomniany otwarty serwer nie trzyma Maca w stanie czuwania w nieskończoność.";
 "Atrasar o repouso" = "Opóźnij uśpienie";
 "Sem atraso" = "Bez opóźnienia";
 "Depois que os agentes terminam, o Mac fica acordado por esse tempo, mesmo de tampa fechada, e então volta ao repouso normal do macOS. Se um agente voltar a trabalhar antes disso, a espera recomeça." = "Gdy agenci skończą, Mac pozostaje aktywny przez ten czas, nawet przy zamkniętej pokrywie, a potem wraca do zwykłego uśpienia macOS. Jeśli agent wcześniej znów zacznie pracę, odliczanie zaczyna się od nowa.";
@@ -381,7 +391,6 @@
 "Despertar agendado" = "Zaplanowane budzenie";
 "Retomada do Codex agendada" = "Zaplanowano wznowienie Codex";
 "Atualizar permissão" = "Zaktualizuj uprawnienie";
-"Limites de uso" = "Limity użycia";
 "Ler limites de uso" = "Odczytuj limity użycia";
 "Ligado, o LlMBO lê os limites de 5 horas e da semana de dois jeitos. A cada 5 minutos, roda o comando /usage do Claude Code de terminal, que vem junto com o app Claude: funciona mesmo se você usa o Claude Code só pelo app Claude, não gasta tokens, não grava sessão nem dispara hooks. E vira a barra de status no rodapé do Claude Code de terminal, que recebe os limites a cada resposta: continua mostrando a barra que você já tinha (sem uma, mostra uma linha curta com os limites), e desligar devolve a anterior. Vale a leitura mais nova. Quem consulta a Anthropic é o Claude Code, com o login dele; o LlMBO não se conecta à internet e só lê o percentual e a hora em que cada limite volta." = "Po włączeniu LlMBO odczytuje limity 5-godzinny i tygodniowy na dwa sposoby. Co 5 minut uruchamia polecenie /usage Claude Code w terminalu, który jest dołączony do aplikacji Claude: działa, nawet jeśli używasz Claude Code tylko przez aplikację Claude, nie zużywa tokenów, nie zapisuje sesji i nie uruchamia hooków. Staje się też paskiem stanu na dole Claude Code w terminalu, który dostaje limity przy każdej odpowiedzi: dalej pokazuje pasek, który już miałeś (bez niego pokazuje krótki wiersz z limitami), a wyłączenie przywraca poprzedni. Liczy się najnowszy odczyt. To Claude Code pyta Anthropic, z własnym logowaniem; LlMBO nie łączy się z internetem i odczytuje tylko procent i godzinę powrotu każdego limitu.";
 "Ler a cota pelo Antigravity aberto" = "Odczytuj limit z otwartego Antigravity";
@@ -402,3 +411,12 @@
 "E mais %lld." = "I jeszcze %lld.";
 "Religar o repouso" = "Włącz usypianie z powrotem";
 "Encerrar" = "Zakończ";
+"LlMBO desligado" = "LlMBO wyłączone";
+"O Mac dorme como sempre." = "Mac usypia jak zwykle.";
+"Repouso normal" = "Zwykłe usypianie";
+"Agentes terminaram às %@" = "Agenci skończyli o %@";
+"Nenhum agente trabalhando." = "Żaden agent nie pracuje.";
+"Sem limites lidos ainda. Veja a aba Uso." = "Nie odczytano jeszcze limitów. Zobacz kartę Użycie.";
+"Tarefa longa" = "Długie zadanie";
+"5 h" = "5 godz.";
+"7 d" = "7 dni";

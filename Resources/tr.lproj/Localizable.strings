@@ -53,6 +53,7 @@
 "aguardando aprovação" = "onay bekliyor";
 "limite de uso" = "kullanım sınırı";
 "hook" = "hook";
+"tarefa em segundo plano" = "arka plan görevi";
 "arquivos %@" = "dosyalar %@";
 "GPU %lld%%" = "GPU %lld%%";
 "CPU %lld%%" = "CPU %%%lld";
@@ -72,6 +73,8 @@
 "Não estou recebendo os sinais do %@. Uma atualização dele pode ter mudado ou apagado o hook: remova e instale de novo na seção Hooks." = "%@ uygulamasından sinyal gelmiyor. Bir güncelleme hook’u değiştirmiş ya da silmiş olabilir: Hook'lar bölümünde kaldırıp yeniden kurun.";
 "Não consegui desativar o repouso." = "Uyku kapatılamadı.";
 "A permissão de administrador parou de funcionar e o Mac pode dormir com a tampa fechada. Reinstale a permissão no assistente (aba Sistema)." = "Yönetici izni çalışmayı bıraktı ve Mac kapak kapalıyken uyuyabilir. İzni yardımcıda yeniden kurun (Sistem sekmesi).";
+"Outro app religou o repouso enquanto um agente trabalhava (o AlDente, por exemplo, tem uma função que mexe nisso). Desliguei de novo às %@." = "Bir ajan çalışırken başka bir uygulama uykuyu yeniden açtı (örneğin AlDente'nin bunu değiştiren bir özelliği var). Saat %@ itibarıyla yeniden kapattım.";
+"Outro app religou o repouso várias vezes enquanto um agente trabalhava. Parei de desligar de novo para não brigar com ele, e o Mac pode dormir. Confira o AlDente ou outro app que controle o repouso." = "Bir ajan çalışırken başka bir uygulama uykuyu birkaç kez yeniden açtı. Onunla çekişmemek için yeniden kapatmayı bıraktım; Mac uykuya geçebilir. AlDente'yi veya uykuyu yöneten başka bir uygulamayı kontrol edin.";
 "Permissão instalada." = "İzin yüklendi.";
 "A permissão não foi instalada." = "İzin yüklenmedi.";
 "Permissão removida." = "İzin kaldırıldı.";
@@ -113,6 +116,11 @@
 "Configurar o LlMBO" = "LlMBO'yu ayarla";
 "LlMBO" = "LlMBO";
 "Outro agente (personalizado)…" = "Başka ajan (özel)…";
+"Segurando o Mac" = "Mac uyanık tutuluyor";
+"Limites de uso" = "Kullanım sınırları";
+"Abra o LlMBO para ver os dados aqui." = "Verileri burada görmek için LlMBO'yu açın.";
+"Se o LlMBO está segurando o Mac, por quê, e quando os agentes terminaram." = "LlMBO'nun Mac'i uyanık tutup tutmadığı, nedeni ve ajanların ne zaman bitirdiği.";
+"Quanto dos limites do Claude Code, do Codex e do Antigravity já foi usado, e quando eles voltam." = "Claude Code, Codex ve Antigravity limitlerinin ne kadarının kullanıldığı ve ne zaman yenileneceği.";
 "Não encontrei o Claude Code neste Mac." = "Bu Mac’te Claude Code bulunamadı.";
 "Agentes" = "Ajanlar";
 "Nenhum agente aberto" = "Açık ajan yok";
@@ -249,6 +257,8 @@
 "Funcionamento" = "Çalışma";
 "Religar ao abrir a tampa" = "Kapak açılınca yeniden etkinleştir";
 "Se o LlMBO foi desligado, por você ou por bateria, tempo ou temperatura, volta a ligar quando a tampa é aberta." = "LlMBO sizin tarafınızdan ya da pil, süre veya sıcaklık nedeniyle kapatıldıysa, kapak açıldığında yeniden etkinleşir.";
+"Apagar a tela com a tampa fechada" = "Kapak kapalıyken ekranı kapat";
+"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "Kapak kapalı ve uyku kapalıyken dahili ekran kapağın arkasında açık kalabilir; pil tüketir, ısınır ve iz bırakabilir. LlMBO, Mac’i uyutmadan ekranı kapatır ve her dakika yeniden denetler. Harici monitör bağlıyken hiçbir şey değişmez. Kapağı açtığınızda ekran normal şekilde geri gelir.";
 "Assistente de configuração" = "Kurulum yardımcısı";
 "Abrir…" = "Aç…";
 "Remover…" = "Kaldır…";
@@ -290,8 +300,6 @@
 "Sem limite" = "Sınırsız";
 "Proteção de temperatura" = "Sıcaklık koruması";
 "Proteção de temperatura: ao atingir o nível escolhido com a tampa fechada, o LlMBO religa o repouso e põe o Mac para dormir na hora. Em “Quente”, o próprio macOS já está reduzindo o desempenho para esfriar." = "Sıcaklık koruması: Kapak kapalıyken seçilen seviyeye ulaşılınca LlMBO uykuyu yeniden açar ve Mac'i hemen uyutur. “Sıcak” seviyesinde macOS soğumak için performansı zaten kendisi düşürür.";
-"Apagar a tela com a tampa fechada" = "Kapak kapalıyken ekranı kapat";
-"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "Kapak kapalı ve uyku kapalıyken dahili ekran kapağın arkasında açık kalabilir; pil tüketir, ısınır ve iz bırakabilir. LlMBO, Mac’i uyutmadan ekranı kapatır ve her dakika yeniden denetler. Harici monitör bağlıyken hiçbir şey değişmez. Kapağı açtığınızda ekran normal şekilde geri gelir.";
 "Vigia contra travamento" = "Donma bekçisi";
 "Um processo do próprio LlMBO, separado da janela (aparece como LlMBO no Monitor de Atividade), confere a cada 10 s se o app continua respondendo. Se o LlMBO travar ou for fechado à força com o repouso desligado, o vigia religa o repouso em cerca de 1 minuto e, com a tampa fechada, põe o Mac para dormir." = "LlMBO'nun pencereden ayrı kendi süreci (Etkinlik Monitörü'nde LlMBO olarak görünür) uygulamanın hâlâ yanıt verip vermediğini 10 sn'de bir denetler. LlMBO uyku kapalıyken donarsa veya zorla kapatılırsa, bekçi uykuyu yaklaşık 1 dakika içinde yeniden açar ve kapak kapalıysa Mac'i uyutur.";
 "Ativo" = "Etkin";
@@ -305,6 +313,8 @@
 "Esperar acordado por aprovações" = "Onaylar için uyanık kal";
 "Quando um agente para pedindo sua aprovação, o Mac fica acordado por esse tempo, mesmo de tampa fechada, para você aprovar à distância (por exemplo, pelo controle remoto no celular) e o trabalho continuar. Se ninguém responder, ele dorme normalmente." = "Bir ajan onayınızı istemek için durduğunda Mac, kapak kapalı olsa bile bu süre boyunca uyanık kalır; böylece uzaktan onaylayabilir (örneğin telefondan uzaktan kumanda ile) ve işin devam etmesini sağlayabilirsiniz. Kimse yanıt vermezse normal şekilde uyur.";
 "Avisam: Claude Code, Codex, Qwen Code, Gemini CLI e OpenCode. Antigravity: só quando pede acesso a recursos. Copilot CLI, Cursor, Crush, Aider e agentes sem hook não avisam; um pedido de aprovação deles conta como parado. Cada linha da seção Hooks, na aba Agentes, mostra o que vale para aquele agente." = "Bildirenler: Claude Code, Codex, Qwen Code, Gemini CLI ve OpenCode. Antigravity: yalnızca kaynaklara erişim istediğinde. Copilot CLI, Cursor, Crush, Aider ve hook'u olmayan ajanlar bildirmez; onlardan gelen bir onay isteği durmuş sayılır. Ajanlar sekmesindeki Hook'lar bölümünün her satırı o ajan için neyin geçerli olduğunu gösterir.";
+"Esperar tarefas em segundo plano" = "Arka plan görevlerini bekle";
+"O Claude Code pode terminar a resposta e deixar um comando rodando em segundo plano (um build, um teste, uma espera). Enquanto esse comando roda, o Mac fica acordado, até esse tempo contado desde que ele começou. O limite existe para um servidor esquecido aberto não segurar o Mac para sempre." = "Claude Code yanıtını bitirip bir komutu arka planda çalışır bırakabilir (bir derleme, bir test, bir bekleme). Bu komut çalıştığı sürece Mac uyanık kalır; en fazla, komutun başladığı andan itibaren bu süre kadar. Sınır, unutulmuş açık bir sunucunun Mac'i sonsuza dek uyanık tutmasını önler.";
 "Atrasar o repouso" = "Uykuyu geciktir";
 "Sem atraso" = "Gecikme yok";
 "Depois que os agentes terminam, o Mac fica acordado por esse tempo, mesmo de tampa fechada, e então volta ao repouso normal do macOS. Se um agente voltar a trabalhar antes disso, a espera recomeça." = "Ajanlar bitirdikten sonra Mac, kapak kapalı olsa bile bu süre boyunca uyanık kalır, ardından macOS'un normal uykusuna döner. Bir ajan bundan önce yeniden çalışmaya başlarsa bekleme baştan başlar.";
@@ -381,7 +391,6 @@
 "Despertar agendado" = "Planlanmış uyandırma";
 "Retomada do Codex agendada" = "Codex sürdürmesi planlandı";
 "Atualizar permissão" = "İzni güncelle";
-"Limites de uso" = "Kullanım sınırları";
 "Ler limites de uso" = "Kullanım sınırlarını oku";
 "Ligado, o LlMBO lê os limites de 5 horas e da semana de dois jeitos. A cada 5 minutos, roda o comando /usage do Claude Code de terminal, que vem junto com o app Claude: funciona mesmo se você usa o Claude Code só pelo app Claude, não gasta tokens, não grava sessão nem dispara hooks. E vira a barra de status no rodapé do Claude Code de terminal, que recebe os limites a cada resposta: continua mostrando a barra que você já tinha (sem uma, mostra uma linha curta com os limites), e desligar devolve a anterior. Vale a leitura mais nova. Quem consulta a Anthropic é o Claude Code, com o login dele; o LlMBO não se conecta à internet e só lê o percentual e a hora em que cada limite volta." = "Açıkken LlMBO 5 saatlik ve haftalık sınırları iki yolla okur. Her 5 dakikada bir, Claude uygulamasıyla gelen terminal Claude Code’un /usage komutunu çalıştırır: Claude Code’u yalnızca Claude uygulamasından kullansanız da çalışır, token harcamaz, oturum kaydetmez ve hook tetiklemez. Ayrıca terminal Claude Code’un altındaki durum satırı olur ve her yanıtta sınırları alır: zaten kullandığınız durum satırını göstermeye devam eder (yoksa sınırları gösteren kısa bir satır gösterir), kapatmak öncekini geri getirir. En yeni okuma geçerlidir. Anthropic’e soran, kendi oturumuyla Claude Code’dur; LlMBO internete bağlanmaz ve yalnızca yüzdeyi ve her sınırın döneceği saati okur.";
 "Ler a cota pelo Antigravity aberto" = "Kotayı açık Antigravity'den oku";
@@ -402,3 +411,12 @@
 "E mais %lld." = "Ve %lld tane daha.";
 "Religar o repouso" = "Uykuyu yeniden aç";
 "Encerrar" = "Sonlandır";
+"LlMBO desligado" = "LlMBO kapalı";
+"O Mac dorme como sempre." = "Mac her zamanki gibi uyur.";
+"Repouso normal" = "Normal uyku";
+"Agentes terminaram às %@" = "Ajanlar %@ itibarıyla bitirdi";
+"Nenhum agente trabalhando." = "Çalışan ajan yok.";
+"Sem limites lidos ainda. Veja a aba Uso." = "Henüz limit okunmadı. Kullanım sekmesine bakın.";
+"Tarefa longa" = "Uzun görev";
+"5 h" = "5 sa";
+"7 d" = "7 g";

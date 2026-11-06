@@ -53,6 +53,7 @@
 "aguardando aprovação" = "承認待ち";
 "limite de uso" = "使用量の上限";
 "hook" = "フック";
+"tarefa em segundo plano" = "バックグラウンドタスク";
 "arquivos %@" = "ファイル %@";
 "GPU %lld%%" = "GPU %lld%%";
 "CPU %lld%%" = "CPU %lld%%";
@@ -72,6 +73,8 @@
 "Não estou recebendo os sinais do %@. Uma atualização dele pode ter mudado ou apagado o hook: remova e instale de novo na seção Hooks." = "%@からシグナルが届いていません。アップデートでフックが変更または削除された可能性があります。「フック」セクションで削除してから再インストールしてください。";
 "Não consegui desativar o repouso." = "スリープを無効にできませんでした。";
 "A permissão de administrador parou de funcionar e o Mac pode dormir com a tampa fechada. Reinstale a permissão no assistente (aba Sistema)." = "管理者権限が機能しなくなり、蓋を閉じるとMacがスリープする可能性があります。アシスタントで権限を再インストールしてください（「システム」タブ）。";
+"Outro app religou o repouso enquanto um agente trabalhava (o AlDente, por exemplo, tem uma função que mexe nisso). Desliguei de novo às %@." = "エージェントの作業中に別のアプリがスリープを再び有効にしました（たとえば AlDente にはこれを変える機能があります）。%@ にもう一度無効にしました。";
+"Outro app religou o repouso várias vezes enquanto um agente trabalhava. Parei de desligar de novo para não brigar com ele, e o Mac pode dormir. Confira o AlDente ou outro app que controle o repouso." = "エージェントの作業中に別のアプリが何度もスリープを再び有効にしました。そのアプリと取り合いにならないよう、無効に戻すのをやめたため、Mac はスリープすることがあります。AlDente など、スリープを制御する別のアプリを確認してください。";
 "Permissão instalada." = "権限をインストールしました。";
 "A permissão não foi instalada." = "権限はインストールされませんでした。";
 "Permissão removida." = "権限を削除しました。";
@@ -113,6 +116,11 @@
 "Configurar o LlMBO" = "LlMBOの設定";
 "LlMBO" = "LlMBO";
 "Outro agente (personalizado)…" = "その他のエージェント（カスタム）…";
+"Segurando o Mac" = "Mac を起こしたまま";
+"Limites de uso" = "使用量の上限";
+"Abra o LlMBO para ver os dados aqui." = "LlMBO を開くとここにデータが表示されます。";
+"Se o LlMBO está segurando o Mac, por quê, e quando os agentes terminaram." = "LlMBO が Mac を起こしたままにしているか、その理由、エージェントがいつ終わったか。";
+"Quanto dos limites do Claude Code, do Codex e do Antigravity já foi usado, e quando eles voltam." = "Claude Code、Codex、Antigravity の上限をどれだけ使ったか、いつ戻るか。";
 "Não encontrei o Claude Code neste Mac." = "この Mac に Claude Code が見つかりませんでした。";
 "Agentes" = "エージェント";
 "Nenhum agente aberto" = "開いているエージェントはありません";
@@ -249,6 +257,8 @@
 "Funcionamento" = "動作";
 "Religar ao abrir a tampa" = "蓋を開けたら再びオンにする";
 "Se o LlMBO foi desligado, por você ou por bateria, tempo ou temperatura, volta a ligar quando a tampa é aberta." = "LlMBOがオフになった場合（手動、またはバッテリー・時間・温度による）、蓋を開けると再びオンになります。";
+"Apagar a tela com a tampa fechada" = "蓋を閉じたら画面をオフ";
+"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "蓋を閉じてスリープを無効にしていると、内蔵ディスプレイが蓋の裏で点いたままになり、バッテリーの消耗、発熱、焼き付きの原因になることがあります。LlMBO は Mac をスリープさせずに画面をオフにし、1 分ごとに再確認します。外部モニタが接続されているときは何もしません。蓋を開けると画面は通常どおり戻ります。";
 "Assistente de configuração" = "設定アシスタント";
 "Abrir…" = "開く…";
 "Remover…" = "削除…";
@@ -290,8 +300,6 @@
 "Sem limite" = "制限なし";
 "Proteção de temperatura" = "温度保護";
 "Proteção de temperatura: ao atingir o nível escolhido com a tampa fechada, o LlMBO religa o repouso e põe o Mac para dormir na hora. Em “Quente”, o próprio macOS já está reduzindo o desempenho para esfriar." = "温度保護：蓋を閉じた状態で選んだレベルに達すると、LlMBOはスリープを再び有効にし、すぐにMacをスリープさせます。「高温」では、macOS自体がすでに冷却のために性能を下げています。";
-"Apagar a tela com a tampa fechada" = "蓋を閉じたら画面をオフ";
-"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "蓋を閉じてスリープを無効にしていると、内蔵ディスプレイが蓋の裏で点いたままになり、バッテリーの消耗、発熱、焼き付きの原因になることがあります。LlMBO は Mac をスリープさせずに画面をオフにし、1 分ごとに再確認します。外部モニタが接続されているときは何もしません。蓋を開けると画面は通常どおり戻ります。";
 "Vigia contra travamento" = "フリーズ監視";
 "Um processo do próprio LlMBO, separado da janela (aparece como LlMBO no Monitor de Atividade), confere a cada 10 s se o app continua respondendo. Se o LlMBO travar ou for fechado à força com o repouso desligado, o vigia religa o repouso em cerca de 1 minuto e, com a tampa fechada, põe o Mac para dormir." = "ウインドウとは別の LlMBO のプロセス（アクティビティモニタに LlMBO と表示）が、10 秒ごとにアプリが応答しているか確認します。スリープをオフにしたまま LlMBO がフリーズしたり強制終了されたりすると、監視役が約 1 分でスリープを元に戻し、ふたが閉じていれば Mac をスリープさせます。";
 "Ativo" = "有効";
@@ -305,6 +313,8 @@
 "Esperar acordado por aprovações" = "承認待ちの間は起きておく";
 "Quando um agente para pedindo sua aprovação, o Mac fica acordado por esse tempo, mesmo de tampa fechada, para você aprovar à distância (por exemplo, pelo controle remoto no celular) e o trabalho continuar. Se ninguém responder, ele dorme normalmente." = "エージェントが承認を求めて止まると、蓋を閉じていてもこの時間はMacを起こしたままにし、離れた場所から承認できるようにします（スマートフォンのリモートコントロールなど）。誰も応答しなければ通常どおりスリープします。";
 "Avisam: Claude Code, Codex, Qwen Code, Gemini CLI e OpenCode. Antigravity: só quando pede acesso a recursos. Copilot CLI, Cursor, Crush, Aider e agentes sem hook não avisam; um pedido de aprovação deles conta como parado. Cada linha da seção Hooks, na aba Agentes, mostra o que vale para aquele agente." = "対応：Claude Code、Codex、Qwen Code、Gemini CLI、OpenCode。Antigravity：リソースへのアクセスを求めるときのみ。Copilot CLI、Cursor、Crush、Aider、フックのないエージェントは通知しないため、承認リクエストは停止として扱われます。「エージェント」タブのフックセクションの各行に、そのエージェントでの扱いが表示されます。";
+"Esperar tarefas em segundo plano" = "バックグラウンドタスクを待つ";
+"O Claude Code pode terminar a resposta e deixar um comando rodando em segundo plano (um build, um teste, uma espera). Enquanto esse comando roda, o Mac fica acordado, até esse tempo contado desde que ele começou. O limite existe para um servidor esquecido aberto não segurar o Mac para sempre." = "Claude Code は返答を終えたあと、コマンドをバックグラウンドで実行したままにすることがあります（ビルド、テスト、待機など）。そのコマンドが動いているあいだ、Mac はスリープしません。ただし、コマンドの開始からこの時間までです。この上限は、開いたまま忘れられたサーバーが Mac をずっと起こしたままにしないためのものです。";
 "Atrasar o repouso" = "スリープを遅らせる";
 "Sem atraso" = "遅らせない";
 "Depois que os agentes terminam, o Mac fica acordado por esse tempo, mesmo de tampa fechada, e então volta ao repouso normal do macOS. Se um agente voltar a trabalhar antes disso, a espera recomeça." = "エージェントの作業が終わった後も、蓋を閉じていてもこの時間はMacを起こしたままにし、その後macOS標準のスリープに戻します。その前にエージェントが再び作業を始めると、待機はやり直しになります。";
@@ -381,7 +391,6 @@
 "Despertar agendado" = "予定されたスリープ解除";
 "Retomada do Codex agendada" = "Codex の再開を予定済み";
 "Atualizar permissão" = "権限を更新";
-"Limites de uso" = "使用量の上限";
 "Ler limites de uso" = "使用上限を読み取る";
 "Ligado, o LlMBO lê os limites de 5 horas e da semana de dois jeitos. A cada 5 minutos, roda o comando /usage do Claude Code de terminal, que vem junto com o app Claude: funciona mesmo se você usa o Claude Code só pelo app Claude, não gasta tokens, não grava sessão nem dispara hooks. E vira a barra de status no rodapé do Claude Code de terminal, que recebe os limites a cada resposta: continua mostrando a barra que você já tinha (sem uma, mostra uma linha curta com os limites), e desligar devolve a anterior. Vale a leitura mais nova. Quem consulta a Anthropic é o Claude Code, com o login dele; o LlMBO não se conecta à internet e só lê o percentual e a hora em que cada limite volta." = "オンにすると、LlMBO は 5 時間と週の上限を 2 つの方法で読み取ります。5 分ごとに、Claude アプリに付属するターミナル版 Claude Code の /usage コマンドを実行します。Claude Code を Claude アプリだけで使っていても動き、トークンを消費せず、セッションを保存せず、フックも起動しません。さらにターミナル版 Claude Code の下部にあるステータスラインになり、返答のたびに上限を受け取ります。これまでのステータスラインはそのまま表示され（ない場合は上限を示す短い行を表示）、オフにすると元に戻ります。いちばん新しい読み取りが使われます。Anthropic に問い合わせるのは Claude Code 自身のログインで、LlMBO はインターネットに接続せず、各上限の割合と戻る時刻だけを読み取ります。";
 "Ler a cota pelo Antigravity aberto" = "開いている Antigravity からクォータを読む";
@@ -402,3 +411,12 @@
 "E mais %lld." = "ほか %lld 件。";
 "Religar o repouso" = "スリープを元に戻す";
 "Encerrar" = "終了";
+"LlMBO desligado" = "LlMBO オフ";
+"O Mac dorme como sempre." = "Mac はいつもどおりスリープします。";
+"Repouso normal" = "通常のスリープ";
+"Agentes terminaram às %@" = "エージェント終了 %@";
+"Nenhum agente trabalhando." = "作業中のエージェントはありません。";
+"Sem limites lidos ainda. Veja a aba Uso." = "上限はまだ読み取れていません。「使用状況」タブを見てください。";
+"Tarefa longa" = "長時間タスク";
+"5 h" = "5時間";
+"7 d" = "7日";

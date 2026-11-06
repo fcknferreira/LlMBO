@@ -18,9 +18,8 @@ enum Theme {
     /// Interruptores e controles ligados: um bronze mais fechado, para o botão branco aparecer.
     static let control = Color(hex: 0xC4874A)
     static let danger = Color(hex: 0xE5786D)
-    static let bronze = LinearGradient(stops: [.init(color: bronze1, location: 0), .init(color: bronze2, location: 0.55),
-                                               .init(color: bronze3, location: 1)],
-                                       startPoint: .leading, endPoint: .trailing)
+    /// Preenchimento de barras e do slider: sólido, o mesmo bronze dos interruptores.
+    static let bronze = control
     static let nsBackground = NSColor(srgbRed: 8 / 255, green: 8 / 255, blue: 10 / 255, alpha: 1)
     static var appearance: NSAppearance? { NSAppearance(named: .darkAqua) }
 
@@ -85,10 +84,9 @@ struct Kicker: View {
 
     var body: some View {
         HStack(spacing: 6) {
-            Text(text.uppercased(with: Locale.current))
-                .font(.system(size: 10.5, weight: .medium))
-                .tracking(1.6)
-                .foregroundStyle(Theme.bronze2)
+            Text(text)
+                .font(.system(size: 12, weight: .medium))
+                .foregroundStyle(Theme.muted)
             if let info { InfoButton(text: info) }
         }
         .padding(.leading, 4)
@@ -169,7 +167,7 @@ struct StatusDot: View {
         Circle()
             .fill(active ? Theme.bronze2 : (running ? Theme.muted : Theme.faint))
             .frame(width: 7, height: 7)
-            .shadow(color: active ? Theme.bronze2.opacity(0.9) : .clear, radius: 5)
+            .shadow(color: active ? Theme.bronze2.opacity(0.6) : .clear, radius: 3)
     }
 }
 
@@ -380,17 +378,15 @@ final class HandCursorNSView: NSView {
 }
 
 
-/// Selo pequeno "BETA" em bronze ao lado da versão; a dica explica o porquê.
+/// "Beta" discreto ao lado da versão; a dica explica o porquê.
 struct BetaBadge: View {
     var body: some View {
-        Text(verbatim: "BETA")
-            .font(.system(size: 8.5, weight: .bold))
-            .tracking(0.8)
-            .foregroundStyle(Theme.bronze2)
-            .padding(.horizontal, 5)
-            .padding(.vertical, 1.5)
-            .background(RoundedRectangle(cornerRadius: 4).fill(Theme.bronze2.opacity(0.10)))
-            .overlay(RoundedRectangle(cornerRadius: 4).strokeBorder(Theme.bronze2.opacity(0.55), lineWidth: 0.8))
+        Text(verbatim: "Beta")
+            .font(.system(size: 11, weight: .medium))
+            .foregroundStyle(Theme.muted)
+            .padding(.horizontal, 6)
+            .padding(.vertical, 2)
+            .overlay(RoundedRectangle(cornerRadius: 4).strokeBorder(Theme.line))
             .help(String(localized: "Versão de testes: por enquanto o LlMBO foi testado em poucos Macs e com poucos agentes. Se algo der errado, use Relatar problema."))
     }
 }

@@ -2,123 +2,99 @@
 
 <h1 align="center">LlMBO</h1>
 
-<p align="center"><b>Feche a tampa. Não o seu trabalho.</b><br>
-Deixa o MacBook trabalhar de tampa fechada enquanto seus agentes de IA rodam, e põe o Mac para dormir assim que todos terminam.</p>
+<p align="center"><b>English</b> · <a href="README.pt-BR.md">Português (Brasil)</a></p>
+
+<p align="center"><b>Close the lid. Not your work.</b><br>
+Lets your MacBook keep working with the lid closed while your AI agents run, and puts the Mac to sleep as soon as they all finish.</p>
 
 <p align="center">
-<a href="https://github.com/fcknferreira/LlMBO/releases/latest/download/LlMBO.dmg"><b>Baixar para macOS</b></a> ·
-grátis · código aberto (MIT) · macOS 13 ou mais novo · Apple Silicon e Intel
+<a href="https://github.com/fcknferreira/LlMBO/releases/latest/download/LlMBO.dmg"><b>Download for macOS</b></a> ·
+free · open source (MIT) · macOS 13 or later · Apple Silicon and Intel
 </p>
 
 ---
 
-*English below.*
+## What it does
 
-## O que ele faz
+You give Claude Code, Codex, Antigravity, Cursor… a long task and want to close the lid and walk away. macOS puts the Mac to sleep right away and the agent stops halfway. LlMBO fixes that:
 
-Você pede uma tarefa longa ao Claude Code, Codex, Antigravity, Cursor… e quer fechar a tampa e ir embora. O macOS põe o Mac para dormir na hora e o agente para no meio. O LlMBO resolve isso:
+- **Keeps the Mac awake only while an agent is working** — lid closed on a desk, not in a backpack (see the safety locks).
+- **Knows when each agent is done** through the agents' official hooks (they report instantly), their session files and, as a last resort, CPU/GPU use.
+- **Brings normal sleep back** once everything is quiet, and tells you: "Agents finished at 03:12".
+- **Waits for approvals** the agent asks for, for a configurable time, so you can approve from elsewhere.
+- **Usage limits:** shows tokens and limits; can wake the Mac when Claude Code's limit resets.
+- **Long tasks:** builds, tests and downloads can hold the Mac from the terminal (`llmbo-signal hold -- npm run build`) or through LlMBO's MCP server, which agents use on their own.
+- **Background commands:** when Claude Code finishes its reply but leaves a command running in the background (a build, a test, a wait), the Mac stays awake until it ends, up to a limit you choose.
+- **Widgets:** "LlMBO" shows whether the Mac is being kept awake and why, or when the agents finished; "Usage limits" shows how much of the Claude Code, Codex and Antigravity limits is used and when they come back.
 
-- **Segura o Mac acordado só enquanto algum agente trabalha** — de tampa fechada, na mochila não (veja as travas).
-- **Sabe quando cada agente terminou** pelos hooks oficiais dos agentes (avisam na hora), pelos arquivos de sessão e, como último recurso, pela CPU/GPU.
-- **Devolve o repouso normal** quando tudo fica quieto e avisa: "Agentes terminaram às 03:12".
-- **Espera aprovações** pedidas pelo agente por um tempo configurável, para você aprovar de longe.
-- **Limites de uso:** mostra tokens e limites; pode acordar o Mac quando o limite do Claude Code volta.
-- **Tarefas longas:** builds, testes e downloads seguram o Mac pelo terminal (`llmbo-signal hold -- npm run build`) ou pelo servidor MCP do LlMBO, que os agentes usam sozinhos.
+Works with Claude Code, Codex, Antigravity (app, IDE and CLI), Gemini CLI, Qwen Code, GitHub Copilot (CLI and VS Code), Cursor, OpenCode, Crush, Aider, Cline, Roo Code, Kilo Code, Continue, Kiro, Windsurf, Amp, Goose, DeepSeek Harness and local AI (Ollama, LM Studio, llama.cpp, MLX, Jan). You can also add your own.
 
-Funciona com Claude Code, Codex, Antigravity (app, IDE e CLI), Gemini CLI, Qwen Code, GitHub Copilot (CLI e VS Code), Cursor, OpenCode, Crush, Aider, Cline, Roo Code, Kilo Code, Continue, Kiro, Windsurf, Amp, Goose e IA local (Ollama, LM Studio, llama.cpp, MLX, Jan). Você também pode cadastrar o seu.
+The app is available in 23 languages.
 
-## Instalar
+## Install
 
-**Pelo Terminal (mais fácil, recomendado)** — sem aviso nenhum, porque arquivos baixados pelo `curl` não ganham a marca de quarentena:
+**From Terminal (easiest, recommended)** — no warning at all, because files downloaded with `curl` don't get the quarantine flag:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/fcknferreira/LlMBO/main/install.sh | bash
 ```
 
-**Pelo DMG:** baixe o [LlMBO.dmg](https://github.com/fcknferreira/LlMBO/releases/latest/download/LlMBO.dmg), arraste para Aplicativos e abra.
+**From the DMG:** download [LlMBO.dmg](https://github.com/fcknferreira/LlMBO/releases/latest/download/LlMBO.dmg), drag it to Applications and open it.
 
 > [!CAUTION]
-> **Na primeira vez o macOS vai sugerir "Mover para o Lixo". NÃO clique nesse botão.** Clique em **Concluído**. O aviso aparece só porque o LlMBO é grátis e não paga os US$ 99 por ano do Apple Developer Program — não porque haja algo de errado com ele (o código está todo aqui). Nas versões recentes do macOS o aviso nem oferece mais o botão "Abrir"; o caminho é este:
+> **The first time, macOS will suggest "Move to Trash". DO NOT click it.** Click **Done**. The warning only appears because LlMBO is free and doesn't pay Apple's $99/year Developer Program — not because anything is wrong with it (all the code is here). Recent macOS versions no longer offer an "Open" button in that warning; this is the way:
 >
-> 1. Abra **Ajustes do Sistema › Privacidade e Segurança** e role até o fim.
-> 2. Clique em **Abrir Mesmo Assim** ao lado do LlMBO, confirme **Abrir Mesmo Assim** de novo e digite a sua senha.
-> 3. Esse botão só aparece por cerca de uma hora depois da tentativa de abrir. Se sumiu, tente abrir o LlMBO de novo.
+> 1. Open **System Settings › Privacy & Security** and scroll to the bottom.
+> 2. Click **Open Anyway** next to LlMBO, confirm **Open Anyway** again and enter your password.
+> 3. That button only shows for about an hour after you try to open the app. If it's gone, try opening LlMBO again.
 >
-> Só uma vez — as atualizações seguintes chegam pelo próprio app.
+> Only once — later updates come through the app itself.
 
-O script baixa a última versão, confere se ela tem a assinatura das Releases do LlMBO e instala em `/Applications`.
+The script downloads the latest version, checks that it carries the signature of LlMBO's Releases and installs it in `/Applications`.
 
-Na primeira abertura, um assistente pede a senha de administrador uma vez. Ela instala `/etc/sudoers.d/llmbo`, que libera **só** estes comandos sem senha: `pmset -a disablesleep 0/1`, `pmset schedule wake …` e `pmset schedule cancel wake …`. Nada mais.
+On first launch, a setup assistant asks for your administrator password once. It installs `/etc/sudoers.d/llmbo`, which allows **only** these commands without a password: `pmset -a disablesleep 0/1`, `pmset schedule wake …` and `pmset schedule cancel wake …`. Nothing else.
 
-## Privacidade
+## Privacy
 
-Tudo roda no seu Mac. O LlMBO não tem servidor, não coleta dados e não manda nada sobre você para lugar nenhum. A única conexão é a consulta ao GitHub por versões novas, uma vez por dia (dá para desligar na aba Sobre). O botão **Relatar problema…** só abre uma issue no navegador, já preenchida, para você revisar antes de enviar.
+Everything runs on your Mac. LlMBO has no server, collects no data and sends nothing about you anywhere. The only network request is a check on GitHub for new versions, once a day (you can turn it off in the About tab). The **Report a Problem…** button only opens a pre-filled issue in your browser, for you to review before sending.
 
-## Atualizar
+## Updating
 
-O app procura versões novas uma vez por dia e no botão **Procurar atualizações…** (aba Sobre). **Atualizar** baixa, confere a assinatura, troca o app e reabre — sem soltar o Mac se houver agentes trabalhando.
+The app looks for new versions once a day and when you click **Check for Updates…** (About tab). **Update** downloads, checks the signature, swaps the app and reopens it — without letting the Mac sleep if agents are working.
 
-## Segurança
+## Safety
 
-- Bateria mínima, tempo máximo acordado (separado para bateria e tomada) e proteção de temperatura religam o repouso.
-- Com a tampa fechada, a tela interna é apagada enquanto os agentes trabalham.
-- Um vigia (processo do próprio LlMBO) devolve o repouso em ~1 min se o app travar ou for encerrado à força.
-- Ao sair, o repouso volta ao normal.
+- Minimum battery, maximum time awake (separate for battery and power adapter) and temperature protection bring sleep back.
+- With the lid closed, the internal screen is turned off while agents work.
+- A watchdog (a process of LlMBO itself) restores sleep within ~1 min if the app hangs or is force-quit.
+- When you quit, sleep goes back to normal.
 
-> Mac fechado e acordado dentro da mochila esquenta. Use em cima da mesa.
+> A closed Mac kept awake inside a backpack gets hot. Use it on a desk.
 
-## Desinstalar
+## Uninstall
 
-Aba **Sistema › Permissão de administrador › Remover…**, depois apague o app e `~/Library/Application Support/LlMBO`. Se algo der errado e o Mac não dormir mais ao fechar a tampa:
+Use **Uninstall…** in the About tab: it removes the `sudo` rule, the hooks, the MCP server and the app itself. Dragging the app to the Trash leaves the rule behind. If something goes wrong and the Mac no longer sleeps when you close the lid:
 
 ```bash
 sudo pmset -a disablesleep 0
 ```
 
-## Compilar
+## Building
 
-Precisa só das Command Line Tools (`xcode-select --install`).
-
-```bash
-./build.sh          # gera build/LlMBO.app
-./build.command     # compila, instala em /Applications e abre
-./release.sh 0.2    # versão pública: zip + DMG em dist/ (--publish cria a Release)
-```
-
-## Problemas e sugestões
-
-[Abra uma issue](https://github.com/fcknferreira/LlMBO/issues) ou use **Relatar problema…** na aba Sobre.
-
-Site: [llmbo.app](https://llmbo.app) · Instagram e Threads: [@llmbo.app](https://www.instagram.com/llmbo.app/)
-
-## Segurança
-
-O LlMBO usa uma regra do `sudo` para ligar e desligar o repouso. Se você achar uma falha de segurança, **não abra uma issue pública**: escreva pelo [formulário de contato](https://llmbo.app/contact.html), que chega só para o autor. Quando houver correção, ela sai numa versão nova e o aviso público vem depois.
-
-Para tirar tudo do Mac (inclusive a regra do `sudo`), use **Desinstalar o LlMBO…** na aba Sobre. Arrastar o app para o Lixo deixa a regra para trás.
-
----
-
-## English
-
-**Close the lid. Not your work.** LlMBO is a free, open-source menu bar app that keeps your MacBook awake with the lid closed while AI coding agents (Claude Code, Codex, Antigravity, Cursor, Copilot, Gemini CLI and many more) are working, and lets it sleep as soon as they all finish.
-
-- Knows when each agent is done through the agents' official hooks, session files and, as a fallback, CPU/GPU use.
-- Waits a configurable time for approval requests, shows token use and limits, and can wake the Mac when Claude Code's limit resets.
-- Safety locks: minimum battery, maximum time awake, temperature, a watchdog that restores sleep if the app hangs.
-- Everything stays on your Mac. The only network request is a daily check on GitHub for new versions (can be turned off).
-
-**Install (easiest, recommended):** this Terminal command installs it with no warning at all:
+Only needs the Command Line Tools (`xcode-select --install`).
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/fcknferreira/LlMBO/main/install.sh | bash
+./build.sh          # builds build/LlMBO.app
+./build.command     # builds, installs to /Applications and opens it
+./release.sh 0.2    # public version: zip + DMG in dist/ (--publish creates the Release)
 ```
 
-Or download [LlMBO.dmg](https://github.com/fcknferreira/LlMBO/releases/latest/download/LlMBO.dmg) and drag it to Applications.
+## Issues and suggestions
 
-> [!CAUTION]
-> **The first time, macOS will suggest "Move to Trash". DO NOT click it.** Click **Done**. The warning only appears because LlMBO doesn't pay for Apple's $99/year signing program — not because anything is wrong with it. Recent macOS versions no longer offer an "Open" button there. Instead, go to **System Settings › Privacy & Security**, scroll down, click **Open Anyway** next to LlMBO, confirm **Open Anyway** again and enter your password. The button only shows for about an hour after you try to open the app.
+[Open an issue](https://github.com/fcknferreira/LlMBO/issues) or use **Report a Problem…** in the About tab.
 
-The app is available in 23 languages. License: [MIT](LICENSE). Website: [llmbo.app](https://llmbo.app) · Instagram and Threads: [@llmbo.app](https://www.instagram.com/llmbo.app/)
+Website: [llmbo.app](https://llmbo.app) · Instagram and Threads: [@llmbo.app](https://www.instagram.com/llmbo.app/) · License: [MIT](LICENSE)
 
-**Security:** LlMBO uses a `sudo` rule to turn sleep on and off. If you find a security issue, **please don't open a public issue**: write through the [contact form](https://llmbo.app/contact.html), which only reaches the author. To remove everything from your Mac (including the `sudo` rule), use **Uninstall LlMBO…** in the About tab; dragging the app to the Trash leaves the rule behind.
+## Reporting a security issue
+
+LlMBO uses a `sudo` rule to turn sleep on and off. If you find a security issue, **please don't open a public issue**: write through the [contact form](https://llmbo.app/contact.html), which only reaches the author. Once there's a fix, it ships in a new version and the public notice comes after.

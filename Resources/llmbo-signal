@@ -145,18 +145,26 @@ vscode_owner() {
       case "$cmd" in
         *"Visual Studio Code"*".app/"*) vs="copilot-vscode" ;;
         *"Devin.app/"* | *"Devin Desktop.app/"* | *"Windsurf.app/"*) vs="windsurf" ;;
+        *"DeepSeek Harness.app/"* | *"@deepseek-ai/dsh"*) vs="deepseek" ;;
       esac
       [ -z "$vs" ] && [ "${exe##*/}" = "devin" ] && vs="windsurf"
+      if [ -z "$vs" ] && { [ "${exe##*/}" = "dsh" ] || [ "${first##*/}" = "dsh" ] || [ "${second##*/}" = "dsh" ]; }; then
+        vs="deepseek"
+      fi
     fi
     pid=$(ps -o ppid= -p "$pid" 2>/dev/null | tr -d ' ')
     i=$((i + 1))
   done
   # O Devin só lê os hooks do Claude, não os do Copilot CLI.
   [ "$vs" = "windsurf" ] && [ "$want" != "claude" ] && return
+  # O DeepSeek Harness roda hooks do Claude Code e do Codex pelas pontes experimentais dsh-hooks-claude-code e
+  # dsh-hooks-codex (montadas à mão no cordis.patch.yml). Para os hooks do Codex, só ele conta como hospedeiro.
+  [ "$vs" = "deepseek" ] && [ "$want" = "copilot" ] && return
+  [ "$want" = "codex" ] && [ "$vs" != "deepseek" ] && return
   [ -n "$vs" ] && echo "$vs"
 }
 
-if [ "$agent" = "claude" ] || [ "$agent" = "copilot" ]; then
+if [ "$agent" = "claude" ] || [ "$agent" = "copilot" ] || [ "$agent" = "codex" ]; then
   found=$(vscode_owner "$agent")
   [ -n "$found" ] && agent="$found"
 fi

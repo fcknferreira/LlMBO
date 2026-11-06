@@ -59,6 +59,10 @@ final class Engine: ObservableObject {
     /// Minutos que o Mac fica acordado com um agente pedindo aprovação (0 = dorme como se tivesse terminado).
     @Published var approvalWaitMinutes: Int { didSet { UserDefaults.standard.set(approvalWaitMinutes, forKey: "approvalWaitMinutes") } }
     static let approvalWaitOptions = [0, 5, 10, 15, 20, 30, 45, 60, 90, 120]
+    /// Minutos que uma tarefa em segundo plano do Claude Code (Bash com run_in_background, Monitor) conta como
+    /// trabalho depois que a resposta termina, contados desde que a tarefa começou (0 = não conta).
+    @Published var backgroundTaskMinutes: Int { didSet { UserDefaults.standard.set(backgroundTaskMinutes, forKey: "backgroundTaskMinutes") } }
+    static let backgroundTaskOptions = [0, 10, 15, 30, 45, 60, 90, 120]
     /// Segundos que o Mac fica acordado depois que os agentes terminam, antes de voltar ao repouso do macOS.
     @Published var sleepDelaySeconds: Int { didSet { UserDefaults.standard.set(sleepDelaySeconds, forKey: "sleepDelaySeconds") } }
     /// Valores do "Atrasar o repouso": segundos no começo, minutos depois.
@@ -137,6 +141,13 @@ final class Engine: ObservableObject {
     /// do hook instalado, e quando foi a última. Um sinal do hook zera.
     private var muteEpisodes: [String: Int] = [:]
     private var muteEpisodeAt: [String: Date] = [:]
+    private var sleepGuard = Power.SleepGuard()
+    /// Quando a última leva de agentes terminou (o aviso "Agentes terminaram às X"), para os widgets.
+    private(set) var lastFinishedAt: Date? = UserDefaults.standard.object(forKey: "lastAgentsFinished") as? Date {
+        didSet { UserDefaults.standard.set(lastFinishedAt, forKey: "lastAgentsFinished") }
+    }
+    /// Hora em que o repouso normal volta, enquanto espera depois do fim (5 s + "Atrasar o repouso").
+    var sleepReturnsAt: Date? { quietSince.map { $0.addingTimeInterval(confirmQuiet + TimeInterval(sleepDelaySeconds)) } }
     private var hookSeen: Set<String> = [] {
         didSet { if hookSeen != oldValue { UserDefaults.standard.set(Array(hookSeen), forKey: "hookSeen") } }
     }
@@ -162,6 +173,7 @@ final class Engine: ObservableObject {
         let d = UserDefaults.standard
         graceMinutes = d.object(forKey: "graceMinutes") as? Int ?? 5
         approvalWaitMinutes = d.object(forKey: "approvalWaitMinutes") as? Int ?? 15
+        backgroundTaskMinutes = d.object(forKey: "backgroundTaskMinutes") as? Int ?? 60
         // Versões anteriores guardavam minutos ("sleepDelayMinutes").
         sleepDelaySeconds = d.object(forKey: "sleepDelaySeconds") as? Int
             ?? (d.object(forKey: "sleepDelayMinutes") as? Int).map { $0 * 60 } ?? 120
@@ -332,14 +344,35 @@ final class Engine: ObservableObject {
             return
         }
         Canaries.shared.clear("sudo")
+        Canaries.shared.clear("external-sleep")   // aviso da vez anterior: fica até começar outro trabalho
         holding = true
         holdingSince = Date()
         Watchdog.setHolding(true)
         activity = ProcessInfo.processInfo.beginActivity(options: [.userInitiated], reason: "LlMBO aguardando agentes")
     }
 
+    /// O LlMBO é quem manda enquanto segura: se outro app religou o repouso (o AlDente tem uma função que mexe no
+    /// mesmo `disablesleep`), desliga de novo. Sem briga: depois de 3 vezes em 10 min, desiste e avisa.
+    private func guardSleepDisabled(_ now: Date) {
+        switch sleepGuard.check(sleepDisabled: Power.sleepDisabled, now: now) {
+        case .ok: break
+        case .restore:
+            let ok = Power.setSleepDisabled(true)
+            AppLog.write("repouso religado por fora durante o trabalho; \(ok ? "desligado de novo" : "falhou ao desligar de novo")")
+            let time = now.formatted(date: .omitted, time: .shortened)
+            Canaries.shared.raise("external-sleep", .system,
+                String(localized: "Outro app religou o repouso enquanto um agente trabalhava (o AlDente, por exemplo, tem uma função que mexe nisso). Desliguei de novo às \(time)."))
+        case .giveUp:
+            AppLog.write("repouso religado por fora \(Power.SleepGuard.maxRestores) vezes em 10 min; parei de insistir")
+            let text = String(localized: "Outro app religou o repouso várias vezes enquanto um agente trabalhava. Parei de desligar de novo para não brigar com ele, e o Mac pode dormir. Confira o AlDente ou outro app que controle o repouso.")
+            Canaries.shared.raise("external-sleep", .system, text)
+            Notifier.shared.post(text, force: true)
+        }
+    }
+
     /// Devolve o repouso normal.
     private func release() {
+        sleepGuard = Power.SleepGuard()
         if holding || Power.sleepDisabled { Power.setSleepDisabled(false) }
         Watchdog.setHolding(false)
         holding = false
@@ -543,6 +576,7 @@ final class Engine: ObservableObject {
 
     private func tick() {
         let now = Date()
+        defer { WidgetFeed.update(self, now: now) }
         Watchdog.beat()
         let wd = Watchdog.status
         if wd != watchdogStatus { watchdogStatus = wd }
@@ -552,6 +586,7 @@ final class Engine: ObservableObject {
             holdingSince = nil
             if let a = activity { ProcessInfo.processInfo.endActivity(a); activity = nil }
         }
+        if holding { guardSleepDisabled(now) }
         // Tampa aberta de novo (inclusive ao acordar): religa se estiver desligado.
         let lidClosed = Power.lidClosed
         let lidOpened = lidWasClosed && !lidClosed
@@ -586,6 +621,11 @@ final class Engine: ObservableObject {
             // CPU do agente + todos os processos filhos (ferramentas, builds, testes…)
             var stack = procs.filter { a.matches($0) }.map(\.pid)
             let running = !stack.isEmpty
+            // Sinal 1b — tarefas em segundo plano do Claude Code: o Stop sai com elas ainda rodando.
+            let backgroundTasks = a.id == "claude"
+                ? ClaudeBackground.count(agentPids: stack, children: children, byPid: byPid,
+                                         window: TimeInterval(backgroundTaskMinutes * 60), now: now)
+                : 0
             var seen = Set<Int32>()
             while let pid = stack.popLast() {
                 if seen.insert(pid).inserted { stack += children[pid] ?? [] }
@@ -664,19 +704,23 @@ final class Engine: ObservableObject {
             if strictHooks || !a.countsCPU { cpuAt = nil }
             // Um "busy" mais novo que o pedido de aprovação (de outra sessão) prevalece no rótulo.
             let waitingApproval = waitingAt.map { w in lastBusy.map { $0 < w } ?? true } ?? false
-            let active = hookBusy || waitingApproval || quotaHold || fileAt != nil || cpuAt != nil || gpuAt != nil
+            let active = hookBusy || waitingApproval || quotaHold || backgroundTasks > 0
+                || fileAt != nil || cpuAt != nil || gpuAt != nil
 
             var reason: String?
             if waitingApproval { reason = String(localized: "aguardando aprovação") }
             else if quotaHold && !hookBusy { reason = String(localized: "limite de uso") }
             else if hookBusy { reason = String(localized: "hook") }
+            else if backgroundTasks > 0 { reason = String(localized: "tarefa em segundo plano") }
             else if let t = fileAt { reason = String(localized: "arquivos \(ago(t, now))") }
             else if gpuAt != nil && (cpuAt == nil || gpu >= (a.gpuLimit ?? 0)) { reason = String(localized: "GPU \(Int(gpu))%") }
             else if cpuAt != nil { reason = cpu >= a.cpuThreshold ? String(localized: "CPU \(Int(cpu))%") : String(localized: "CPU \(ago(cpuAt!, now))") }
 
             var status = AgentStatus(id: a.id, name: a.name, running: running, active: active, cpu: cpu,
                                      viaHook: hookBusy, reason: reason, hook: hookStates[a.id] ?? .unsupported)
-            status.waitingHook = hookOnly && hasHook && running && sigs.isEmpty
+            // Só quando o hook nunca disparou: sinais com mais de 24 h são apagados, e um agente parado há um dia
+            // (hook já visto funcionando) não está "aguardando o hook".
+            status.waitingHook = hookOnly && hasHook && running && sigs.isEmpty && !hookSeen.contains(a.id)
             // App, IDE e CLI do Antigravity dividem hook e pasta: sinal de qualquer um deles vale.
             checkMuteHook(a, hasHook: hasHook, running: running,
                           sigs: signals.filter { Hooks.sharedWith(a.id).contains($0.agent) }, now: now)
@@ -763,6 +807,7 @@ final class Engine: ObservableObject {
                 // Avisa na hora que terminaram (pedido do usuário: o mais instantâneo possível); os 5 s de quietude
                 // e o atraso valem só para devolver o repouso, que depois volta sem outro aviso.
                 notifiedEarly = true
+                lastFinishedAt = now
                 let f = DateFormatter()
                 f.timeStyle = .short
                 let back = q.addingTimeInterval(confirmQuiet + TimeInterval(sleepDelaySeconds))

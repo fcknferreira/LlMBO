@@ -72,6 +72,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if ProcessInfo.processInfo.environment["LLMBO_TEST_UNINSTALL"] != nil { Uninstaller.selfTest() }
         if ProcessInfo.processInfo.environment["LLMBO_TEST_USAGE"] != nil { TokenScanner.selfTest() }
         if ProcessInfo.processInfo.environment["LLMBO_TEST_CODEX"] != nil { CodexResume.selfTest() }
+        if ProcessInfo.processInfo.environment["LLMBO_TEST_BACKGROUND"] != nil { ClaudeBackground.selfTest() }
+        if ProcessInfo.processInfo.environment["LLMBO_TEST_SLEEPGUARD"] != nil { Power.SleepGuard.selfTest() }
+        if ProcessInfo.processInfo.environment["LLMBO_TEST_WIDGET"] != nil {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { WidgetFeed.selfTest(Engine.shared) }
+        }
         if ProcessInfo.processInfo.environment["LLMBO_TEST_AGQUOTA"] != nil { AntigravityQuota.selfTest() }
         if ProcessInfo.processInfo.environment["LLMBO_TEST_CLAUDEUSAGE"] != nil { ClaudeUsageCLI.selfTest() }
         if ProcessInfo.processInfo.environment["LLMBO_TEST_TABCLICK"] != nil {

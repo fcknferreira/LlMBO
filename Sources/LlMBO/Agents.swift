@@ -108,6 +108,14 @@ struct AgentConfig: Codable, Hashable {
                     activityPaths: ["~/.local/share/goose/sessions"]),
         AgentConfig(id: "crush", name: "Crush",
                     executables: ["crush"], argsContains: [], cpuThreshold: 5),
+        // DeepSeek Harness (`dsh`, npm @deepseek-ai/dsh; Web UI em 127.0.0.1:3080 e app Electron "DeepSeek Harness").
+        // Sessões em ~/.dsh/sessions/<projeto>/<sessão>/*.jsonl.zstd (DSH_HOME muda a pasta; zstd por padrão,
+        // então só o mtime serve, os tokens não dão para ler). Hooks só pela ponte experimental
+        // dsh-hooks-claude-code (montada à mão no cordis.patch.yml), por isso fica nos arquivos + CPU.
+        AgentConfig(id: "deepseek", name: "DeepSeek Harness",
+                    executables: ["dsh"], argsContains: ["@deepseek-ai/dsh", "DeepSeek Harness.app/Contents/MacOS/"],
+                    cpuThreshold: 10,
+                    activityPaths: ["~/.dsh/sessions"]),
 
         // MARK: Extensões de IDE — rodam dentro do VS Code/Cursor: a CPU é da IDE inteira, então não conta;
         // o sinal é o arquivo de conversa que a extensão grava enquanto trabalha (e o hook, onde houver).
@@ -352,6 +360,69 @@ func processSnapshot() -> [ProcInfo] {
         result.append(ProcInfo(pid: pid, ppid: ppid, cpu: cpu, args: args, exe: executablePath(pid, &buf)))
     }
     return result
+}
+
+/// Tarefas em segundo plano do Claude Code (Bash com run_in_background, Monitor). O Claude Code roda cada
+/// comando num shell filho que carrega o retrato do ambiente: `zsh -c source ~/.claude/shell-snapshots/snapshot-…`.
+/// O Stop do hook sai com elas ainda rodando, então sem isto o Mac dormia no meio da espera.
+enum ClaudeBackground {
+    static let marker = "/.claude/shell-snapshots/snapshot-"
+
+    /// Quantas tarefas filhas diretas do `claude` estão vivas e começaram há menos de `window`.
+    /// O teto evita segurar o Mac para sempre por um servidor esquecido (`python3 -m http.server` de 11 h).
+    /// Menos de 3 s de vida não conta: comandos rápidos não são tarefa.
+    static func count(agentPids: [Int32], children: [Int32: [Int32]], byPid: [Int32: ProcInfo],
+                      window: TimeInterval, now: Date) -> Int {
+        guard window > 0 else { return 0 }
+        var n = 0
+        for parent in agentPids {
+            for pid in children[parent] ?? [] {
+                guard let p = byPid[pid], bytesContain(p.args, marker), let start = startTime(pid) else { continue }
+                let age = now.timeIntervalSince(start)
+                if age >= 3, age < window { n += 1 }
+            }
+        }
+        return n
+    }
+
+    /// LLMBO_TEST_BACKGROUND=1: abre como filhos do próprio app um shell com a assinatura do Claude Code e um
+    /// comando comum, e confere a contagem, o teto e o fim. Grava background-test.log.
+    static func selfTest() {
+        DispatchQueue.global().async {
+            var out: [String] = []
+            func check(_ name: String, _ ok: Bool) { out.append("\(ok ? "ok " : "ERRO") \(name)") }
+            func spawn(_ path: String, _ args: [String]) -> Process {
+                let p = Process(); p.executableURL = URL(fileURLWithPath: path); p.arguments = args
+                try? p.run(); return p
+            }
+            let me = getpid()
+            func counted(window: TimeInterval) -> Int {
+                let procs = processSnapshot()
+                var children: [Int32: [Int32]] = [:], byPid: [Int32: ProcInfo] = [:]
+                for p in procs { children[p.ppid, default: []].append(p.pid); byPid[p.pid] = p }
+                return count(agentPids: [me], children: children, byPid: byPid, window: window, now: Date())
+            }
+            let task = spawn("/bin/zsh", ["-c", "source /tmp/llmbo-test\(marker)zsh-0.sh 2>/dev/null || true; sleep 30 && pwd -P >/dev/null"])   // como o Claude Code: termina com pwd, o zsh não vira o comando
+            let plain = spawn("/bin/sleep", ["30"])
+            check("tarefa recém-aberta (< 3 s) não conta", counted(window: 3600) == 0)
+            Thread.sleep(forTimeInterval: 4)
+            check("tarefa viva conta; comando comum não", counted(window: 3600) == 1)
+            check("tarefa mais velha que o teto não conta", counted(window: 3) == 0)
+            check("teto 0 = não conta", counted(window: 0) == 0)
+            check("hora de início lida", startTime(task.processIdentifier).map { Date().timeIntervalSince($0) } ?? -1 >= 3)
+            task.terminate(); plain.terminate(); task.waitUntilExit(); plain.waitUntilExit()
+            check("tarefa encerrada não conta", counted(window: 3600) == 0)
+            try? out.joined(separator: "\n").write(to: Paths.support.appendingPathComponent("background-test.log"),
+                                                   atomically: true, encoding: .utf8)
+        }
+    }
+
+    static func startTime(_ pid: Int32) -> Date? {
+        var info = proc_bsdinfo()
+        let size = Int32(MemoryLayout<proc_bsdinfo>.size)
+        guard proc_pidinfo(pid, PROC_PIDTBSDINFO, 0, &info, size) == size else { return nil }
+        return Date(timeIntervalSince1970: TimeInterval(info.pbi_start_tvsec) + TimeInterval(info.pbi_start_tvusec) / 1e6)
+    }
 }
 
 /// Busca de texto por bytes (memmem). Bem mais rápida que String.contains do Foundation em textos longos

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- O macOS só roda widget isolado. -->
+	<key>com.apple.security.app-sandbox</key><true/>
+	<!-- Leitura só da pasta do LlMBO, onde o app grava widget.json. Vale com a assinatura própria, sem grupo de apps. -->
+	<key>com.apple.security.temporary-exception.files.home-relative-path.read-only</key>
+	<array><string>/Library/Application Support/LlMBO/</string></array>
+</dict>
+</plist>

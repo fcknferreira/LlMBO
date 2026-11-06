@@ -36,6 +36,7 @@ enum Uninstaller {
             UserDefaults.standard.removePersistentDomain(forName: id)
             UserDefaults.standard.synchronize()
         }
+        removeWidget()
         try? FileManager.default.trashItem(at: Bundle.main.bundleURL, resultingItemURL: nil)
 
         let done = NSAlert()
@@ -45,6 +46,15 @@ enum Uninstaller {
             : String(localized: "O app foi para o Lixo. Não deu para tirar: \(failed.joined(separator: ", ")).")
         done.runModal()
         exit(0)
+    }
+
+    /// Widgets: a extensão vai junto com o app; aqui só sai do registro do macOS (some da galeria na hora) e a pasta
+    /// isolada dela vai para o Lixo. Essa pasta é protegida pelo macOS e às vezes não sai: não conta como falha.
+    static func removeWidget() {
+        let appex = Bundle.main.bundleURL.appendingPathComponent("Contents/PlugIns/LlMBOWidget.appex")
+        _ = run("/usr/bin/pluginkit", ["-r", appex.path])
+        let container = Hooks.realHome.appendingPathComponent("Library/Containers/com.llmbo.app.widget")
+        try? FileManager.default.trashItem(at: container, resultingItemURL: nil)
     }
 
     /// Tira hooks, barra de status e MCP de todos os agentes. Devolve o que não saiu.

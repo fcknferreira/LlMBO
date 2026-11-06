@@ -53,6 +53,7 @@
 "aguardando aprovação" = "ממתין לאישור";
 "limite de uso" = "מגבלת שימוש";
 "hook" = "hook";
+"tarefa em segundo plano" = "משימה ברקע";
 "arquivos %@" = "קבצים %@";
 "GPU %lld%%" = "GPU %lld%%";
 "CPU %lld%%" = "מעבד %lld%%";
@@ -72,6 +73,8 @@
 "Não estou recebendo os sinais do %@. Uma atualização dele pode ter mudado ou apagado o hook: remova e instale de novo na seção Hooks." = "לא מגיעים אליי אותות מ-%@. ייתכן שעדכון שינה או מחק את ה-hook: הסירו והתקינו אותו מחדש באזור ה-Hooks.";
 "Não consegui desativar o repouso." = "לא ניתן היה לכבות את מצב השינה.";
 "A permissão de administrador parou de funcionar e o Mac pode dormir com a tampa fechada. Reinstale a permissão no assistente (aba Sistema)." = "הרשאת המנהל הפסיקה לעבוד וה-Mac עלול להירדם כשהמכסה סגור. התקינו מחדש את ההרשאה באשף (לשונית מערכת).";
+"Outro app religou o repouso enquanto um agente trabalhava (o AlDente, por exemplo, tem uma função que mexe nisso). Desliguei de novo às %@." = "אפליקציה אחרת הפעילה שוב את מצב השינה בזמן שסוכן עבד (ל‑AlDente, למשל, יש פונקציה שמשנה את זה). כיביתי אותו שוב ב‑%@.";
+"Outro app religou o repouso várias vezes enquanto um agente trabalhava. Parei de desligar de novo para não brigar com ele, e o Mac pode dormir. Confira o AlDente ou outro app que controle o repouso." = "אפליקציה אחרת הפעילה שוב את מצב השינה כמה פעמים בזמן שסוכן עבד. הפסקתי לכבות אותו שוב כדי לא להתווכח איתה, וה‑Mac עלול להירדם. כדאי לבדוק את AlDente או אפליקציה אחרת ששולטת במצב השינה.";
 "Permissão instalada." = "ההרשאה הותקנה.";
 "A permissão não foi instalada." = "ההרשאה לא הותקנה.";
 "Permissão removida." = "ההרשאה הוסרה.";
@@ -113,6 +116,11 @@
 "Configurar o LlMBO" = "הגדרת LlMBO";
 "LlMBO" = "LlMBO";
 "Outro agente (personalizado)…" = "סוכן אחר (מותאם אישית)…";
+"Segurando o Mac" = "משאיר את ה‑Mac ער";
+"Limites de uso" = "מגבלות שימוש";
+"Abra o LlMBO para ver os dados aqui." = "פתח את LlMBO כדי לראות כאן את הנתונים.";
+"Se o LlMBO está segurando o Mac, por quê, e quando os agentes terminaram." = "האם LlMBO משאיר את ה‑Mac ער, למה, ומתי הסוכנים סיימו.";
+"Quanto dos limites do Claude Code, do Codex e do Antigravity já foi usado, e quando eles voltam." = "כמה מהמגבלות של Claude Code, Codex ו‑Antigravity כבר נוצל, ומתי הן חוזרות.";
 "Não encontrei o Claude Code neste Mac." = "לא מצאתי את Claude Code ב‑Mac הזה.";
 "Agentes" = "סוכנים";
 "Nenhum agente aberto" = "אין סוכנים פתוחים";
@@ -249,6 +257,8 @@
 "Funcionamento" = "פעולה";
 "Religar ao abrir a tampa" = "להפעיל מחדש כשהמכסה נפתח";
 "Se o LlMBO foi desligado, por você ou por bateria, tempo ou temperatura, volta a ligar quando a tampa é aberta." = "אם LlMBO כובה, על ידך או בגלל סוללה, זמן או טמפרטורה, הוא יופעל שוב כשהמכסה נפתח.";
+"Apagar a tela com a tampa fechada" = "כיבוי המסך כשהמכסה סגור";
+"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "כשהמכסה סגור והשינה כבויה, המסך המובנה עלול להישאר דולק מאחורי המכסה, לבזבז סוללה, להתחמם ולהיצרב. LlMBO מכבה את המסך בלי להכניס את ה‑Mac לשינה ובודק שוב כל דקה. כשמחובר מסך חיצוני, שום דבר לא משתנה. כשפותחים את המכסה, המסך חוזר כרגיל.";
 "Assistente de configuração" = "עוזר ההגדרה";
 "Abrir…" = "פתח…";
 "Remover…" = "הסר…";
@@ -290,8 +300,6 @@
 "Sem limite" = "ללא הגבלה";
 "Proteção de temperatura" = "הגנת טמפרטורה";
 "Proteção de temperatura: ao atingir o nível escolhido com a tampa fechada, o LlMBO religa o repouso e põe o Mac para dormir na hora. Em “Quente”, o próprio macOS já está reduzindo o desempenho para esfriar." = "הגנת טמפרטורה: כשמגיעים לרמה שנבחרה והמכסה סגור, LlMBO מפעיל שוב את מצב השינה ומכניס את ה-Mac לשינה מיד. ברמה „חם” macOS עצמו כבר מאט את הביצועים כדי להתקרר.";
-"Apagar a tela com a tampa fechada" = "כיבוי המסך כשהמכסה סגור";
-"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "כשהמכסה סגור והשינה כבויה, המסך המובנה עלול להישאר דולק מאחורי המכסה, לבזבז סוללה, להתחמם ולהיצרב. LlMBO מכבה את המסך בלי להכניס את ה‑Mac לשינה ובודק שוב כל דקה. כשמחובר מסך חיצוני, שום דבר לא משתנה. כשפותחים את המכסה, המסך חוזר כרגיל.";
 "Vigia contra travamento" = "שומר מפני תקיעה";
 "Um processo do próprio LlMBO, separado da janela (aparece como LlMBO no Monitor de Atividade), confere a cada 10 s se o app continua respondendo. Se o LlMBO travar ou for fechado à força com o repouso desligado, o vigia religa o repouso em cerca de 1 minuto e, com a tampa fechada, põe o Mac para dormir." = "תהליך נפרד של LlMBO, מנותק מהחלון (מופיע כ-LlMBO במוניטור הפעילות), בודק כל 10 שניות שהאפליקציה עדיין מגיבה. אם LlMBO נתקע או נסגר בכוח כשהשינה כבויה, השומר מחזיר את השינה תוך כדקה, וכשהמכסה סגור מכניס את ה-Mac לשינה.";
 "Ativo" = "פעיל";
@@ -305,6 +313,8 @@
 "Esperar acordado por aprovações" = "להישאר ער לאישורים";
 "Quando um agente para pedindo sua aprovação, o Mac fica acordado por esse tempo, mesmo de tampa fechada, para você aprovar à distância (por exemplo, pelo controle remoto no celular) e o trabalho continuar. Se ninguém responder, ele dorme normalmente." = "כשסוכן עוצר כדי לבקש את אישורך, ה-Mac נשאר ער למשך הזמן הזה, גם כשהמכסה סגור, כדי שתוכל לאשר מרחוק (למשל, בשליטה מרחוק מהטלפון) והעבודה תימשך. אם אף אחד לא עונה, הוא נכנס לשינה כרגיל.";
 "Avisam: Claude Code, Codex, Qwen Code, Gemini CLI e OpenCode. Antigravity: só quando pede acesso a recursos. Copilot CLI, Cursor, Crush, Aider e agentes sem hook não avisam; um pedido de aprovação deles conta como parado. Cada linha da seção Hooks, na aba Agentes, mostra o que vale para aquele agente." = "מדווחים: Claude Code, Codex, Qwen Code, Gemini CLI ו-OpenCode. Antigravity: רק כשהוא מבקש גישה למשאבים. Copilot CLI, Cursor, Crush, Aider וסוכנים בלי hook לא מדווחים; בקשת אישור מהם נחשבת לעצירה. כל שורה במקטע Hooks, בכרטיסייה סוכנים, מציגה מה חל על אותו סוכן.";
+"Esperar tarefas em segundo plano" = "להמתין למשימות ברקע";
+"O Claude Code pode terminar a resposta e deixar um comando rodando em segundo plano (um build, um teste, uma espera). Enquanto esse comando roda, o Mac fica acordado, até esse tempo contado desde que ele começou. O limite existe para um servidor esquecido aberto não segurar o Mac para sempre." = "‏Claude Code יכול לסיים את התשובה ולהשאיר פקודה שרצה ברקע (בנייה, בדיקה, המתנה). כל עוד הפקודה רצה, ה‑Mac נשאר ער, לכל היותר הזמן הזה מרגע שהיא התחילה. המגבלה נועדה כדי ששרת פתוח שנשכח לא ישאיר את ה‑Mac ער לנצח.";
 "Atrasar o repouso" = "השהיית השינה";
 "Sem atraso" = "ללא השהיה";
 "Depois que os agentes terminam, o Mac fica acordado por esse tempo, mesmo de tampa fechada, e então volta ao repouso normal do macOS. Se um agente voltar a trabalhar antes disso, a espera recomeça." = "אחרי שהסוכנים מסיימים, ה-Mac נשאר ער למשך הזמן הזה, גם כשהמכסה סגור, ואז חוזר לשינה הרגילה של macOS. אם סוכן חוזר לעבוד לפני כן, ההמתנה מתחילה מחדש.";
@@ -381,7 +391,6 @@
 "Despertar agendado" = "השכמה מתוזמנת";
 "Retomada do Codex agendada" = "ההמשך של Codex תוזמן";
 "Atualizar permissão" = "עדכון הרשאה";
-"Limites de uso" = "מגבלות שימוש";
 "Ler limites de uso" = "קריאת מגבלות השימוש";
 "Ligado, o LlMBO lê os limites de 5 horas e da semana de dois jeitos. A cada 5 minutos, roda o comando /usage do Claude Code de terminal, que vem junto com o app Claude: funciona mesmo se você usa o Claude Code só pelo app Claude, não gasta tokens, não grava sessão nem dispara hooks. E vira a barra de status no rodapé do Claude Code de terminal, que recebe os limites a cada resposta: continua mostrando a barra que você já tinha (sem uma, mostra uma linha curta com os limites), e desligar devolve a anterior. Vale a leitura mais nova. Quem consulta a Anthropic é o Claude Code, com o login dele; o LlMBO não se conecta à internet e só lê o percentual e a hora em que cada limite volta." = "כשזה מופעל, LlMBO קורא את מגבלות 5 השעות והשבוע בשתי דרכים. כל 5 דקות הוא מריץ את הפקודה ‎/usage‎ של Claude Code בטרמינל, שמגיע עם אפליקציית Claude: זה עובד גם אם אתה משתמש ב‑Claude Code רק דרך אפליקציית Claude, לא צורך טוקנים, לא שומר סשן ולא מפעיל hooks. הוא גם הופך לשורת המצב בתחתית Claude Code בטרמינל, שמקבלת את המגבלות בכל תשובה: שורת המצב שהייתה לך ממשיכה להופיע (בלעדיה מוצגת שורה קצרה עם המגבלות), וכיבוי מחזיר את הקודמת. הקריאה החדשה ביותר קובעת. מי ששואל את Anthropic הוא Claude Code, עם ההתחברות שלו; LlMBO לא מתחבר לאינטרנט וקורא רק את האחוז ואת שעת החזרה של כל מגבלה.";
 "Ler a cota pelo Antigravity aberto" = "קריאת המכסה מ-Antigravity הפתוח";
@@ -402,3 +411,12 @@
 "E mais %lld." = "ועוד %lld.";
 "Religar o repouso" = "הפעלה מחדש של השינה";
 "Encerrar" = "סיום";
+"LlMBO desligado" = "LlMBO כבוי";
+"O Mac dorme como sempre." = "ה‑Mac נרדם כרגיל.";
+"Repouso normal" = "שינה רגילה";
+"Agentes terminaram às %@" = "הסוכנים סיימו ב‑%@";
+"Nenhum agente trabalhando." = "אף סוכן לא עובד.";
+"Sem limites lidos ainda. Veja a aba Uso." = "עדיין לא נקראו מגבלות. ראה את הכרטיסייה שימוש.";
+"Tarefa longa" = "משימה ארוכה";
+"5 h" = "5 ש׳";
+"7 d" = "7 ימים";

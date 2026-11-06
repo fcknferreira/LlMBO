@@ -104,10 +104,9 @@ struct DropdownList<ID: Hashable>: View {
                     VStack(alignment: .leading, spacing: 0) {
                         ForEach(groups) { g in
                             if let t = g.title {
-                                Text(t.uppercased(with: Locale.current))
-                                    .font(.system(size: 9.5, weight: .medium))
-                                    .tracking(1.4)
-                                    .foregroundStyle(Theme.bronze2)
+                                Text(t)
+                                    .font(.system(size: 11, weight: .medium))
+                                    .foregroundStyle(Theme.muted)
                                     .frame(height: Self.headerHeight, alignment: .bottomLeading)
                                     .padding(.horizontal, 12)
                                     .padding(.bottom, 0)

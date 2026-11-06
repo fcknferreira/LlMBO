@@ -53,6 +53,7 @@
 "aguardando aprovação" = "đang chờ phê duyệt";
 "limite de uso" = "giới hạn sử dụng";
 "hook" = "hook";
+"tarefa em segundo plano" = "tác vụ nền";
 "arquivos %@" = "tệp %@";
 "GPU %lld%%" = "GPU %lld%%";
 "CPU %lld%%" = "CPU %lld%%";
@@ -72,6 +73,8 @@
 "Não estou recebendo os sinais do %@. Uma atualização dele pode ter mudado ou apagado o hook: remova e instale de novo na seção Hooks." = "Không nhận được tín hiệu từ %@. Một bản cập nhật có thể đã đổi hoặc xóa hook: hãy gỡ rồi cài lại trong mục Hook.";
 "Não consegui desativar o repouso." = "Không thể tắt chế độ ngủ.";
 "A permissão de administrador parou de funcionar e o Mac pode dormir com a tampa fechada. Reinstale a permissão no assistente (aba Sistema)." = "Quyền quản trị viên đã ngừng hoạt động và Mac có thể ngủ khi gập nắp. Hãy cài lại quyền trong trợ lý (tab Hệ thống).";
+"Outro app religou o repouso enquanto um agente trabalhava (o AlDente, por exemplo, tem uma função que mexe nisso). Desliguei de novo às %@." = "Một ứng dụng khác đã bật lại chế độ ngủ khi tác nhân đang làm việc (ví dụ AlDente có tính năng thay đổi việc này). Tôi đã tắt lại lúc %@.";
+"Outro app religou o repouso várias vezes enquanto um agente trabalhava. Parei de desligar de novo para não brigar com ele, e o Mac pode dormir. Confira o AlDente ou outro app que controle o repouso." = "Một ứng dụng khác đã bật lại chế độ ngủ nhiều lần khi tác nhân đang làm việc. Tôi đã ngừng tắt lại để không giành với ứng dụng đó, và Mac có thể ngủ. Hãy kiểm tra AlDente hoặc ứng dụng khác điều khiển chế độ ngủ.";
 "Permissão instalada." = "Đã cài quyền.";
 "A permissão não foi instalada." = "Chưa cài được quyền.";
 "Permissão removida." = "Đã gỡ quyền.";
@@ -113,6 +116,11 @@
 "Configurar o LlMBO" = "Thiết lập LlMBO";
 "LlMBO" = "LlMBO";
 "Outro agente (personalizado)…" = "Tác tử khác (tùy chỉnh)…";
+"Segurando o Mac" = "Đang giữ Mac thức";
+"Limites de uso" = "Giới hạn sử dụng";
+"Abra o LlMBO para ver os dados aqui." = "Mở LlMBO để xem dữ liệu ở đây.";
+"Se o LlMBO está segurando o Mac, por quê, e quando os agentes terminaram." = "LlMBO có đang giữ Mac thức không, vì sao, và khi nào các tác nhân xong việc.";
+"Quanto dos limites do Claude Code, do Codex e do Antigravity já foi usado, e quando eles voltam." = "Đã dùng bao nhiêu giới hạn của Claude Code, Codex và Antigravity, và khi nào chúng được làm mới.";
 "Não encontrei o Claude Code neste Mac." = "Không tìm thấy Claude Code trên Mac này.";
 "Agentes" = "Tác tử";
 "Nenhum agente aberto" = "Không có tác tử nào đang mở";
@@ -249,6 +257,8 @@
 "Funcionamento" = "Hoạt động";
 "Religar ao abrir a tampa" = "Bật lại khi mở nắp";
 "Se o LlMBO foi desligado, por você ou por bateria, tempo ou temperatura, volta a ligar quando a tampa é aberta." = "Nếu LlMBO đã bị tắt, do bạn hoặc do pin, thời gian hay nhiệt độ, nó sẽ bật lại khi mở nắp.";
+"Apagar a tela com a tampa fechada" = "Tắt màn hình khi gập nắp";
+"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "Khi gập nắp và tắt chế độ ngủ, màn hình tích hợp có thể vẫn sáng sau nắp, gây hao pin, nóng máy và có thể bị lưu ảnh. LlMBO tắt màn hình mà không cho Mac ngủ và kiểm tra lại mỗi phút. Khi có màn hình ngoài được kết nối, không có gì thay đổi. Khi mở nắp, màn hình trở lại bình thường.";
 "Assistente de configuração" = "Trợ lý thiết lập";
 "Abrir…" = "Mở…";
 "Remover…" = "Xóa…";
@@ -290,8 +300,6 @@
 "Sem limite" = "Không giới hạn";
 "Proteção de temperatura" = "Bảo vệ nhiệt độ";
 "Proteção de temperatura: ao atingir o nível escolhido com a tampa fechada, o LlMBO religa o repouso e põe o Mac para dormir na hora. Em “Quente”, o próprio macOS já está reduzindo o desempenho para esfriar." = "Bảo vệ nhiệt độ: khi đạt mức đã chọn trong lúc gập nắp, LlMBO bật lại chế độ ngủ và cho Mac ngủ ngay. Ở mức “Nóng”, chính macOS đã giảm hiệu năng để làm mát.";
-"Apagar a tela com a tampa fechada" = "Tắt màn hình khi gập nắp";
-"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "Khi gập nắp và tắt chế độ ngủ, màn hình tích hợp có thể vẫn sáng sau nắp, gây hao pin, nóng máy và có thể bị lưu ảnh. LlMBO tắt màn hình mà không cho Mac ngủ và kiểm tra lại mỗi phút. Khi có màn hình ngoài được kết nối, không có gì thay đổi. Khi mở nắp, màn hình trở lại bình thường.";
 "Vigia contra travamento" = "Giám sát treo";
 "Um processo do próprio LlMBO, separado da janela (aparece como LlMBO no Monitor de Atividade), confere a cada 10 s se o app continua respondendo. Se o LlMBO travar ou for fechado à força com o repouso desligado, o vigia religa o repouso em cerca de 1 minuto e, com a tampa fechada, põe o Mac para dormir." = "Một tiến trình riêng của LlMBO, tách khỏi cửa sổ (hiện là LlMBO trong Giám sát hoạt động), cứ 10 giây kiểm tra xem ứng dụng còn phản hồi không. Nếu LlMBO bị treo hoặc bị buộc thoát khi chế độ ngủ đang tắt, trình canh gác bật lại chế độ ngủ trong khoảng 1 phút và, khi nắp đóng, cho Mac ngủ.";
 "Ativo" = "Đang bật";
@@ -305,6 +313,8 @@
 "Esperar acordado por aprovações" = "Thức để chờ phê duyệt";
 "Quando um agente para pedindo sua aprovação, o Mac fica acordado por esse tempo, mesmo de tampa fechada, para você aprovar à distância (por exemplo, pelo controle remoto no celular) e o trabalho continuar. Se ninguém responder, ele dorme normalmente." = "Khi một tác tử dừng lại để xin phê duyệt của bạn, Mac vẫn thức trong khoảng thời gian này, kể cả khi đóng nắp, để bạn phê duyệt từ xa (ví dụ, bằng điều khiển từ xa trên điện thoại) và công việc tiếp tục. Nếu không ai trả lời, Mac sẽ ngủ như bình thường.";
 "Avisam: Claude Code, Codex, Qwen Code, Gemini CLI e OpenCode. Antigravity: só quando pede acesso a recursos. Copilot CLI, Cursor, Crush, Aider e agentes sem hook não avisam; um pedido de aprovação deles conta como parado. Cada linha da seção Hooks, na aba Agentes, mostra o que vale para aquele agente." = "Hỗ trợ: Claude Code, Codex, Qwen Code, Gemini CLI và OpenCode. Antigravity: chỉ khi yêu cầu quyền truy cập tài nguyên. Copilot CLI, Cursor, Crush, Aider và các tác tử không có hook không báo; yêu cầu phê duyệt của chúng được tính là đã dừng. Mỗi dòng trong phần Hook, ở thẻ Tác tử, cho biết điều áp dụng với tác tử đó.";
+"Esperar tarefas em segundo plano" = "Chờ tác vụ nền";
+"O Claude Code pode terminar a resposta e deixar um comando rodando em segundo plano (um build, um teste, uma espera). Enquanto esse comando roda, o Mac fica acordado, até esse tempo contado desde que ele começou. O limite existe para um servidor esquecido aberto não segurar o Mac para sempre." = "Claude Code có thể trả lời xong và để một lệnh chạy ở chế độ nền (một bản build, một bài kiểm thử, một vòng chờ). Khi lệnh đó còn chạy, Mac vẫn thức, tối đa trong khoảng thời gian này tính từ lúc lệnh bắt đầu. Giới hạn này giúp một máy chủ bị quên còn mở không giữ Mac thức mãi.";
 "Atrasar o repouso" = "Trì hoãn chế độ ngủ";
 "Sem atraso" = "Không trì hoãn";
 "Depois que os agentes terminam, o Mac fica acordado por esse tempo, mesmo de tampa fechada, e então volta ao repouso normal do macOS. Se um agente voltar a trabalhar antes disso, a espera recomeça." = "Sau khi các tác tử xong việc, Mac vẫn thức trong khoảng thời gian này, kể cả khi đóng nắp, rồi quay về chế độ ngủ bình thường của macOS. Nếu một tác tử làm việc lại trước đó, thời gian chờ sẽ bắt đầu lại.";
@@ -381,7 +391,6 @@
 "Despertar agendado" = "Lịch đánh thức";
 "Retomada do Codex agendada" = "Đã lên lịch tiếp tục Codex";
 "Atualizar permissão" = "Cập nhật quyền";
-"Limites de uso" = "Giới hạn sử dụng";
 "Ler limites de uso" = "Đọc giới hạn sử dụng";
 "Ligado, o LlMBO lê os limites de 5 horas e da semana de dois jeitos. A cada 5 minutos, roda o comando /usage do Claude Code de terminal, que vem junto com o app Claude: funciona mesmo se você usa o Claude Code só pelo app Claude, não gasta tokens, não grava sessão nem dispara hooks. E vira a barra de status no rodapé do Claude Code de terminal, que recebe os limites a cada resposta: continua mostrando a barra que você já tinha (sem uma, mostra uma linha curta com os limites), e desligar devolve a anterior. Vale a leitura mais nova. Quem consulta a Anthropic é o Claude Code, com o login dele; o LlMBO não se conecta à internet e só lê o percentual e a hora em que cada limite volta." = "Khi bật, LlMBO đọc giới hạn 5 giờ và giới hạn tuần theo hai cách. Cứ 5 phút, nó chạy lệnh /usage của Claude Code dòng lệnh, đi kèm ứng dụng Claude: vẫn hoạt động kể cả khi bạn chỉ dùng Claude Code qua ứng dụng Claude, không tốn token, không lưu phiên và không kích hoạt hook. Nó cũng trở thành dòng trạng thái ở cuối Claude Code dòng lệnh, nơi nhận giới hạn sau mỗi câu trả lời: dòng trạng thái bạn đang có vẫn hiển thị (nếu không có, nó hiện một dòng ngắn với các giới hạn), và tắt đi sẽ trả lại dòng cũ. Lần đọc mới nhất được dùng. Người hỏi Anthropic là Claude Code, bằng đăng nhập của nó; LlMBO không kết nối internet và chỉ đọc phần trăm cùng giờ mỗi giới hạn quay lại.";
 "Ler a cota pelo Antigravity aberto" = "Đọc hạn mức từ Antigravity đang mở";
@@ -402,3 +411,12 @@
 "E mais %lld." = "Và %lld nữa.";
 "Religar o repouso" = "Bật lại chế độ ngủ";
 "Encerrar" = "Kết thúc";
+"LlMBO desligado" = "LlMBO đã tắt";
+"O Mac dorme como sempre." = "Mac ngủ như bình thường.";
+"Repouso normal" = "Ngủ bình thường";
+"Agentes terminaram às %@" = "Các tác nhân xong lúc %@";
+"Nenhum agente trabalhando." = "Không có tác nhân nào đang làm việc.";
+"Sem limites lidos ainda. Veja a aba Uso." = "Chưa đọc được giới hạn nào. Xem tab Sử dụng.";
+"Tarefa longa" = "Tác vụ dài";
+"5 h" = "5 giờ";
+"7 d" = "7 ngày";

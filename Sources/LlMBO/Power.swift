@@ -38,6 +38,43 @@ enum Power {
         return error == nil
     }
 
+    /// Enquanto o LlMBO segura, outro app pode religar o repouso por baixo dele (o AlDente tem uma função própria
+    /// que mexe no mesmo `disablesleep`, com timer). Religar de novo, mas sem brigar: 3 vezes em 10 min e desiste.
+    struct SleepGuard {
+        enum Action: Equatable { case ok, restore, giveUp }
+        static let maxRestores = 3
+        static let window: TimeInterval = 600
+        private(set) var restores: [Date] = []
+        private(set) var gaveUp = false
+
+        mutating func check(sleepDisabled: Bool, now: Date) -> Action {
+            guard !sleepDisabled, !gaveUp else { return .ok }
+            restores.removeAll { now.timeIntervalSince($0) > Self.window }
+            if restores.count >= Self.maxRestores { gaveUp = true; return .giveUp }
+            restores.append(now)
+            return .restore
+        }
+
+        /// LLMBO_TEST_SLEEPGUARD=1. Grava sleepguard-test.log.
+        static func selfTest() {
+            var out: [String] = []
+            func check(_ name: String, _ ok: Bool) { out.append("\(ok ? "ok " : "ERRO") \(name)") }
+            let t0 = Date()
+            var g = SleepGuard()
+            check("repouso desligado: nada a fazer", g.check(sleepDisabled: true, now: t0) == .ok)
+            check("religado por fora: desliga de novo", g.check(sleepDisabled: false, now: t0) == .restore)
+            check("2ª vez: desliga de novo", g.check(sleepDisabled: false, now: t0 + 60) == .restore)
+            check("3ª vez: desliga de novo", g.check(sleepDisabled: false, now: t0 + 120) == .restore)
+            check("4ª vez em 10 min: desiste", g.check(sleepDisabled: false, now: t0 + 180) == .giveUp)
+            check("depois de desistir: não mexe mais", g.check(sleepDisabled: false, now: t0 + 240) == .ok)
+            var h = SleepGuard()
+            for i in 0..<3 { _ = h.check(sleepDisabled: false, now: t0 + Double(i) * 60) }
+            check("passados 10 min, a conta zera", h.check(sleepDisabled: false, now: t0 + 900) == .restore)
+            try? out.joined(separator: "\n").write(to: Paths.support.appendingPathComponent("sleepguard-test.log"),
+                                                   atomically: true, encoding: .utf8)
+        }
+    }
+
     /// Liga/desliga o repouso do sistema (inclusive ao fechar a tampa).
     @discardableResult
     static func setSleepDisabled(_ on: Bool) -> Bool {

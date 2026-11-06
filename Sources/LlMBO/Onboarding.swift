@@ -107,8 +107,7 @@ private struct StepHeader: View {
             if let symbol {
                 Image(systemName: symbol)
                     .font(.system(size: 30, weight: .light))
-                    .foregroundStyle(Theme.bronze2)
-                    .shadow(color: Theme.bronze2.opacity(0.35), radius: 14)
+                    .foregroundStyle(Theme.muted)
                     .frame(height: 44)
             }
             Text(title).font(Theme.serif(32)).foregroundStyle(Theme.text)
@@ -181,7 +180,7 @@ private struct WelcomeStep: View {
         let text: String
         var body: some View {
             HStack(alignment: .firstTextBaseline, spacing: 10) {
-                Image(systemName: symbol).foregroundStyle(Theme.bronze2).frame(width: 22)
+                Image(systemName: symbol).foregroundStyle(Theme.muted).frame(width: 22)
                 Text(text).font(.system(size: 13)).foregroundStyle(Theme.text.opacity(0.85)).fixedSize(horizontal: false, vertical: true)
             }
         }
@@ -224,11 +223,10 @@ private struct PrivacyNote: View {
                 Rectangle().fill(Theme.line).frame(height: 1)
                 HStack(spacing: 6) {
                     Image(systemName: "lock.fill").font(.system(size: 9.5, weight: .semibold))
-                    Text(String(localized: "Seus dados ficam no seu Mac").uppercased(with: Locale.current))
-                        .font(.system(size: 10.5, weight: .medium))
-                        .tracking(1.6)
+                    Text(String(localized: "Seus dados ficam no seu Mac"))
+                        .font(.system(size: 12, weight: .medium))
                 }
-                .foregroundStyle(Theme.bronze2)
+                .foregroundStyle(Theme.muted)
                 .fixedSize()
                 Rectangle().fill(Theme.line).frame(height: 1)
             }
@@ -451,9 +449,9 @@ private struct PreferencesStep: View {
                 HStack {
                     Text("Ícone do app").foregroundStyle(Theme.text)
                     Spacer()
-                    HStack(spacing: 16) {
+                    HStack(spacing: 10) {
                         ForEach(IconStyle.allCases) { style in
-                            IconChoice(style: style, selected: engine.iconStyle == style, size: 44) {
+                            IconChoice(style: style, selected: engine.iconStyle == style, size: 28, showsTitle: false) {
                                 engine.iconStyle = style
                             }
                         }

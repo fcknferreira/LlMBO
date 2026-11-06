@@ -53,6 +53,7 @@
 "aguardando aprovação" = "等待批准";
 "limite de uso" = "使用限额";
 "hook" = "钩子";
+"tarefa em segundo plano" = "后台任务";
 "arquivos %@" = "文件 %@";
 "GPU %lld%%" = "GPU %lld%%";
 "CPU %lld%%" = "CPU %lld%%";
@@ -72,6 +73,8 @@
 "Não estou recebendo os sinais do %@. Uma atualização dele pode ter mudado ou apagado o hook: remova e instale de novo na seção Hooks." = "收不到 %@ 的信号。更新可能改动或删除了钩子：请在“钩子”部分移除后重新安装。";
 "Não consegui desativar o repouso." = "无法关闭睡眠。";
 "A permissão de administrador parou de funcionar e o Mac pode dormir com a tampa fechada. Reinstale a permissão no assistente (aba Sistema)." = "管理员权限失效了，合上盖子时 Mac 可能会睡眠。请在设置助理中重新安装权限（“系统”标签页）。";
+"Outro app religou o repouso enquanto um agente trabalhava (o AlDente, por exemplo, tem uma função que mexe nisso). Desliguei de novo às %@." = "代理工作期间，另一个 App 重新开启了睡眠（例如 AlDente 有一项会更改它的功能）。我已在 %@ 再次关闭。";
+"Outro app religou o repouso várias vezes enquanto um agente trabalhava. Parei de desligar de novo para não brigar com ele, e o Mac pode dormir. Confira o AlDente ou outro app que controle o repouso." = "代理工作期间，另一个 App 多次重新开启了睡眠。为避免与它来回争抢，我已停止再次关闭，Mac 可能会进入睡眠。请检查 AlDente 或其他控制睡眠的 App。";
 "Permissão instalada." = "权限已安装。";
 "A permissão não foi instalada." = "权限未安装。";
 "Permissão removida." = "权限已移除。";
@@ -113,6 +116,11 @@
 "Configurar o LlMBO" = "设置 LlMBO";
 "LlMBO" = "LlMBO";
 "Outro agente (personalizado)…" = "其他智能体（自定义）…";
+"Segurando o Mac" = "正在让 Mac 保持唤醒";
+"Limites de uso" = "使用限额";
+"Abra o LlMBO para ver os dados aqui." = "打开 LlMBO 即可在此查看数据。";
+"Se o LlMBO está segurando o Mac, por quê, e quando os agentes terminaram." = "LlMBO 是否在让 Mac 保持唤醒、原因，以及代理何时完成。";
+"Quanto dos limites do Claude Code, do Codex e do Antigravity já foi usado, e quando eles voltam." = "Claude Code、Codex 和 Antigravity 的限额已用了多少，以及何时恢复。";
 "Não encontrei o Claude Code neste Mac." = "在这台 Mac 上找不到 Claude Code。";
 "Agentes" = "智能体";
 "Nenhum agente aberto" = "没有打开的智能体";
@@ -249,6 +257,8 @@
 "Funcionamento" = "运行方式";
 "Religar ao abrir a tampa" = "打开屏幕时重新启用";
 "Se o LlMBO foi desligado, por você ou por bateria, tempo ou temperatura, volta a ligar quando a tampa é aberta." = "如果 LlMBO 被关闭（由你手动，或因电量、时间、温度），打开屏幕时会重新启用。";
+"Apagar a tela com a tampa fechada" = "合盖时关闭屏幕";
+"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "合盖且关闭睡眠时，内建显示器可能在盖子后面一直亮着，耗电、发热，还可能留下残影。LlMBO 会在不让 Mac 睡眠的情况下关闭屏幕，并每分钟再检查一次。连接外接显示器时不做任何改变。打开盖子后，屏幕会照常恢复。";
 "Assistente de configuração" = "设置助理";
 "Abrir…" = "打开…";
 "Remover…" = "移除…";
@@ -290,8 +300,6 @@
 "Sem limite" = "无限制";
 "Proteção de temperatura" = "温度保护";
 "Proteção de temperatura: ao atingir o nível escolhido com a tampa fechada, o LlMBO religa o repouso e põe o Mac para dormir na hora. Em “Quente”, o próprio macOS já está reduzindo o desempenho para esfriar." = "温度保护：合盖时达到所选级别后，LlMBO 会重新开启睡眠并立即让 Mac 睡眠。在“过热”级别，macOS 本身已在降低性能以降温。";
-"Apagar a tela com a tampa fechada" = "合盖时关闭屏幕";
-"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "合盖且关闭睡眠时，内建显示器可能在盖子后面一直亮着，耗电、发热，还可能留下残影。LlMBO 会在不让 Mac 睡眠的情况下关闭屏幕，并每分钟再检查一次。连接外接显示器时不做任何改变。打开盖子后，屏幕会照常恢复。";
 "Vigia contra travamento" = "卡死守护";
 "Um processo do próprio LlMBO, separado da janela (aparece como LlMBO no Monitor de Atividade), confere a cada 10 s se o app continua respondendo. Se o LlMBO travar ou for fechado à força com o repouso desligado, o vigia religa o repouso em cerca de 1 minuto e, com a tampa fechada, põe o Mac para dormir." = "一个独立于窗口的 LlMBO 进程（在“活动监视器”中显示为 LlMBO）每 10 秒检查一次应用是否仍在响应。如果在关闭睡眠时 LlMBO 卡住或被强制退出，看守进程会在约 1 分钟内重新开启睡眠，合盖时还会让 Mac 睡眠。";
 "Ativo" = "已开启";
@@ -305,6 +313,8 @@
 "Esperar acordado por aprovações" = "等待批准时保持唤醒";
 "Quando um agente para pedindo sua aprovação, o Mac fica acordado por esse tempo, mesmo de tampa fechada, para você aprovar à distância (por exemplo, pelo controle remoto no celular) e o trabalho continuar. Se ninguém responder, ele dorme normalmente." = "当智能体停下来请求你批准时，即使合上屏幕，Mac 也会在这段时间内保持唤醒，方便你远程批准（例如用手机上的远程控制）让工作继续。如果没人回应，它会照常睡眠。";
 "Avisam: Claude Code, Codex, Qwen Code, Gemini CLI e OpenCode. Antigravity: só quando pede acesso a recursos. Copilot CLI, Cursor, Crush, Aider e agentes sem hook não avisam; um pedido de aprovação deles conta como parado. Cada linha da seção Hooks, na aba Agentes, mostra o que vale para aquele agente." = "支持：Claude Code、Codex、Qwen Code、Gemini CLI 和 OpenCode。Antigravity：仅在请求访问资源时。Copilot CLI、Cursor、Crush、Aider 和没有钩子的智能体不会报告；它们的批准请求视为已停止。“智能体”标签页的钩子部分每一行都会显示该智能体的情况。";
+"Esperar tarefas em segundo plano" = "等待后台任务";
+"O Claude Code pode terminar a resposta e deixar um comando rodando em segundo plano (um build, um teste, uma espera). Enquanto esse comando roda, o Mac fica acordado, até esse tempo contado desde que ele começou. O limite existe para um servidor esquecido aberto não segurar o Mac para sempre." = "Claude Code 可能在结束回复后让某个命令继续在后台运行（构建、测试、等待）。只要该命令还在运行，Mac 就保持唤醒，最长为从它开始算起的这段时间。这个上限是为了防止忘记关闭的服务器让 Mac 一直保持唤醒。";
 "Atrasar o repouso" = "延迟睡眠";
 "Sem atraso" = "不延迟";
 "Depois que os agentes terminam, o Mac fica acordado por esse tempo, mesmo de tampa fechada, e então volta ao repouso normal do macOS. Se um agente voltar a trabalhar antes disso, a espera recomeça." = "智能体完成后，即使合上屏幕，Mac 也会在这段时间内保持唤醒，然后恢复 macOS 的正常睡眠。如果在此之前有智能体重新开始工作，等待会重新计时。";
@@ -381,7 +391,6 @@
 "Despertar agendado" = "已安排的唤醒";
 "Retomada do Codex agendada" = "已安排继续 Codex";
 "Atualizar permissão" = "更新权限";
-"Limites de uso" = "使用限额";
 "Ler limites de uso" = "读取用量限额";
 "Ligado, o LlMBO lê os limites de 5 horas e da semana de dois jeitos. A cada 5 minutos, roda o comando /usage do Claude Code de terminal, que vem junto com o app Claude: funciona mesmo se você usa o Claude Code só pelo app Claude, não gasta tokens, não grava sessão nem dispara hooks. E vira a barra de status no rodapé do Claude Code de terminal, que recebe os limites a cada resposta: continua mostrando a barra que você já tinha (sem uma, mostra uma linha curta com os limites), e desligar devolve a anterior. Vale a leitura mais nova. Quem consulta a Anthropic é o Claude Code, com o login dele; o LlMBO não se conecta à internet e só lê o percentual e a hora em que cada limite volta." = "打开后，LlMBO 用两种方式读取 5 小时和每周限额。每 5 分钟运行一次随 Claude App 附带的终端版 Claude Code 的 /usage 命令：即使你只在 Claude App 中使用 Claude Code 也能用，不消耗 token，不保存会话，也不触发 hook。它还会成为终端版 Claude Code 底部的状态栏，每次回复都会收到限额：你原来的状态栏照常显示（没有的话显示一行简短的限额），关闭后恢复原来的状态栏。以最新的读数为准。向 Anthropic 查询的是 Claude Code 本身，用它自己的登录；LlMBO 不连接互联网，只读取每项限额的百分比和恢复时间。";
 "Ler a cota pelo Antigravity aberto" = "从打开的 Antigravity 读取配额";
@@ -402,3 +411,12 @@
 "E mais %lld." = "还有 %lld 个。";
 "Religar o repouso" = "重新开启睡眠";
 "Encerrar" = "结束";
+"LlMBO desligado" = "LlMBO 已关闭";
+"O Mac dorme como sempre." = "Mac 照常进入睡眠。";
+"Repouso normal" = "正常睡眠";
+"Agentes terminaram às %@" = "代理完成于 %@";
+"Nenhum agente trabalhando." = "没有代理在工作。";
+"Sem limites lidos ainda. Veja a aba Uso." = "尚未读取到限额。请查看“用量”标签页。";
+"Tarefa longa" = "长时间任务";
+"5 h" = "5 小时";
+"7 d" = "7 天";

@@ -53,6 +53,7 @@
 "aguardando aprovação" = "menunggu persetujuan";
 "limite de uso" = "batas penggunaan";
 "hook" = "hook";
+"tarefa em segundo plano" = "tugas latar belakang";
 "arquivos %@" = "file %@";
 "GPU %lld%%" = "GPU %lld%%";
 "CPU %lld%%" = "CPU %lld%%";
@@ -72,6 +73,8 @@
 "Não estou recebendo os sinais do %@. Uma atualização dele pode ter mudado ou apagado o hook: remova e instale de novo na seção Hooks." = "Sinyal dari %@ tidak masuk. Pembaruan mungkin mengubah atau menghapus hook: hapus lalu pasang lagi di bagian Hook.";
 "Não consegui desativar o repouso." = "Tidak dapat mematikan mode tidur.";
 "A permissão de administrador parou de funcionar e o Mac pode dormir com a tampa fechada. Reinstale a permissão no assistente (aba Sistema)." = "Izin administrator berhenti bekerja dan Mac bisa tidur saat penutup ditutup. Pasang ulang izin di asisten (tab Sistem).";
+"Outro app religou o repouso enquanto um agente trabalhava (o AlDente, por exemplo, tem uma função que mexe nisso). Desliguei de novo às %@." = "Aplikasi lain menyalakan tidur lagi saat agen sedang bekerja (AlDente, misalnya, punya fitur yang mengubahnya). Saya mematikannya lagi pukul %@.";
+"Outro app religou o repouso várias vezes enquanto um agente trabalhava. Parei de desligar de novo para não brigar com ele, e o Mac pode dormir. Confira o AlDente ou outro app que controle o repouso." = "Aplikasi lain menyalakan tidur lagi beberapa kali saat agen sedang bekerja. Saya berhenti mematikannya lagi agar tidak berebut dengannya, dan Mac bisa tidur. Periksa AlDente atau aplikasi lain yang mengatur tidur.";
 "Permissão instalada." = "Izin terpasang.";
 "A permissão não foi instalada." = "Izin tidak terpasang.";
 "Permissão removida." = "Izin dihapus.";
@@ -113,6 +116,11 @@
 "Configurar o LlMBO" = "Atur LlMBO";
 "LlMBO" = "LlMBO";
 "Outro agente (personalizado)…" = "Agen Lain (Kustom)…";
+"Segurando o Mac" = "Menjaga Mac tetap terjaga";
+"Limites de uso" = "Batas penggunaan";
+"Abra o LlMBO para ver os dados aqui." = "Buka LlMBO untuk melihat datanya di sini.";
+"Se o LlMBO está segurando o Mac, por quê, e quando os agentes terminaram." = "Apakah LlMBO menjaga Mac tetap terjaga, alasannya, dan kapan agen selesai.";
+"Quanto dos limites do Claude Code, do Codex e do Antigravity já foi usado, e quando eles voltam." = "Berapa banyak batas Claude Code, Codex, dan Antigravity yang sudah terpakai, dan kapan kembali.";
 "Não encontrei o Claude Code neste Mac." = "Claude Code tidak ditemukan di Mac ini.";
 "Agentes" = "Agen";
 "Nenhum agente aberto" = "Tidak ada agen yang terbuka";
@@ -249,6 +257,8 @@
 "Funcionamento" = "Cara kerja";
 "Religar ao abrir a tampa" = "Nyalakan lagi saat penutup dibuka";
 "Se o LlMBO foi desligado, por você ou por bateria, tempo ou temperatura, volta a ligar quando a tampa é aberta." = "Jika LlMBO dimatikan, oleh Anda atau karena baterai, waktu, atau suhu, ia akan menyala lagi saat penutup dibuka.";
+"Apagar a tela com a tampa fechada" = "Matikan layar saat penutup tertutup";
+"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "Saat penutup tertutup dan tidur dinonaktifkan, layar internal bisa tetap menyala di balik penutup, menguras baterai, menambah panas, dan berisiko meninggalkan bekas. LlMBO mematikan layar tanpa menidurkan Mac dan memeriksa ulang setiap menit. Dengan monitor eksternal terhubung, tidak ada yang berubah. Saat penutup dibuka, layar kembali seperti biasa.";
 "Assistente de configuração" = "Asisten pengaturan";
 "Abrir…" = "Buka…";
 "Remover…" = "Hapus…";
@@ -290,8 +300,6 @@
 "Sem limite" = "Tanpa batas";
 "Proteção de temperatura" = "Perlindungan suhu";
 "Proteção de temperatura: ao atingir o nível escolhido com a tampa fechada, o LlMBO religa o repouso e põe o Mac para dormir na hora. Em “Quente”, o próprio macOS já está reduzindo o desempenho para esfriar." = "Perlindungan suhu: saat level yang dipilih tercapai dengan penutup tertutup, LlMBO menyalakan kembali mode tidur dan langsung menidurkan Mac. Pada “Panas”, macOS sendiri sudah menurunkan kinerja untuk mendinginkan diri.";
-"Apagar a tela com a tampa fechada" = "Matikan layar saat penutup tertutup";
-"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "Saat penutup tertutup dan tidur dinonaktifkan, layar internal bisa tetap menyala di balik penutup, menguras baterai, menambah panas, dan berisiko meninggalkan bekas. LlMBO mematikan layar tanpa menidurkan Mac dan memeriksa ulang setiap menit. Dengan monitor eksternal terhubung, tidak ada yang berubah. Saat penutup dibuka, layar kembali seperti biasa.";
 "Vigia contra travamento" = "Penjaga macet";
 "Um processo do próprio LlMBO, separado da janela (aparece como LlMBO no Monitor de Atividade), confere a cada 10 s se o app continua respondendo. Se o LlMBO travar ou for fechado à força com o repouso desligado, o vigia religa o repouso em cerca de 1 minuto e, com a tampa fechada, põe o Mac para dormir." = "Proses LlMBO sendiri yang terpisah dari jendela (tampil sebagai LlMBO di Monitor Aktivitas) memeriksa setiap 10 detik apakah app masih merespons. Jika LlMBO macet atau ditutup paksa saat tidur dimatikan, penjaga menyalakan tidur lagi dalam sekitar 1 menit dan, dengan tutup tertutup, menidurkan Mac.";
 "Ativo" = "Aktif";
@@ -305,6 +313,8 @@
 "Esperar acordado por aprovações" = "Tetap menyala untuk persetujuan";
 "Quando um agente para pedindo sua aprovação, o Mac fica acordado por esse tempo, mesmo de tampa fechada, para você aprovar à distância (por exemplo, pelo controle remoto no celular) e o trabalho continuar. Se ninguém responder, ele dorme normalmente." = "Saat agen berhenti untuk meminta persetujuan Anda, Mac tetap menyala selama waktu ini, meski penutup tertutup, agar Anda bisa menyetujui dari jauh (misalnya, lewat kontrol jarak jauh di ponsel) dan pekerjaan berlanjut. Jika tidak ada yang menjawab, Mac tidur seperti biasa.";
 "Avisam: Claude Code, Codex, Qwen Code, Gemini CLI e OpenCode. Antigravity: só quando pede acesso a recursos. Copilot CLI, Cursor, Crush, Aider e agentes sem hook não avisam; um pedido de aprovação deles conta como parado. Cada linha da seção Hooks, na aba Agentes, mostra o que vale para aquele agente." = "Didukung: Claude Code, Codex, Qwen Code, Gemini CLI, dan OpenCode. Antigravity: hanya saat meminta akses ke sumber daya. Copilot CLI, Cursor, Crush, Aider, dan agen tanpa hook tidak melaporkannya; permintaan persetujuan dari mereka dihitung sebagai berhenti. Setiap baris di bagian Hook, di tab Agen, menunjukkan apa yang berlaku untuk agen itu.";
+"Esperar tarefas em segundo plano" = "Tunggu tugas latar belakang";
+"O Claude Code pode terminar a resposta e deixar um comando rodando em segundo plano (um build, um teste, uma espera). Enquanto esse comando roda, o Mac fica acordado, até esse tempo contado desde que ele começou. O limite existe para um servidor esquecido aberto não segurar o Mac para sempre." = "Claude Code bisa menyelesaikan balasannya dan membiarkan perintah tetap berjalan di latar belakang (build, tes, menunggu). Selama perintah itu berjalan, Mac tetap terjaga, paling lama selama waktu ini sejak perintah dimulai. Batas ini mencegah server yang terlupa dan masih terbuka membuat Mac terjaga selamanya.";
 "Atrasar o repouso" = "Tunda mode tidur";
 "Sem atraso" = "Tanpa penundaan";
 "Depois que os agentes terminam, o Mac fica acordado por esse tempo, mesmo de tampa fechada, e então volta ao repouso normal do macOS. Se um agente voltar a trabalhar antes disso, a espera recomeça." = "Setelah agen selesai, Mac tetap menyala selama waktu ini, meski penutup tertutup, lalu kembali ke mode tidur normal macOS. Jika ada agen yang bekerja lagi sebelum itu, penantian dimulai ulang.";
@@ -381,7 +391,6 @@
 "Despertar agendado" = "Bangun terjadwal";
 "Retomada do Codex agendada" = "Kelanjutan Codex dijadwalkan";
 "Atualizar permissão" = "Perbarui izin";
-"Limites de uso" = "Batas penggunaan";
 "Ler limites de uso" = "Baca batas penggunaan";
 "Ligado, o LlMBO lê os limites de 5 horas e da semana de dois jeitos. A cada 5 minutos, roda o comando /usage do Claude Code de terminal, que vem junto com o app Claude: funciona mesmo se você usa o Claude Code só pelo app Claude, não gasta tokens, não grava sessão nem dispara hooks. E vira a barra de status no rodapé do Claude Code de terminal, que recebe os limites a cada resposta: continua mostrando a barra que você já tinha (sem uma, mostra uma linha curta com os limites), e desligar devolve a anterior. Vale a leitura mais nova. Quem consulta a Anthropic é o Claude Code, com o login dele; o LlMBO não se conecta à internet e só lê o percentual e a hora em que cada limite volta." = "Saat menyala, LlMBO membaca batas 5 jam dan mingguan dengan dua cara. Setiap 5 menit ia menjalankan perintah /usage dari Claude Code terminal, yang ikut terpasang bersama aplikasi Claude: tetap berfungsi meski Anda hanya memakai Claude Code lewat aplikasi Claude, tidak memakai token, tidak menyimpan sesi, dan tidak memicu hook. Ia juga menjadi baris status di bagian bawah Claude Code terminal, yang menerima batas di setiap balasan: baris status yang sudah Anda punya tetap tampil (tanpa itu, tampil baris pendek berisi batas), dan mematikannya mengembalikan yang sebelumnya. Pembacaan terbaru yang dipakai. Yang bertanya ke Anthropic adalah Claude Code, dengan login-nya sendiri; LlMBO tidak terhubung ke internet dan hanya membaca persentase serta waktu setiap batas kembali.";
 "Ler a cota pelo Antigravity aberto" = "Baca kuota dari Antigravity yang terbuka";
@@ -402,3 +411,12 @@
 "E mais %lld." = "Dan %lld lagi.";
 "Religar o repouso" = "Nyalakan tidur lagi";
 "Encerrar" = "Hentikan";
+"LlMBO desligado" = "LlMBO mati";
+"O Mac dorme como sempre." = "Mac tidur seperti biasa.";
+"Repouso normal" = "Tidur normal";
+"Agentes terminaram às %@" = "Agen selesai pukul %@";
+"Nenhum agente trabalhando." = "Tidak ada agen yang bekerja.";
+"Sem limites lidos ainda. Veja a aba Uso." = "Belum ada batas yang terbaca. Lihat tab Penggunaan.";
+"Tarefa longa" = "Tugas panjang";
+"5 h" = "5 j";
+"7 d" = "7 h";

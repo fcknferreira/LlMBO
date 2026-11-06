@@ -11,6 +11,7 @@ else
   swift build -c release
   BIN=.build/release/LlMBO
 fi
+WIDGET_BIN="$(dirname "$BIN")/LlMBOWidget"
 
 # Monta o .app fora do iCloud: o iCloud adiciona atributos que quebram a assinatura.
 STAGE="$(mktemp -d)"
@@ -29,6 +30,21 @@ cp -R Resources/*.lproj Resources/Fonts "$APP/Contents/Resources/"
 cp Resources/Sounds/*.aiff "$APP/Contents/Resources/"
 cp Resources/SocialIcons/*.svg "$APP/Contents/Resources/"
 
+# Widgets (Sources/LlMBOWidget): extensão em PlugIns, com textos e fonte próprios (o widget não lê o pacote do app).
+APPEX="$APP/Contents/PlugIns/LlMBOWidget.appex"
+mkdir -p "$APPEX/Contents/MacOS" "$APPEX/Contents/Resources"
+cp "$WIDGET_BIN" "$APPEX/Contents/MacOS/LlMBOWidget"
+cp Resources/Widget-Info.plist "$APPEX/Contents/Info.plist"
+PB=/usr/libexec/PlistBuddy
+for k in CFBundleShortVersionString CFBundleVersion; do
+  "$PB" -c "Set :$k $("$PB" -c "Print :$k" Resources/Info.plist)" "$APPEX/Contents/Info.plist"
+done
+SDKV="$(xcrun --show-sdk-version 2>/dev/null || sw_vers -productVersion)"
+for kv in "DTPlatformName macosx" "DTSDKName macosx$SDKV" "DTPlatformVersion $SDKV"; do
+  "$PB" -c "Add :${kv%% *} string ${kv#* }" "$APPEX/Contents/Info.plist"
+done
+cp -R Resources/*.lproj Resources/Fonts "$APPEX/Contents/Resources/"
+
 # Ícone: gera o .icns a partir do PNG de 1024 px
 ICONSET="$STAGE/AppIcon.iconset"
 rm -rf "$ICONSET"; mkdir -p "$ICONSET"
@@ -44,7 +60,11 @@ xattr -cr "$APP"
 # entre builds e o macOS mantém as permissões (gravação de áudio do sistema, etc.). Sem ele, ad-hoc —
 # e cada build vira um app novo para essas permissões.
 IDENTITY="$(security find-identity -p codesigning 2>/dev/null | awk -F'"' '/"LlMBO Local Signing"/ {split($1, a, " "); print a[2]; exit}')"
-codesign --force --deep --sign "${IDENTITY:--}" "$APP"
+# Widget primeiro, com as próprias permissões (sandbox + leitura da pasta do LlMBO); depois o app sem --deep,
+# que assinaria a extensão de novo sem elas.
+codesign --force --sign "${IDENTITY:--}" --options runtime --entitlements Resources/Widget.entitlements "$APPEX"
+codesign --force --sign "${IDENTITY:--}" "$APP"
+codesign --verify --deep --strict "$APP"
 if [ -n "$IDENTITY" ]; then echo "Assinatura: LlMBO Local Signing ($IDENTITY)"; else echo "Assinatura: ad-hoc"; fi
 rm -rf build/LlMBO.app; mkdir -p build
 ditto "$APP" build/LlMBO.app

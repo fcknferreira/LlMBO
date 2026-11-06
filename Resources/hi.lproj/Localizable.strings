@@ -53,6 +53,7 @@
 "aguardando aprovação" = "स्वीकृति की प्रतीक्षा";
 "limite de uso" = "उपयोग सीमा";
 "hook" = "हुक";
+"tarefa em segundo plano" = "बैकग्राउंड टास्क";
 "arquivos %@" = "फ़ाइलें %@";
 "GPU %lld%%" = "GPU %lld%%";
 "CPU %lld%%" = "CPU %lld%%";
@@ -72,6 +73,8 @@
 "Não estou recebendo os sinais do %@. Uma atualização dele pode ter mudado ou apagado o hook: remova e instale de novo na seção Hooks." = "%@ से सिग्नल नहीं आ रहे। किसी अपडेट ने हुक बदल या मिटा दिया हो सकता है: हुक सेक्शन में उसे हटाकर फिर से इंस्टॉल करें।";
 "Não consegui desativar o repouso." = "स्लीप बंद नहीं हो सका।";
 "A permissão de administrador parou de funcionar e o Mac pode dormir com a tampa fechada. Reinstale a permissão no assistente (aba Sistema)." = "एडमिनिस्ट्रेटर अनुमति काम नहीं कर रही और ढक्कन बंद होने पर Mac स्लीप में जा सकता है। सहायक में अनुमति फिर से इंस्टॉल करें (सिस्टम टैब)।";
+"Outro app religou o repouso enquanto um agente trabalhava (o AlDente, por exemplo, tem uma função que mexe nisso). Desliguei de novo às %@." = "किसी एजेंट के काम करते समय किसी दूसरे ऐप ने स्लीप फिर से चालू कर दी (जैसे AlDente में इसे बदलने वाली एक सुविधा है)। मैंने %@ पर इसे फिर से बंद कर दिया।";
+"Outro app religou o repouso várias vezes enquanto um agente trabalhava. Parei de desligar de novo para não brigar com ele, e o Mac pode dormir. Confira o AlDente ou outro app que controle o repouso." = "किसी एजेंट के काम करते समय किसी दूसरे ऐप ने कई बार स्लीप फिर से चालू कर दी। उससे टकराव न हो, इसलिए मैंने इसे फिर से बंद करना छोड़ दिया है, और Mac स्लीप में जा सकता है। AlDente या स्लीप को नियंत्रित करने वाला कोई दूसरा ऐप जाँचें।";
 "Permissão instalada." = "अनुमति इंस्टॉल हो गई।";
 "A permissão não foi instalada." = "अनुमति इंस्टॉल नहीं हुई।";
 "Permissão removida." = "अनुमति हटा दी गई।";
@@ -113,6 +116,11 @@
 "Configurar o LlMBO" = "LlMBO सेट अप करें";
 "LlMBO" = "LlMBO";
 "Outro agente (personalizado)…" = "दूसरा एजेंट (कस्टम)…";
+"Segurando o Mac" = "Mac को जगाए रखा है";
+"Limites de uso" = "उपयोग सीमाएँ";
+"Abra o LlMBO para ver os dados aqui." = "यहाँ डेटा देखने के लिए LlMBO खोलें।";
+"Se o LlMBO está segurando o Mac, por quê, e quando os agentes terminaram." = "क्या LlMBO Mac को जगाए रख रहा है, क्यों, और एजेंट कब खत्म हुए।";
+"Quanto dos limites do Claude Code, do Codex e do Antigravity já foi usado, e quando eles voltam." = "Claude Code, Codex और Antigravity की सीमाओं का कितना हिस्सा इस्तेमाल हो चुका है, और वे कब लौटेंगी।";
 "Não encontrei o Claude Code neste Mac." = "इस Mac पर Claude Code नहीं मिला।";
 "Agentes" = "एजेंट्स";
 "Nenhum agente aberto" = "कोई एजेंट खुला नहीं है";
@@ -249,6 +257,8 @@
 "Funcionamento" = "व्यवहार";
 "Religar ao abrir a tampa" = "ढक्कन खुलने पर फिर से चालू करें";
 "Se o LlMBO foi desligado, por você ou por bateria, tempo ou temperatura, volta a ligar quando a tampa é aberta." = "अगर LlMBO बंद हुआ था, आपके द्वारा या बैटरी, समय या तापमान के कारण, तो ढक्कन खुलने पर यह फिर से चालू हो जाता है।";
+"Apagar a tela com a tampa fechada" = "ढक्कन बंद होने पर स्क्रीन बंद करें";
+"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "ढक्कन बंद और स्लीप बंद होने पर बिल्ट-इन डिस्प्ले ढक्कन के पीछे जलता रह सकता है, जिससे बैटरी खर्च होती है, गर्मी बढ़ती है और स्क्रीन पर निशान पड़ सकते हैं। LlMBO, Mac को स्लीप में डाले बिना स्क्रीन बंद कर देता है और हर मिनट फिर जाँचता है। बाहरी मॉनिटर जुड़ा हो तो कुछ नहीं बदलता। ढक्कन खोलने पर स्क्रीन सामान्य रूप से लौट आती है।";
 "Assistente de configuração" = "सेटअप असिस्टेंट";
 "Abrir…" = "खोलें…";
 "Remover…" = "हटाएँ…";
@@ -290,8 +300,6 @@
 "Sem limite" = "कोई सीमा नहीं";
 "Proteção de temperatura" = "तापमान सुरक्षा";
 "Proteção de temperatura: ao atingir o nível escolhido com a tampa fechada, o LlMBO religa o repouso e põe o Mac para dormir na hora. Em “Quente”, o próprio macOS já está reduzindo o desempenho para esfriar." = "तापमान सुरक्षा: ढक्कन बंद होने पर चुना गया स्तर आते ही LlMBO स्लीप फिर से चालू करता है और Mac को तुरंत स्लीप में भेज देता है। “गर्म” पर macOS खुद ठंडा होने के लिए परफ़ॉर्मेंस घटा रहा होता है।";
-"Apagar a tela com a tampa fechada" = "ढक्कन बंद होने पर स्क्रीन बंद करें";
-"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "ढक्कन बंद और स्लीप बंद होने पर बिल्ट-इन डिस्प्ले ढक्कन के पीछे जलता रह सकता है, जिससे बैटरी खर्च होती है, गर्मी बढ़ती है और स्क्रीन पर निशान पड़ सकते हैं। LlMBO, Mac को स्लीप में डाले बिना स्क्रीन बंद कर देता है और हर मिनट फिर जाँचता है। बाहरी मॉनिटर जुड़ा हो तो कुछ नहीं बदलता। ढक्कन खोलने पर स्क्रीन सामान्य रूप से लौट आती है।";
 "Vigia contra travamento" = "अटकने से सुरक्षा";
 "Um processo do próprio LlMBO, separado da janela (aparece como LlMBO no Monitor de Atividade), confere a cada 10 s se o app continua respondendo. Se o LlMBO travar ou for fechado à força com o repouso desligado, o vigia religa o repouso em cerca de 1 minuto e, com a tampa fechada, põe o Mac para dormir." = "विंडो से अलग LlMBO की अपनी प्रक्रिया (एक्टिविटी मॉनिटर में LlMBO के नाम से दिखती है) हर 10 सेकंड जाँचती है कि ऐप अब भी जवाब दे रहा है। स्लीप बंद रहते हुए LlMBO अटक जाए या ज़बरदस्ती बंद हो जाए, तो निगरानी प्रक्रिया लगभग 1 मिनट में स्लीप फिर चालू कर देती है और ढक्कन बंद हो तो Mac को स्लीप में डाल देती है।";
 "Ativo" = "चालू";
@@ -305,6 +313,8 @@
 "Esperar acordado por aprovações" = "स्वीकृतियों के लिए जागे रहें";
 "Quando um agente para pedindo sua aprovação, o Mac fica acordado por esse tempo, mesmo de tampa fechada, para você aprovar à distância (por exemplo, pelo controle remoto no celular) e o trabalho continuar. Se ninguém responder, ele dorme normalmente." = "जब कोई एजेंट आपकी स्वीकृति माँगने के लिए रुकता है, तो Mac ढक्कन बंद होने पर भी इतने समय तक जागा रहता है, ताकि आप दूर से स्वीकृति दे सकें (जैसे फ़ोन पर रिमोट कंट्रोल से) और काम जारी रहे। अगर कोई जवाब न दे, तो वह सामान्य रूप से स्लीप में चला जाता है।";
 "Avisam: Claude Code, Codex, Qwen Code, Gemini CLI e OpenCode. Antigravity: só quando pede acesso a recursos. Copilot CLI, Cursor, Crush, Aider e agentes sem hook não avisam; um pedido de aprovação deles conta como parado. Cada linha da seção Hooks, na aba Agentes, mostra o que vale para aquele agente." = "सूचना देते हैं: Claude Code, Codex, Qwen Code, Gemini CLI और OpenCode। Antigravity: केवल जब वह संसाधनों तक ऐक्सेस माँगता है। Copilot CLI, Cursor, Crush, Aider और बिना हुक वाले एजेंट सूचना नहीं देते; उनका स्वीकृति अनुरोध रुका हुआ माना जाता है। एजेंट टैब के हुक सेक्शन की हर पंक्ति दिखाती है कि उस एजेंट पर क्या लागू होता है।";
+"Esperar tarefas em segundo plano" = "बैकग्राउंड टास्क का इंतज़ार करें";
+"O Claude Code pode terminar a resposta e deixar um comando rodando em segundo plano (um build, um teste, uma espera). Enquanto esse comando roda, o Mac fica acordado, até esse tempo contado desde que ele começou. O limite existe para um servidor esquecido aberto não segurar o Mac para sempre." = "Claude Code अपना जवाब पूरा करके कोई कमांड बैकग्राउंड में चलता छोड़ सकता है (बिल्ड, टेस्ट, इंतज़ार)। जब तक वह कमांड चलती है, Mac जागा रहता है, उसके शुरू होने से ज़्यादा से ज़्यादा इतने समय तक। यह सीमा इसलिए है ताकि भूला हुआ खुला सर्वर Mac को हमेशा के लिए जगाए न रखे।";
 "Atrasar o repouso" = "स्लीप में देरी";
 "Sem atraso" = "कोई देरी नहीं";
 "Depois que os agentes terminam, o Mac fica acordado por esse tempo, mesmo de tampa fechada, e então volta ao repouso normal do macOS. Se um agente voltar a trabalhar antes disso, a espera recomeça." = "एजेंटों के काम पूरा करने के बाद Mac, ढक्कन बंद होने पर भी, इतने समय तक जागा रहता है और फिर macOS की सामान्य स्लीप पर लौट आता है। अगर इससे पहले कोई एजेंट फिर से काम शुरू करे, तो प्रतीक्षा फिर से शुरू होती है।";
@@ -381,7 +391,6 @@
 "Despertar agendado" = "तय जागना";
 "Retomada do Codex agendada" = "Codex का फिर शुरू होना तय";
 "Atualizar permissão" = "अनुमति अपडेट करें";
-"Limites de uso" = "उपयोग सीमाएँ";
 "Ler limites de uso" = "उपयोग सीमाएँ पढ़ें";
 "Ligado, o LlMBO lê os limites de 5 horas e da semana de dois jeitos. A cada 5 minutos, roda o comando /usage do Claude Code de terminal, que vem junto com o app Claude: funciona mesmo se você usa o Claude Code só pelo app Claude, não gasta tokens, não grava sessão nem dispara hooks. E vira a barra de status no rodapé do Claude Code de terminal, que recebe os limites a cada resposta: continua mostrando a barra que você já tinha (sem uma, mostra uma linha curta com os limites), e desligar devolve a anterior. Vale a leitura mais nova. Quem consulta a Anthropic é o Claude Code, com o login dele; o LlMBO não se conecta à internet e só lê o percentual e a hora em que cada limite volta." = "चालू होने पर LlMBO 5 घंटे और साप्ताहिक सीमाएँ दो तरह से पढ़ता है। हर 5 मिनट में यह टर्मिनल वाले Claude Code का /usage कमांड चलाता है, जो Claude ऐप के साथ आता है: यह तब भी काम करता है जब आप Claude Code सिर्फ़ Claude ऐप से इस्तेमाल करते हैं, कोई टोकन ख़र्च नहीं करता, सत्र सेव नहीं करता और हुक नहीं चलाता। साथ ही यह टर्मिनल वाले Claude Code के नीचे की स्टेटस लाइन बन जाता है, जिसे हर जवाब के साथ सीमाएँ मिलती हैं: आपकी पहले वाली स्टेटस लाइन दिखती रहती है (न हो तो सीमाओं वाली एक छोटी लाइन दिखती है), और बंद करने पर पिछली लौट आती है। सबसे नई रीडिंग मानी जाती है। Anthropic से पूछने वाला Claude Code है, अपने लॉगिन से; LlMBO इंटरनेट से नहीं जुड़ता और सिर्फ़ प्रतिशत और हर सीमा लौटने का समय पढ़ता है।";
 "Ler a cota pelo Antigravity aberto" = "खुले Antigravity से कोटा पढ़ें";
@@ -402,3 +411,12 @@
 "E mais %lld." = "और %lld।";
 "Religar o repouso" = "स्लीप फिर चालू करें";
 "Encerrar" = "बंद करें";
+"LlMBO desligado" = "LlMBO बंद";
+"O Mac dorme como sempre." = "Mac हमेशा की तरह स्लीप में जाता है।";
+"Repouso normal" = "सामान्य स्लीप";
+"Agentes terminaram às %@" = "एजेंट %@ पर खत्म हुए";
+"Nenhum agente trabalhando." = "कोई एजेंट काम नहीं कर रहा।";
+"Sem limites lidos ainda. Veja a aba Uso." = "अभी तक कोई सीमा नहीं पढ़ी गई। उपयोग टैब देखें।";
+"Tarefa longa" = "लंबा टास्क";
+"5 h" = "5 घं";
+"7 d" = "7 दि";

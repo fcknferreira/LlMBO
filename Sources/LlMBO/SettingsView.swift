@@ -356,6 +356,10 @@ struct SystemTab: View {
                           info: String(localized: "Se o LlMBO foi desligado, por você ou por bateria, tempo ou temperatura, volta a ligar quando a tampa é aberta."),
                           isOn: $engine.armOnLidOpen)
                 CardDivider()
+                ToggleRow(title: String(localized: "Apagar a tela com a tampa fechada"),
+                          info: String(localized: "Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente."),
+                          isOn: $engine.darkenLidClosed)
+                CardDivider()
                 Row(title: String(localized: "Assistente de configuração")) {
                     Button("Abrir…") { AppDelegate.shared.showOnboarding() }.buttonStyle(.pill)
                 }
@@ -375,7 +379,7 @@ struct SystemTab: View {
     }
 }
 
-/// Topo do Geral: marca, frase do site e o interruptor principal, com um brilho bronze quando ligado.
+/// Topo do Geral: marca, frase do site e o interruptor principal.
 private struct HeroCard: View {
     @EnvironmentObject var engine: Engine
 
@@ -428,16 +432,8 @@ private struct HeroCard: View {
                     .padding(.vertical, 10)
             }
         }
-        .background(
-            ZStack {
-                RoundedRectangle(cornerRadius: 16, style: .continuous).fill(Theme.card)
-                RadialGradient(colors: [Theme.bronze2.opacity(engine.armed ? 0.12 : 0.05), .clear],
-                               center: .init(x: 0.12, y: 0.2), startRadius: 0, endRadius: 260)
-                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-            }
-        )
+        .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(Theme.card))
         .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(Theme.line))
-        .animation(.easeInOut(duration: 0.3), value: engine.armed)
     }
 }
 
@@ -727,10 +723,6 @@ struct SleepTab: View {
                     }
                 }
                 CardDivider()
-                ToggleRow(title: String(localized: "Apagar a tela com a tampa fechada"),
-                          info: String(localized: "Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente."),
-                          isOn: $engine.darkenLidClosed)
-                CardDivider()
                 Row(title: String(localized: "Vigia contra travamento"),
                     info: String(localized: "Um processo do próprio LlMBO, separado da janela (aparece como LlMBO no Monitor de Atividade), confere a cada 10 s se o app continua respondendo. Se o LlMBO travar ou for fechado à força com o repouso desligado, o vigia religa o repouso em cerca de 1 minuto e, com a tampa fechada, põe o Mac para dormir.")) {
                     switch engine.watchdogStatus {
@@ -762,6 +754,11 @@ struct SleepTab: View {
                               info: String(localized: "Quando um agente para pedindo sua aprovação, o Mac fica acordado por esse tempo, mesmo de tampa fechada, para você aprovar à distância (por exemplo, pelo controle remoto no celular) e o trabalho continuar. Se ninguém responder, ele dorme normalmente.")
                                 + "\n\n"
                                 + String(localized: "Avisam: Claude Code, Codex, Qwen Code, Gemini CLI e OpenCode. Antigravity: só quando pede acesso a recursos. Copilot CLI, Cursor, Crush, Aider e agentes sem hook não avisam; um pedido de aprovação deles conta como parado. Cada linha da seção Hooks, na aba Agentes, mostra o que vale para aquele agente."))
+                CardDivider()
+                PresetStepper(title: String(localized: "Esperar tarefas em segundo plano"), value: $engine.backgroundTaskMinutes,
+                              options: Engine.backgroundTaskOptions, zeroLabel: String(localized: "Não esperar"),
+                              format: { Self.duration($0 * 60) },
+                              info: String(localized: "O Claude Code pode terminar a resposta e deixar um comando rodando em segundo plano (um build, um teste, uma espera). Enquanto esse comando roda, o Mac fica acordado, até esse tempo contado desde que ele começou. O limite existe para um servidor esquecido aberto não segurar o Mac para sempre."))
                 CardDivider()
                 PresetStepper(title: String(localized: "Atrasar o repouso"), value: $engine.sleepDelaySeconds,
                               options: Engine.sleepDelayOptions, zeroLabel: String(localized: "Sem atraso"),

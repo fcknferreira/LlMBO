@@ -53,6 +53,7 @@
 "aguardando aprovação" = "승인 대기 중";
 "limite de uso" = "사용 한도";
 "hook" = "훅";
+"tarefa em segundo plano" = "백그라운드 작업";
 "arquivos %@" = "파일 %@";
 "GPU %lld%%" = "GPU %lld%%";
 "CPU %lld%%" = "CPU %lld%%";
@@ -72,6 +73,8 @@
 "Não estou recebendo os sinais do %@. Uma atualização dele pode ter mudado ou apagado o hook: remova e instale de novo na seção Hooks." = "%@에서 신호가 오지 않습니다. 업데이트로 훅이 바뀌었거나 삭제되었을 수 있습니다. 훅 섹션에서 제거한 뒤 다시 설치하세요.";
 "Não consegui desativar o repouso." = "잠자기를 끌 수 없습니다.";
 "A permissão de administrador parou de funcionar e o Mac pode dormir com a tampa fechada. Reinstale a permissão no assistente (aba Sistema)." = "관리자 권한이 작동하지 않아 덮개를 닫으면 Mac이 잠자기에 들어갈 수 있습니다. 설정 지원에서 권한을 다시 설치하세요(시스템 탭).";
+"Outro app religou o repouso enquanto um agente trabalhava (o AlDente, por exemplo, tem uma função que mexe nisso). Desliguei de novo às %@." = "에이전트가 작업하는 동안 다른 앱이 잠자기를 다시 켰습니다(예를 들어 AlDente에는 이를 바꾸는 기능이 있습니다). %@에 다시 껐습니다.";
+"Outro app religou o repouso várias vezes enquanto um agente trabalhava. Parei de desligar de novo para não brigar com ele, e o Mac pode dormir. Confira o AlDente ou outro app que controle o repouso." = "에이전트가 작업하는 동안 다른 앱이 잠자기를 여러 번 다시 켰습니다. 그 앱과 다투지 않도록 다시 끄는 것을 멈췄으며, Mac이 잠자기에 들어갈 수 있습니다. AlDente 또는 잠자기를 제어하는 다른 앱을 확인하세요.";
 "Permissão instalada." = "권한이 설치되었습니다.";
 "A permissão não foi instalada." = "권한이 설치되지 않았습니다.";
 "Permissão removida." = "권한이 제거되었습니다.";
@@ -113,6 +116,11 @@
 "Configurar o LlMBO" = "LlMBO 설정";
 "LlMBO" = "LlMBO";
 "Outro agente (personalizado)…" = "기타 에이전트(사용자 지정)…";
+"Segurando o Mac" = "Mac을 깨어 있게 하는 중";
+"Limites de uso" = "사용 한도";
+"Abra o LlMBO para ver os dados aqui." = "여기에서 데이터를 보려면 LlMBO를 여세요.";
+"Se o LlMBO está segurando o Mac, por quê, e quando os agentes terminaram." = "LlMBO가 Mac을 깨어 있게 하는지, 그 이유, 에이전트가 언제 끝났는지.";
+"Quanto dos limites do Claude Code, do Codex e do Antigravity já foi usado, e quando eles voltam." = "Claude Code, Codex, Antigravity 한도를 얼마나 썼는지, 언제 돌아오는지.";
 "Não encontrei o Claude Code neste Mac." = "이 Mac에서 Claude Code를 찾지 못했습니다.";
 "Agentes" = "에이전트";
 "Nenhum agente aberto" = "열린 에이전트 없음";
@@ -249,6 +257,8 @@
 "Funcionamento" = "동작";
 "Religar ao abrir a tampa" = "덮개를 열면 다시 켜기";
 "Se o LlMBO foi desligado, por você ou por bateria, tempo ou temperatura, volta a ligar quando a tampa é aberta." = "LlMBO가 꺼졌다면(직접 끄거나 배터리, 시간, 온도 때문에) 덮개를 열 때 다시 켜집니다.";
+"Apagar a tela com a tampa fechada" = "덮개를 닫으면 화면 끄기";
+"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "덮개를 닫고 잠자기를 끈 상태에서는 내장 디스플레이가 덮개 안에서 켜진 채로 남아 배터리를 소모하고 열을 내며 번인이 생길 수 있습니다. LlMBO는 Mac을 잠재우지 않고 화면을 끄며 1분마다 다시 확인합니다. 외장 모니터가 연결되어 있으면 아무것도 바뀌지 않습니다. 덮개를 열면 화면이 평소처럼 돌아옵니다.";
 "Assistente de configuração" = "설정 지원";
 "Abrir…" = "열기…";
 "Remover…" = "제거…";
@@ -290,8 +300,6 @@
 "Sem limite" = "제한 없음";
 "Proteção de temperatura" = "온도 보호";
 "Proteção de temperatura: ao atingir o nível escolhido com a tampa fechada, o LlMBO religa o repouso e põe o Mac para dormir na hora. Em “Quente”, o próprio macOS já está reduzindo o desempenho para esfriar." = "온도 보호: 덮개를 닫은 상태에서 선택한 수준에 도달하면 LlMBO가 잠자기를 다시 켜고 즉시 Mac을 잠자기 상태로 전환합니다. ‘뜨거움’ 단계에서는 macOS가 이미 열을 식히기 위해 성능을 낮추고 있습니다.";
-"Apagar a tela com a tampa fechada" = "덮개를 닫으면 화면 끄기";
-"Com a tampa fechada e o repouso desligado, a tela interna pode continuar acesa por trás da tampa, gastando bateria, esquentando e podendo marcar a tela. O LlMBO apaga a tela sem pôr o Mac para dormir e confere de novo a cada minuto. Com um monitor externo ligado, nada muda. Ao abrir a tampa, a tela volta normalmente." = "덮개를 닫고 잠자기를 끈 상태에서는 내장 디스플레이가 덮개 안에서 켜진 채로 남아 배터리를 소모하고 열을 내며 번인이 생길 수 있습니다. LlMBO는 Mac을 잠재우지 않고 화면을 끄며 1분마다 다시 확인합니다. 외장 모니터가 연결되어 있으면 아무것도 바뀌지 않습니다. 덮개를 열면 화면이 평소처럼 돌아옵니다.";
 "Vigia contra travamento" = "멈춤 감시";
 "Um processo do próprio LlMBO, separado da janela (aparece como LlMBO no Monitor de Atividade), confere a cada 10 s se o app continua respondendo. Se o LlMBO travar ou for fechado à força com o repouso desligado, o vigia religa o repouso em cerca de 1 minuto e, com a tampa fechada, põe o Mac para dormir." = "창과 분리된 LlMBO 자체 프로세스(활성 상태 보기에 LlMBO로 표시)가 10초마다 앱이 응답하는지 확인합니다. 잠자기를 끈 상태에서 LlMBO가 멈추거나 강제 종료되면, 감시자가 약 1분 안에 잠자기를 다시 켜고 덮개가 닫혀 있으면 Mac을 잠자게 합니다.";
 "Ativo" = "켬";
@@ -305,6 +313,8 @@
 "Esperar acordado por aprovações" = "승인을 기다리는 동안 깨어 있기";
 "Quando um agente para pedindo sua aprovação, o Mac fica acordado por esse tempo, mesmo de tampa fechada, para você aprovar à distância (por exemplo, pelo controle remoto no celular) e o trabalho continuar. Se ninguém responder, ele dorme normalmente." = "에이전트가 승인을 요청하며 멈추면, 덮개가 닫혀 있어도 이 시간 동안 Mac을 깨어 있게 하여 원격으로 승인하고(예: 휴대폰의 원격 제어) 작업을 이어갈 수 있게 합니다. 아무도 응답하지 않으면 평소처럼 잠자기 상태가 됩니다.";
 "Avisam: Claude Code, Codex, Qwen Code, Gemini CLI e OpenCode. Antigravity: só quando pede acesso a recursos. Copilot CLI, Cursor, Crush, Aider e agentes sem hook não avisam; um pedido de aprovação deles conta como parado. Cada linha da seção Hooks, na aba Agentes, mostra o que vale para aquele agente." = "지원: Claude Code, Codex, Qwen Code, Gemini CLI, OpenCode. Antigravity: 리소스 접근을 요청할 때만. Copilot CLI, Cursor, Crush, Aider와 훅이 없는 에이전트는 알리지 않으며, 이들의 승인 요청은 멈춘 것으로 간주됩니다. 에이전트 탭의 훅 섹션 각 행에 해당 에이전트의 적용 내용이 표시됩니다.";
+"Esperar tarefas em segundo plano" = "백그라운드 작업 기다리기";
+"O Claude Code pode terminar a resposta e deixar um comando rodando em segundo plano (um build, um teste, uma espera). Enquanto esse comando roda, o Mac fica acordado, até esse tempo contado desde que ele começou. O limite existe para um servidor esquecido aberto não segurar o Mac para sempre." = "Claude Code는 답변을 마친 뒤 명령을 백그라운드에서 계속 실행해 둘 수 있습니다(빌드, 테스트, 대기 등). 그 명령이 실행되는 동안 Mac은 깨어 있으며, 명령이 시작된 때부터 최대 이 시간까지입니다. 이 제한은 잊고 열어 둔 서버가 Mac을 영원히 깨어 있게 하지 않도록 하기 위한 것입니다.";
 "Atrasar o repouso" = "잠자기 지연";
 "Sem atraso" = "지연 없음";
 "Depois que os agentes terminam, o Mac fica acordado por esse tempo, mesmo de tampa fechada, e então volta ao repouso normal do macOS. Se um agente voltar a trabalhar antes disso, a espera recomeça." = "에이전트가 작업을 마친 뒤에도 덮개가 닫혀 있어도 이 시간 동안 Mac을 깨어 있게 한 다음 macOS의 일반 잠자기로 돌아갑니다. 그 전에 에이전트가 다시 작업하면 대기가 처음부터 다시 시작됩니다.";
@@ -381,7 +391,6 @@
 "Despertar agendado" = "예약된 깨우기";
 "Retomada do Codex agendada" = "Codex 재개 예약됨";
 "Atualizar permissão" = "권한 업데이트";
-"Limites de uso" = "사용 한도";
 "Ler limites de uso" = "사용 한도 읽기";
 "Ligado, o LlMBO lê os limites de 5 horas e da semana de dois jeitos. A cada 5 minutos, roda o comando /usage do Claude Code de terminal, que vem junto com o app Claude: funciona mesmo se você usa o Claude Code só pelo app Claude, não gasta tokens, não grava sessão nem dispara hooks. E vira a barra de status no rodapé do Claude Code de terminal, que recebe os limites a cada resposta: continua mostrando a barra que você já tinha (sem uma, mostra uma linha curta com os limites), e desligar devolve a anterior. Vale a leitura mais nova. Quem consulta a Anthropic é o Claude Code, com o login dele; o LlMBO não se conecta à internet e só lê o percentual e a hora em que cada limite volta." = "켜면 LlMBO가 5시간 한도와 주간 한도를 두 가지 방법으로 읽습니다. 5분마다 Claude 앱에 함께 들어 있는 터미널용 Claude Code의 /usage 명령을 실행합니다. Claude Code를 Claude 앱으로만 써도 작동하고, 토큰을 쓰지 않으며, 세션을 저장하지 않고 훅도 실행하지 않습니다. 또한 터미널용 Claude Code 아래쪽의 상태 표시줄이 되어 답변마다 한도를 받습니다. 쓰던 상태 표시줄은 그대로 보이고(없으면 한도를 보여 주는 짧은 줄 표시), 끄면 이전 것으로 돌아갑니다. 가장 최근 값이 쓰입니다. Anthropic에 묻는 것은 Claude Code가 자기 로그인으로 하며, LlMBO는 인터넷에 연결하지 않고 각 한도의 비율과 돌아오는 시각만 읽습니다.";
 "Ler a cota pelo Antigravity aberto" = "열려 있는 Antigravity에서 할당량 읽기";
@@ -402,3 +411,12 @@
 "E mais %lld." = "외 %lld개.";
 "Religar o repouso" = "잠자기 다시 켜기";
 "Encerrar" = "종료";
+"LlMBO desligado" = "LlMBO 꺼짐";
+"O Mac dorme como sempre." = "Mac이 평소처럼 잠자기에 듭니다.";
+"Repouso normal" = "일반 잠자기";
+"Agentes terminaram às %@" = "에이전트 종료 %@";
+"Nenhum agente trabalhando." = "작업 중인 에이전트가 없습니다.";
+"Sem limites lidos ainda. Veja a aba Uso." = "아직 읽은 한도가 없습니다. 사용량 탭을 보세요.";
+"Tarefa longa" = "긴 작업";
+"5 h" = "5시간";
+"7 d" = "7일";
