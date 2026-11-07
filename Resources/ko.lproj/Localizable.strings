@@ -148,6 +148,8 @@
 "enquanto roda" = "실행되는 동안";
 "Para mexer no repouso, o LlMBO precisa de uma permissão de administrador (uma vez só)." = "잠자기를 제어하려면 LlMBO에 관리자 권한이 필요합니다(한 번만).";
 "Instalar permissão…" = "권한 설치…";
+"Novidades da versão %@" = "버전 %@의 새로운 기능";
+"Ver tudo no GitHub" = "GitHub에서 모두 보기";
 "Trabalhando · %@" = "작업 중 · %@";
 "Trabalhando" = "작업 중";
 "Atualizado para a versão %@." = "버전 %@(으)로 업데이트했습니다.";
@@ -411,6 +413,8 @@
 "E mais %lld." = "외 %lld개.";
 "Religar o repouso" = "잠자기 다시 켜기";
 "Encerrar" = "종료";
+"Novidades de cada versão neste menu" = "버전별 새로운 기능을 이 메뉴에서";
+"Ícone da barra alinhado com os outros" = "메뉴 막대 아이콘을 다른 아이콘과 정렬";
 "LlMBO desligado" = "LlMBO 꺼짐";
 "O Mac dorme como sempre." = "Mac이 평소처럼 잠자기에 듭니다.";
 "Repouso normal" = "일반 잠자기";

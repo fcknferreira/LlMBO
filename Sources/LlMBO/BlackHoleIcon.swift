@@ -6,7 +6,9 @@ enum BlackHoleIcon {
     static func image(active: Bool) -> NSImage {
         let size = NSSize(width: 20, height: 18)
         let img = NSImage(size: size, flipped: false) { rect in
-            let c = NSPoint(x: rect.midX, y: rect.midY)
+            // O arco de cima (7,6) é mais alto que o de baixo (6,0): no centro da imagem a tinta
+            // ficava ~1 pt acima dos outros ícones da barra (medido na tela, 06/11/2026). Desce 1 pt.
+            let c = NSPoint(x: rect.midX, y: rect.midY - 1)
             let lw: CGFloat = 1.3
             NSColor.black.setFill()
             NSColor.black.setStroke()

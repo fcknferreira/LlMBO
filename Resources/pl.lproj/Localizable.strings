@@ -148,6 +148,8 @@
 "enquanto roda" = "dopóki działa";
 "Para mexer no repouso, o LlMBO precisa de uma permissão de administrador (uma vez só)." = "Aby sterować uśpieniem, LlMBO potrzebuje uprawnień administratora (tylko raz).";
 "Instalar permissão…" = "Zainstaluj uprawnienie…";
+"Novidades da versão %@" = "Nowości w wersji %@";
+"Ver tudo no GitHub" = "Zobacz wszystko na GitHubie";
 "Trabalhando · %@" = "Pracuje · %@";
 "Trabalhando" = "Pracuje";
 "Atualizado para a versão %@." = "Uaktualniono do wersji %@.";
@@ -411,6 +413,8 @@
 "E mais %lld." = "I jeszcze %lld.";
 "Religar o repouso" = "Włącz usypianie z powrotem";
 "Encerrar" = "Zakończ";
+"Novidades de cada versão neste menu" = "Nowości każdej wersji w tym menu";
+"Ícone da barra alinhado com os outros" = "Ikona paska wyrównana z pozostałymi";
 "LlMBO desligado" = "LlMBO wyłączone";
 "O Mac dorme como sempre." = "Mac usypia jak zwykle.";
 "Repouso normal" = "Zwykłe usypianie";

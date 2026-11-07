@@ -1,29 +1,5 @@
-LlMBO — Leia antes de abrir  ·  Read me before opening
+LlMBO — Read me before opening  ·  Leia antes de abrir
 ======================================================
-
-PORTUGUÊS
-
-1. Arraste o LlMBO para a pasta Aplicativos.
-2. Abra o LlMBO. O macOS vai dizer que não conseguiu verificar o app e vai
-   destacar o botão "Mover para o Lixo".
-
-   >>> NÃO CLIQUE EM "MOVER PARA O LIXO". <<<
-
-   Clique em "Concluído". O aviso aparece só porque o LlMBO é grátis e de código
-   aberto e não paga a assinatura anual da Apple (Apple Developer Program) —
-   não porque haja algo de errado com ele. Nas versões recentes do macOS o aviso
-   nem oferece mais o botão "Abrir": o caminho é o passo 3.
-3. Abra Ajustes do Sistema › Privacidade e Segurança, role até o fim e clique
-   em "Abrir Mesmo Assim" ao lado do LlMBO. Confirme "Abrir Mesmo Assim" de novo
-   e digite a sua senha. Esse botão só aparece por cerca de uma hora depois da
-   tentativa de abrir; se sumiu, tente abrir o LlMBO de novo e volte aqui.
-4. Pronto. Isso só é preciso uma vez; as atualizações seguintes chegam pelo próprio app.
-
-Mais fácil (recomendado): este comando no Terminal baixa e instala sem aviso nenhum:
-   curl -fsSL https://raw.githubusercontent.com/fcknferreira/LlMBO/main/install.sh | bash
-
-Código-fonte: https://github.com/fcknferreira/LlMBO
-
 
 ENGLISH
 
@@ -47,3 +23,27 @@ Easiest (recommended): this Terminal command downloads and installs with no warn
    curl -fsSL https://raw.githubusercontent.com/fcknferreira/LlMBO/main/install.sh | bash
 
 Source code: https://github.com/fcknferreira/LlMBO
+
+
+PORTUGUÊS
+
+1. Arraste o LlMBO para a pasta Aplicativos.
+2. Abra o LlMBO. O macOS vai dizer que não conseguiu verificar o app e vai
+   destacar o botão "Mover para o Lixo".
+
+   >>> NÃO CLIQUE EM "MOVER PARA O LIXO". <<<
+
+   Clique em "Concluído". O aviso aparece só porque o LlMBO é grátis e de código
+   aberto e não paga a assinatura anual da Apple (Apple Developer Program) —
+   não porque haja algo de errado com ele. Nas versões recentes do macOS o aviso
+   nem oferece mais o botão "Abrir": o caminho é o passo 3.
+3. Abra Ajustes do Sistema › Privacidade e Segurança, role até o fim e clique
+   em "Abrir Mesmo Assim" ao lado do LlMBO. Confirme "Abrir Mesmo Assim" de novo
+   e digite a sua senha. Esse botão só aparece por cerca de uma hora depois da
+   tentativa de abrir; se sumiu, tente abrir o LlMBO de novo e volte aqui.
+4. Pronto. Isso só é preciso uma vez; as atualizações seguintes chegam pelo próprio app.
+
+Mais fácil (recomendado): este comando no Terminal baixa e instala sem aviso nenhum:
+   curl -fsSL https://raw.githubusercontent.com/fcknferreira/LlMBO/main/install.sh | bash
+
+Código-fonte: https://github.com/fcknferreira/LlMBO

@@ -55,6 +55,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // (o ícone da barra de menus pode ficar escondido atrás do notch ou do Bartender).
         // Aberto por uma atualização automática: fica só na barra de menus e avisa (não abre a janela no meio
         // do que a pessoa estiver fazendo).
+        WhatsNew.prepare()
         let autoUpdated = Updater.consumeAutoMarker()
         if OnboardingModel.needed { showOnboarding() } else if !autoUpdated { showMainWindow() }
         if autoUpdated {

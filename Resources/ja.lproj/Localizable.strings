@@ -148,6 +148,8 @@
 "enquanto roda" = "実行中は";
 "Para mexer no repouso, o LlMBO precisa de uma permissão de administrador (uma vez só)." = "スリープを制御するには、LlMBOに管理者権限が必要です（1回のみ）。";
 "Instalar permissão…" = "権限をインストール…";
+"Novidades da versão %@" = "バージョン %@ の新機能";
+"Ver tudo no GitHub" = "GitHubですべて見る";
 "Trabalhando · %@" = "作業中・%@";
 "Trabalhando" = "作業中";
 "Atualizado para a versão %@." = "バージョン %@ にアップデートしました。";
@@ -411,6 +413,8 @@
 "E mais %lld." = "ほか %lld 件。";
 "Religar o repouso" = "スリープを元に戻す";
 "Encerrar" = "終了";
+"Novidades de cada versão neste menu" = "各バージョンの新機能をこのメニューで";
+"Ícone da barra alinhado com os outros" = "メニューバーのアイコンをほかと揃えました";
 "LlMBO desligado" = "LlMBO オフ";
 "O Mac dorme como sempre." = "Mac はいつもどおりスリープします。";
 "Repouso normal" = "通常のスリープ";

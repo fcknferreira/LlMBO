@@ -148,6 +148,8 @@
 "enquanto roda" = "pendant l’exécution";
 "Para mexer no repouso, o LlMBO precisa de uma permissão de administrador (uma vez só)." = "Pour contrôler la veille, LlMBO a besoin d’une autorisation d’administrateur (une seule fois).";
 "Instalar permissão…" = "Installer l’autorisation…";
+"Novidades da versão %@" = "Nouveautés de la version %@";
+"Ver tudo no GitHub" = "Tout voir sur GitHub";
 "Trabalhando · %@" = "Au travail · %@";
 "Trabalhando" = "Au travail";
 "Atualizado para a versão %@." = "Mis à jour vers la version %@.";
@@ -411,6 +413,8 @@
 "E mais %lld." = "Et %lld de plus.";
 "Religar o repouso" = "Réactiver la suspension";
 "Encerrar" = "Quitter";
+"Novidades de cada versão neste menu" = "Les nouveautés de chaque version dans ce menu";
+"Ícone da barra alinhado com os outros" = "Icône de la barre alignée avec les autres";
 "LlMBO desligado" = "LlMBO désactivé";
 "O Mac dorme como sempre." = "Le Mac se met en veille comme d’habitude.";
 "Repouso normal" = "Veille normale";

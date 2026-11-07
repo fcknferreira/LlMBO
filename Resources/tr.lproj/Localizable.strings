@@ -148,6 +148,8 @@
 "enquanto roda" = "çalıştığı sürece";
 "Para mexer no repouso, o LlMBO precisa de uma permissão de administrador (uma vez só)." = "Uykuyu yönetmek için LlMBO'nun yönetici izni gerekir (yalnızca bir kez).";
 "Instalar permissão…" = "İzni yükle…";
+"Novidades da versão %@" = "%@ sürümündeki yenilikler";
+"Ver tudo no GitHub" = "Tümünü GitHub’da gör";
 "Trabalhando · %@" = "Çalışıyor · %@";
 "Trabalhando" = "Çalışıyor";
 "Atualizado para a versão %@." = "%@ sürümüne güncellendi.";
@@ -411,6 +413,8 @@
 "E mais %lld." = "Ve %lld tane daha.";
 "Religar o repouso" = "Uykuyu yeniden aç";
 "Encerrar" = "Sonlandır";
+"Novidades de cada versão neste menu" = "Her sürümün yenilikleri bu menüde";
+"Ícone da barra alinhado com os outros" = "Menü çubuğu simgesi diğerleriyle hizalı";
 "LlMBO desligado" = "LlMBO kapalı";
 "O Mac dorme como sempre." = "Mac her zamanki gibi uyur.";
 "Repouso normal" = "Normal uyku";

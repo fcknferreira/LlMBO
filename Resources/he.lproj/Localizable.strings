@@ -148,6 +148,8 @@
 "enquanto roda" = "כל עוד רץ";
 "Para mexer no repouso, o LlMBO precisa de uma permissão de administrador (uma vez só)." = "כדי לשלוט במצב השינה, LlMBO צריך הרשאת מנהל (פעם אחת בלבד).";
 "Instalar permissão…" = "התקן הרשאה…";
+"Novidades da versão %@" = "מה חדש בגרסה %@";
+"Ver tudo no GitHub" = "הצגת הכול ב‑GitHub";
 "Trabalhando · %@" = "עובד · %@";
 "Trabalhando" = "עובד";
 "Atualizado para a versão %@." = "עודכן לגרסה %@.";
@@ -411,6 +413,8 @@
 "E mais %lld." = "ועוד %lld.";
 "Religar o repouso" = "הפעלה מחדש של השינה";
 "Encerrar" = "סיום";
+"Novidades de cada versão neste menu" = "החידושים של כל גרסה בתפריט הזה";
+"Ícone da barra alinhado com os outros" = "הסמל בשורת התפריטים מיושר עם האחרים";
 "LlMBO desligado" = "LlMBO כבוי";
 "O Mac dorme como sempre." = "ה‑Mac נרדם כרגיל.";
 "Repouso normal" = "שינה רגילה";

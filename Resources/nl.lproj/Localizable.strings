@@ -148,6 +148,8 @@
 "enquanto roda" = "zolang het draait";
 "Para mexer no repouso, o LlMBO precisa de uma permissão de administrador (uma vez só)." = "Om de sluimerstand te regelen heeft LlMBO een beheerderstoestemming nodig (eenmalig).";
 "Instalar permissão…" = "Installeer toestemming…";
+"Novidades da versão %@" = "Nieuw in versie %@";
+"Ver tudo no GitHub" = "Alles bekijken op GitHub";
 "Trabalhando · %@" = "Aan het werk · %@";
 "Trabalhando" = "Aan het werk";
 "Atualizado para a versão %@." = "Bijgewerkt naar versie %@.";
@@ -411,6 +413,8 @@
 "E mais %lld." = "En nog %lld.";
 "Religar o repouso" = "Sluimerstand weer aanzetten";
 "Encerrar" = "Stop";
+"Novidades de cada versão neste menu" = "Nieuw in elke versie, in dit menu";
+"Ícone da barra alinhado com os outros" = "Menubalksymbool uitgelijnd met de andere";
 "LlMBO desligado" = "LlMBO uit";
 "O Mac dorme como sempre." = "De Mac sluimert zoals altijd.";
 "Repouso normal" = "Normale sluimerstand";

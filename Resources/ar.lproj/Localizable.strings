@@ -148,6 +148,8 @@
 "enquanto roda" = "أثناء التشغيل";
 "Para mexer no repouso, o LlMBO precisa de uma permissão de administrador (uma vez só)." = "للتحكم في السكون، يحتاج LlMBO إلى إذن المسؤول (مرة واحدة فقط).";
 "Instalar permissão…" = "تثبيت الإذن…";
+"Novidades da versão %@" = "مستجدات الإصدار %@";
+"Ver tudo no GitHub" = "عرض الكل على GitHub";
 "Trabalhando · %@" = "يعمل · %@";
 "Trabalhando" = "يعمل";
 "Atualizado para a versão %@." = "تم التحديث إلى الإصدار %@.";
@@ -411,6 +413,8 @@
 "E mais %lld." = "و%lld أخرى.";
 "Religar o repouso" = "إعادة تشغيل السكون";
 "Encerrar" = "إنهاء";
+"Novidades de cada versão neste menu" = "مستجدات كل إصدار في هذه القائمة";
+"Ícone da barra alinhado com os outros" = "أيقونة الشريط محاذية للأيقونات الأخرى";
 "LlMBO desligado" = "LlMBO متوقف";
 "O Mac dorme como sempre." = "ينام الـ Mac كالمعتاد.";
 "Repouso normal" = "سكون عادي";

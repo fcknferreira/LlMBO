@@ -148,6 +148,8 @@
 "enquanto roda" = "运行期间";
 "Para mexer no repouso, o LlMBO precisa de uma permissão de administrador (uma vez só)." = "为了控制睡眠，LlMBO 需要管理员权限（仅需一次）。";
 "Instalar permissão…" = "安装权限…";
+"Novidades da versão %@" = "%@ 版新功能";
+"Ver tudo no GitHub" = "在 GitHub 上查看全部";
 "Trabalhando · %@" = "正在工作 · %@";
 "Trabalhando" = "正在工作";
 "Atualizado para a versão %@." = "已更新到版本 %@。";
@@ -411,6 +413,8 @@
 "E mais %lld." = "还有 %lld 个。";
 "Religar o repouso" = "重新开启睡眠";
 "Encerrar" = "结束";
+"Novidades de cada versão neste menu" = "每个版本的新功能都在此菜单中";
+"Ícone da barra alinhado com os outros" = "菜单栏图标与其他图标对齐";
 "LlMBO desligado" = "LlMBO 已关闭";
 "O Mac dorme como sempre." = "Mac 照常进入睡眠。";
 "Repouso normal" = "正常睡眠";

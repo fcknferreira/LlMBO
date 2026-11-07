@@ -148,6 +148,8 @@
 "enquanto roda" = "solange es läuft";
 "Para mexer no repouso, o LlMBO precisa de uma permissão de administrador (uma vez só)." = "Um den Ruhezustand zu steuern, braucht LlMBO eine Administratorberechtigung (nur einmal).";
 "Instalar permissão…" = "Berechtigung installieren …";
+"Novidades da versão %@" = "Neu in Version %@";
+"Ver tudo no GitHub" = "Alles auf GitHub ansehen";
 "Trabalhando · %@" = "Arbeitet · %@";
 "Trabalhando" = "Arbeitet";
 "Atualizado para a versão %@." = "Auf Version %@ aktualisiert.";
@@ -411,6 +413,8 @@
 "E mais %lld." = "Und %lld weitere.";
 "Religar o repouso" = "Ruhezustand wieder einschalten";
 "Encerrar" = "Beenden";
+"Novidades de cada versão neste menu" = "Neuigkeiten jeder Version in diesem Menü";
+"Ícone da barra alinhado com os outros" = "Menüleisten-Symbol bündig mit den anderen";
 "LlMBO desligado" = "LlMBO aus";
 "O Mac dorme como sempre." = "Der Mac schläft wie immer.";
 "Repouso normal" = "Normaler Ruhezustand";

@@ -1,0 +1,42 @@
+{
+  "_about": [
+    "Tabela de agentes do site (llmbo.app/agents.html). O site lê este arquivo na tag do último Release;",
+    "o release.sh confere o formato e copia a tabela para o site.js como reserva.",
+    "Uma letra por coluna, na ordem de columns: Y funciona, P em parte (com nota), - não se aplica.",
+    "Fonte da verdade no app: Hooks.supported/fullLifecycle/approvalSupport, AgentConfig.defaults",
+    "(arquivos de sessão, CPU, GPU da IA local), UsageStore.order, CodexResume e MCPInstall.targets.",
+    "Colunas, grupos, sub e notes são chaves de texto do site (i18n.js): uma chave nova só aparece",
+    "depois de traduzida e publicada no site; até lá a coluna, o grupo ou o número da nota ficam de fora."
+  ],
+  "columns": ["hook", "files", "cpu", "gpu", "approval", "usage", "limit", "mcp"],
+  "rows": [
+    { "group": "g_code" },
+    { "name": "Claude Code", "icon": "claudecode.svg", "f": "YYY-YYYY" },
+    { "name": "Codex", "icon": "codex.svg", "f": "YYY-YYPY", "notes": { "limit": "n_codex" } },
+    { "name": "Antigravity", "icon": "antigravity.svg", "f": "YYY-PY-Y", "notes": { "approval": "n_antigravity" }, "sub": "ag_sub_name" },
+    { "name": "Gemini CLI", "icon": "geminicli.svg", "f": "YYY-YY-Y" },
+    { "name": "GitHub Copilot CLI", "icon": "githubcopilot.svg", "f": "YYY----Y" },
+    { "name": "Cursor", "icon": "cursor.svg", "f": "Y-Y----Y" },
+    { "name": "Qwen Code", "icon": "qwen.svg", "f": "YYY-YY-Y" },
+    { "name": "OpenCode", "icon": "opencode.svg", "f": "YYY-YY-Y" },
+    { "name": "Crush", "icon": "crush.png", "f": "Y-Y----Y" },
+    { "name": "Aider", "icon": "aider.png", "f": "P-Y-----", "notes": { "hook": "n_aider" } },
+    { "name": "Goose", "icon": "goose.svg", "f": "-YY----Y" },
+    { "name": "DeepSeek Harness", "icon": "deepseek.svg", "f": "PYY-----", "notes": { "hook": "n_deepseek" } },
+    { "name": "Amp", "icon": "amp.svg", "f": "--Y----Y" },
+    { "name": "Kiro", "icon": "kiro.svg", "f": "--Y----Y" },
+    { "name": "Windsurf / Devin", "icon": "windsurf.svg", "f": "--Y----Y" },
+    { "group": "g_ide" },
+    { "name": "GitHub Copilot (VS Code)", "icon": "githubcopilot.svg", "f": "PY-----Y", "notes": { "hook": "n_copilot_vscode" } },
+    { "name": "Cline", "icon": "cline.svg", "f": "-Y-----Y" },
+    { "name": "Roo Code", "icon": "roocode.svg", "f": "-Y-----Y" },
+    { "name": "Kilo Code", "icon": "kilocode.svg", "f": "-Y-----Y" },
+    { "name": "Continue", "icon": "continue.svg", "f": "-Y-----Y" },
+    { "group": "g_local" },
+    { "name": "Ollama", "icon": "ollama.svg", "f": "--YY----" },
+    { "name": "LM Studio", "icon": "lmstudio.svg", "f": "--YY---Y" },
+    { "name": "llama.cpp", "icon": "llamacpp.svg", "f": "--YY----" },
+    { "name": "MLX", "icon": "mlx.png", "f": "--YY----" },
+    { "name": "Jan", "icon": "jan.png", "f": "--YY----" }
+  ]
+}

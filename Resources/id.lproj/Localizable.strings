@@ -148,6 +148,8 @@
 "enquanto roda" = "selama berjalan";
 "Para mexer no repouso, o LlMBO precisa de uma permissão de administrador (uma vez só)." = "Untuk mengatur mode tidur, LlMBO memerlukan izin administrator (cukup sekali).";
 "Instalar permissão…" = "Pasang Izin…";
+"Novidades da versão %@" = "Yang baru di versi %@";
+"Ver tudo no GitHub" = "Lihat semua di GitHub";
 "Trabalhando · %@" = "Bekerja · %@";
 "Trabalhando" = "Bekerja";
 "Atualizado para a versão %@." = "Diperbarui ke versi %@.";
@@ -411,6 +413,8 @@
 "E mais %lld." = "Dan %lld lagi.";
 "Religar o repouso" = "Nyalakan tidur lagi";
 "Encerrar" = "Hentikan";
+"Novidades de cada versão neste menu" = "Yang baru di tiap versi, di menu ini";
+"Ícone da barra alinhado com os outros" = "Ikon bilah menu sejajar dengan yang lain";
 "LlMBO desligado" = "LlMBO mati";
 "O Mac dorme como sempre." = "Mac tidur seperti biasa.";
 "Repouso normal" = "Tidur normal";

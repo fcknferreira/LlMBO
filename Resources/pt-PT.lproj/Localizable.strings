@@ -148,6 +148,8 @@
 "enquanto roda" = "enquanto corre";
 "Para mexer no repouso, o LlMBO precisa de uma permissão de administrador (uma vez só)." = "Para controlar a pausa, o LlMBO precisa de uma permissão de administrador (só uma vez).";
 "Instalar permissão…" = "Instalar permissão…";
+"Novidades da versão %@" = "Novidades da versão %@";
+"Ver tudo no GitHub" = "Ver tudo no GitHub";
 "Trabalhando · %@" = "A trabalhar · %@";
 "Trabalhando" = "A trabalhar";
 "Atualizado para a versão %@." = "Atualizado para a versão %@.";
@@ -411,6 +413,8 @@
 "E mais %lld." = "E mais %lld.";
 "Religar o repouso" = "Voltar a ligar o repouso";
 "Encerrar" = "Terminar";
+"Novidades de cada versão neste menu" = "Novidades de cada versão neste menu";
+"Ícone da barra alinhado com os outros" = "Ícone da barra alinhado com os outros";
 "LlMBO desligado" = "LlMBO desligado";
 "O Mac dorme como sempre." = "O Mac adormece como sempre.";
 "Repouso normal" = "Repouso normal";

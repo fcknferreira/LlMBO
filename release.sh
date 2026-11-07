@@ -19,13 +19,20 @@ if [ "$PUBLISH" = "--promote" ]; then
   exit 0
 fi
 LEAF="9e652604d46ed9ddec648e1beeb56bf92d869d77"
+# Novidades do menu (WhatsNew.swift): toda versão publicada precisa da sua entrada.
+grep -q "(\"$VERSION\", \[" Sources/LlMBO/WhatsNew.swift || {
+  echo "Falta a entrada da versão $VERSION em Sources/LlMBO/WhatsNew.swift (novidades do menu)."; exit 1; }
+# Tabela de agentes do site: o site lê o agents.json da tag desta versão. Aqui ele é conferido (antes de mexer
+# em qualquer coisa) e, com o site nesta máquina, copiado para o site.js como reserva.
+# O site fica fora do repositório (~/Downloads/website LLMBO).
+SITE="${LLMBO_SITE:-$HOME/Downloads/website LLMBO}"
+python3 -I Design/agents_matrix.py agents.json "$SITE"
 PLIST=Resources/Info.plist
 
 # Versão: CFBundleShortVersionString = a escolhida; CFBundleVersion sobe um.
 BUILD=$(( $(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$PLIST") + 1 ))
 /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $VERSION" -c "Set :CFBundleVersion $BUILD" "$PLIST"
-# O site fica fora do repositório (~/Downloads/website LLMBO); se estiver lá, atualiza a versão mostrada nele.
-SITE="${LLMBO_SITE:-$HOME/Downloads/website LLMBO}"
+# Se o site estiver nesta máquina, atualiza a versão de reserva mostrada nele.
 [ -f "$SITE/site.js" ] && sed -i '' "s/^  version: \".*\",/  version: \"$VERSION\",/" "$SITE/site.js"
 echo "Versão $VERSION ($BUILD)"
 

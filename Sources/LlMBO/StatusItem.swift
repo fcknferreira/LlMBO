@@ -91,7 +91,7 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
     }
 
     nonisolated func popoverDidClose(_ notification: Notification) {
-        Task { @MainActor in self.stopWatching() }
+        Task { @MainActor in self.stopWatching(); WhatsNew.shared.menuClosed() }
     }
 
     /// Para o diagnóstico.

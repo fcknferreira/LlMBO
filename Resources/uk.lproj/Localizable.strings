@@ -148,6 +148,8 @@
 "enquanto roda" = "поки працює";
 "Para mexer no repouso, o LlMBO precisa de uma permissão de administrador (uma vez só)." = "Щоб керувати режимом сну, LlMBO потрібен дозвіл адміністратора (лише один раз).";
 "Instalar permissão…" = "Встановити дозвіл…";
+"Novidades da versão %@" = "Нове у версії %@";
+"Ver tudo no GitHub" = "Усе на GitHub";
 "Trabalhando · %@" = "Працює · %@";
 "Trabalhando" = "Працює";
 "Atualizado para a versão %@." = "Оновлено до версії %@.";
@@ -411,6 +413,8 @@
 "E mais %lld." = "І ще %lld.";
 "Religar o repouso" = "Знову ввімкнути сон";
 "Encerrar" = "Завершити";
+"Novidades de cada versão neste menu" = "Нове в кожній версії — у цьому меню";
+"Ícone da barra alinhado com os outros" = "Значок у рядку меню вирівняно з іншими";
 "LlMBO desligado" = "LlMBO вимкнено";
 "O Mac dorme como sempre." = "Mac засинає як завжди.";
 "Repouso normal" = "Звичайний сон";

@@ -4,6 +4,7 @@ import SwiftUI
 struct MenuView: View {
     @EnvironmentObject var engine: Engine
     @ObservedObject private var updater = Updater.shared
+    @ObservedObject private var whatsNew = WhatsNew.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -89,6 +90,9 @@ struct MenuView: View {
             MenuDivider()
 
             VStack(spacing: 0) {
+                if !whatsNew.items.isEmpty {
+                    WhatsNewRow(model: whatsNew)
+                }
                 if let r = updater.available {
                     MenuRow(String(localized: "Atualizar para a versão \(r.version)…")) {
                         MainTabModel.shared.tab = .about
@@ -223,14 +227,16 @@ private struct MenuDivider: View {
 private struct MenuRow: View {
     let title: String
     let shortcut: String?
+    var symbol: String? = nil
     let action: () -> Void
     // @State virou macro no SDK do macOS 27 e as Command Line Tools não trazem o plugin; @StateObject funciona.
     @StateObject private var hoverState = HoverState()
     private var hover: Bool { hoverState.on }
 
-    init(_ title: String, shortcut: String? = nil, action: @escaping () -> Void) {
+    init(_ title: String, shortcut: String? = nil, symbol: String? = nil, action: @escaping () -> Void) {
         self.title = title
         self.shortcut = shortcut
+        self.symbol = symbol
         self.action = action
     }
 
@@ -241,6 +247,9 @@ private struct MenuRow: View {
                 Spacer()
                 if let shortcut {
                     Text(shortcut).foregroundStyle(Theme.muted)
+                }
+                if let symbol {
+                    Image(systemName: symbol).font(.system(size: 10, weight: .semibold)).foregroundStyle(Theme.muted)
                 }
             }
             .font(.system(size: 13))
@@ -253,6 +262,44 @@ private struct MenuRow: View {
         .buttonStyle(.plain)
         .handCursor()
         .onHover { hoverState.on = $0 }
+    }
+}
+
+/// "Novidades da versão X": uma linha de menu comum (sem ponto nem cor), que abre a lista ali mesmo.
+private struct WhatsNewRow: View {
+    @ObservedObject var model: WhatsNew
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            MenuRow(String(localized: "Novidades da versão \(Project.version)"),
+                    symbol: model.expanded ? "chevron.down" : "chevron.forward") {
+                if model.expanded { model.expanded = false } else { model.open() }
+            }
+            if model.expanded {
+                VStack(alignment: .leading, spacing: 5) {
+                    ForEach(model.items, id: \.self) { item in
+                        HStack(alignment: .firstTextBaseline, spacing: 7) {
+                            Circle().fill(Theme.muted).frame(width: 3, height: 3).alignmentGuide(.firstTextBaseline) { $0.height + 1 }
+                            Text(item).fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+                    Button("Ver tudo no GitHub") {
+                        AppDelegate.shared.closeMenu()
+                        NSWorkspace.shared.open(Project.releasesURL.appendingPathComponent("tag/v\(Project.version)"))
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundStyle(Theme.muted)
+                    .underline()
+                    .handCursor()
+                    .padding(.top, 3)
+                }
+                .font(.system(size: 12))
+                .foregroundStyle(Theme.text.opacity(0.85))
+                .padding(.leading, 9)
+                .padding(.trailing, 9)
+                .padding(.bottom, 8)
+            }
+        }
     }
 }
 

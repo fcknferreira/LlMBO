@@ -148,6 +148,8 @@
 "enquanto roda" = "चलने तक";
 "Para mexer no repouso, o LlMBO precisa de uma permissão de administrador (uma vez só)." = "स्लीप नियंत्रित करने के लिए LlMBO को एडमिनिस्ट्रेटर अनुमति चाहिए (सिर्फ़ एक बार)।";
 "Instalar permissão…" = "अनुमति इंस्टॉल करें…";
+"Novidades da versão %@" = "संस्करण %@ में नया";
+"Ver tudo no GitHub" = "GitHub पर सब देखें";
 "Trabalhando · %@" = "काम कर रहा है · %@";
 "Trabalhando" = "काम कर रहा है";
 "Atualizado para a versão %@." = "संस्करण %@ पर अपडेट हो गया।";
@@ -411,6 +413,8 @@
 "E mais %lld." = "और %lld।";
 "Religar o repouso" = "स्लीप फिर चालू करें";
 "Encerrar" = "बंद करें";
+"Novidades de cada versão neste menu" = "हर संस्करण की नई बातें इसी मेनू में";
+"Ícone da barra alinhado com os outros" = "मेनू बार आइकन बाकी आइकनों के साथ संरेखित";
 "LlMBO desligado" = "LlMBO बंद";
 "O Mac dorme como sempre." = "Mac हमेशा की तरह स्लीप में जाता है।";
 "Repouso normal" = "सामान्य स्लीप";

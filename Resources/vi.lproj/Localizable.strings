@@ -148,6 +148,8 @@
 "enquanto roda" = "khi đang chạy";
 "Para mexer no repouso, o LlMBO precisa de uma permissão de administrador (uma vez só)." = "Để điều khiển chế độ ngủ, LlMBO cần quyền quản trị viên (chỉ một lần).";
 "Instalar permissão…" = "Cài quyền…";
+"Novidades da versão %@" = "Có gì mới trong phiên bản %@";
+"Ver tudo no GitHub" = "Xem tất cả trên GitHub";
 "Trabalhando · %@" = "Đang làm việc · %@";
 "Trabalhando" = "Đang làm việc";
 "Atualizado para a versão %@." = "Đã cập nhật lên phiên bản %@.";
@@ -411,6 +413,8 @@
 "E mais %lld." = "Và %lld nữa.";
 "Religar o repouso" = "Bật lại chế độ ngủ";
 "Encerrar" = "Kết thúc";
+"Novidades de cada versão neste menu" = "Điểm mới của mỗi phiên bản trong menu này";
+"Ícone da barra alinhado com os outros" = "Biểu tượng thanh menu thẳng hàng với các biểu tượng khác";
 "LlMBO desligado" = "LlMBO đã tắt";
 "O Mac dorme como sempre." = "Mac ngủ như bình thường.";
 "Repouso normal" = "Ngủ bình thường";

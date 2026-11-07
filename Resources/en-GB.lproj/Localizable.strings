@@ -148,6 +148,8 @@
 "enquanto roda" = "while it runs";
 "Para mexer no repouso, o LlMBO precisa de uma permissão de administrador (uma vez só)." = "To control sleep, LlMBO needs administrator permission (just once).";
 "Instalar permissão…" = "Install Permission…";
+"Novidades da versão %@" = "What's New in %@";
+"Ver tudo no GitHub" = "See All on GitHub";
 "Trabalhando · %@" = "Working · %@";
 "Trabalhando" = "Working";
 "Atualizado para a versão %@." = "Updated to version %@.";
@@ -411,6 +413,8 @@
 "E mais %lld." = "And %lld more.";
 "Religar o repouso" = "Turn Sleep Back On";
 "Encerrar" = "Quit";
+"Novidades de cada versão neste menu" = "What's new in each version, in this menu";
+"Ícone da barra alinhado com os outros" = "Menu bar icon lines up with the others";
 "LlMBO desligado" = "LlMBO off";
 "O Mac dorme como sempre." = "The Mac sleeps as usual.";
 "Repouso normal" = "Normal sleep";
