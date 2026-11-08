@@ -11,6 +11,12 @@ final class WhatsNew: ObservableObject {
     /// Mais nova primeiro. Texto em `String(localized:)` para entrar no update_strings.sh.
     static var entries: [(version: String, items: [String])] {
         [
+            ("0.3.2", [
+                String(localized: "Retomar sozinho: Codex e Antigravity"),
+                String(localized: "Hook próprio do Devin"),
+                String(localized: "Luz da maçã no MacBook Pro"),
+                String(localized: "Widgets não congelam mais"),
+            ]),
             ("0.3.1", [
                 String(localized: "Novidades de cada versão neste menu"),
                 String(localized: "Ícone da barra alinhado com os outros"),

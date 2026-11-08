@@ -12,9 +12,10 @@ enum Hooks {
         case unsupported
     }
 
-    /// Windsurf fica de fora: virou Devin Desktop e o formato antigo (~/.codeium/windsurf/hooks.json) não tem
-    /// documentação confiável hoje.
-    static let supported: Set<String> = Set(["claude", "codex", "qwen", "gemini", "cursor", "opencode", "aider", "crush"])
+    /// Windsurf = Devin Desktop/CLI: hook próprio em ~/.config/devin/config.json (docs.devin.ai/cli/extensibility/hooks,
+    /// lido em 07/11/2026). O formato antigo do Windsurf (~/.codeium/windsurf/hooks.json) não é usado.
+    static let supported: Set<String> = Set(["claude", "codex", "qwen", "gemini", "cursor", "opencode", "aider", "crush",
+                                             "windsurf"])
         .union(antigravityFamily).union(copilotFamily)
 
     /// App, IDE e CLI do Antigravity leem o mesmo ~/.gemini/config/hooks.json: um hook só (`auto`), e o
@@ -56,7 +57,7 @@ enum Hooks {
 
     /// Hooks que avisam começo E fim: com eles instalados (e já vistos funcionando), só o hook decide.
     /// O OpenCode e o Aider ficam de fora: o OpenCode tem começo aproximado, e o Aider só avisa o fim (idle).
-    static let fullLifecycle: Set<String> = Set(["claude", "codex", "qwen", "gemini", "cursor", "crush"])
+    static let fullLifecycle: Set<String> = Set(["claude", "codex", "qwen", "gemini", "cursor", "crush", "windsurf"])
         .union(antigravityFamily).union(copilotFamily)
 
     /// Observação mostrada na linha do hook, quando o agente pede um passo a mais.
@@ -79,7 +80,7 @@ enum Hooks {
     /// Cursor, Crush e Aider não têm evento para isso.
     static func approvalSupport(_ agent: String) -> ApprovalSupport {
         switch agent {
-        case "claude", "qwen", "codex", "gemini", "opencode": return .yes
+        case "claude", "qwen", "codex", "gemini", "opencode", "windsurf": return .yes
         case _ where antigravityFamily.contains(agent): return .partial
         default: return .no
         }
@@ -100,7 +101,8 @@ enum Hooks {
     static func selfTest() {
         let home = FileManager.default.temporaryDirectory.appendingPathComponent("llmbo-hooks-test-\(UUID().uuidString)")
         var out: [String] = []
-        let older: [String: String] = ["qwen": "Notification", "codex": "PermissionRequest", "gemini": "AfterTool"]
+        let older: [String: String] = ["qwen": "Notification", "codex": "PermissionRequest", "gemini": "AfterTool",
+                                       "windsurf": "PermissionRequest"]
         for (agent, event) in older {
             install(agent, home: home)
             let fresh = state(agent, home: home)
@@ -239,6 +241,15 @@ enum Hooks {
             ("BeforeAgent", "busy", "json", false), ("AfterTool", "busy", "json", false),
             ("Notification", "idle", "json", false), ("AfterAgent", "idle", "json", false),
             ("SessionEnd", "idle", "json", false)]),
+        // Devin Desktop/CLI (id "windsurf"): formato do Claude na chave "hooks" do config.json do usuário, com
+        // session_id. O stdout é opcional (JSON de decisão), então tudo mudo. PermissionRequest = "precisa de uma
+        // decisão de permissão" → aguardando aprovação. O Devin também roda os hooks do ~/.claude/settings.json
+        // (read_config_from.claude, ligado por padrão), e o script já manda esses para "windsurf": os dois gravam o
+        // mesmo arquivo de sinal (mesma sessão), então repetir não atrapalha. Nunca testado com o Devin de verdade.
+        "windsurf": SettingsHook(agent: "windsurf", path: ".config/devin/config.json", events: [
+            ("UserPromptSubmit", "busy", "silent", false), ("PreToolUse", "busy", "silent", true),
+            ("PostToolUse", "busy", "silent", true), ("PermissionRequest", "waiting", "silent", false),
+            ("Stop", "idle", "silent", false), ("SessionEnd", "idle", "silent", false)]),
     ]
 
     fileprivate static func readJSON(_ url: URL) throws -> [String: Any] {

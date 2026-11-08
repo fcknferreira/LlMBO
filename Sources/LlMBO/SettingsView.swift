@@ -208,6 +208,11 @@ struct GeneralTab: View {
                 }
                 CardDivider()
                 LanguagePicker()
+                // Só aparece nos MacBook Pro com a maçã acesa (PROLED XDR).
+                if LogoLight.shared.isSupported {
+                    CardDivider()
+                    LogoLightRows()
+                }
             }
 
             // Comportamento do ícone (não é visual, por isso fora de Aparência).

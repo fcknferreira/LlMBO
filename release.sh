@@ -22,8 +22,9 @@ LEAF="9e652604d46ed9ddec648e1beeb56bf92d869d77"
 # Novidades do menu (WhatsNew.swift): toda versão publicada precisa da sua entrada.
 grep -q "(\"$VERSION\", \[" Sources/LlMBO/WhatsNew.swift || {
   echo "Falta a entrada da versão $VERSION em Sources/LlMBO/WhatsNew.swift (novidades do menu)."; exit 1; }
-# Tabela de agentes do site: o site lê o agents.json da tag desta versão. Aqui ele é conferido (antes de mexer
-# em qualquer coisa) e, com o site nesta máquina, copiado para o site.js como reserva.
+# Tabela de agentes do site: o site lê o agents.json (tabela e textos) e o agent-icons.json (logos, gerado de
+# Design/agent-icons/) da tag desta versão. Aqui eles são conferidos e gerados (antes de mexer em qualquer coisa)
+# e, com o site nesta máquina, copiados para o site.js e o agent-icons.js como reserva.
 # O site fica fora do repositório (~/Downloads/website LLMBO).
 SITE="${LLMBO_SITE:-$HOME/Downloads/website LLMBO}"
 python3 -I Design/agents_matrix.py agents.json "$SITE"
@@ -34,6 +35,8 @@ BUILD=$(( $(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$PLIST") + 1 ))
 /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $VERSION" -c "Set :CFBundleVersion $BUILD" "$PLIST"
 # Se o site estiver nesta máquina, atualiza a versão de reserva mostrada nele.
 [ -f "$SITE/site.js" ] && sed -i '' "s/^  version: \".*\",/  version: \"$VERSION\",/" "$SITE/site.js"
+# O zip que vai para a hospedagem (~/Downloads/llmbo-site.zip) é remontado com a versão nova.
+[ -x "$SITE/make_zip.sh" ] && "$SITE/make_zip.sh"
 echo "Versão $VERSION ($BUILD)"
 
 UNIVERSAL=1 ./build.sh
@@ -54,6 +57,11 @@ ls -lh dist
 
 if [ "$PUBLISH" = "--publish" ] || [ "$PUBLISH" = "--prerelease" ]; then
   command -v gh >/dev/null || { echo "Instale e entre no gh (brew install gh && gh auth login)."; exit 1; }
+  # O site lê a tabela, os textos e os logos da tag: sem commit, a tag sairia sem eles.
+  if [ -n "$(git status --porcelain -- agents.json agent-icons.json Design/agent-icons)" ]; then
+    echo "agents.json, agent-icons.json ou Design/agent-icons/ têm mudanças sem commit. Faça o commit da versão antes de publicar."
+    exit 1
+  fi
   NOTES=(); [ -f dist/notes.md ] && NOTES=(--notes-file dist/notes.md)
   PRE=(); [ "$PUBLISH" = "--prerelease" ] && PRE=(--prerelease)
   gh release create "v$VERSION" dist/LlMBO.zip dist/LlMBO.dmg --repo "$REPO" --title "LlMBO $VERSION" \

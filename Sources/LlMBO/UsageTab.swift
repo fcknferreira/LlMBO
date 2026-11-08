@@ -6,6 +6,7 @@ struct UsageTab: View {
     @EnvironmentObject var engine: Engine
     @ObservedObject private var usage = UsageStore.shared
     @ObservedObject private var codexResume = Engine.shared.codexResume
+    @ObservedObject private var agResume = Engine.shared.antigravityResume
 
     private var tokensInfo: String {
         String(localized: "Contados dos arquivos de conversa no seu Mac (entrada, cache e saída). Nada é enviado pela internet.")
@@ -30,25 +31,34 @@ struct UsageTab: View {
                     subtitle: engine.quotaMode == .wake && !engine.claudeLimits
                         ? String(localized: "Precisa da leitura dos limites.") : nil,
                     info: String(localized: "O Claude Code espera o limite voltar e continua a tarefa sozinho, mas só se o Mac não estiver dormindo há mais de ~30 min na hora do reset. “Acordar no reset” deixa o Mac dormir e o acorda 2 min antes do reset para ele continuar; precisa da leitura dos limites no cartão do Claude Code. “Ficar acordado” segura o Mac até o reset. Limites que voltam em mais de 24 h não são esperados.")) {
-                    QuotaModePicker(selection: engine.quotaMode, recommendWake: true) { engine.quotaMode = $0 }
+                    QuotaModePicker(selection: engine.quotaMode, modes: QuotaMode.continuesAlone, recommendWake: true) { engine.quotaMode = $0 }
                 }
-                // Antigravity: não continua sozinho; a hora do reset vem da cota lida pelo Antigravity aberto.
+                // Antigravity e Codex não continuam sozinhos: uma linha cada, com "Retomar sozinho" na lista.
                 if engine.antigravityListed {
                     CardDivider()
                     Row(title: "Antigravity",
-                        subtitle: engine.antigravityQuotaMode == .wake && !engine.antigravityQuota
+                        subtitle: [.wake, .resume].contains(engine.antigravityQuotaMode) && !engine.antigravityQuota
                             ? String(localized: "Precisa da leitura da cota pelo Antigravity aberto.") : nil,
-                        info: String(localized: "O Antigravity não continua sozinho quando o limite volta: acordar ou ficar acordado só ajuda se você for retomar a conversa (por exemplo, à distância). “Acordar no reset” deixa o Mac dormir e o acorda 2 min antes do reset; “Ficar acordado” segura o Mac até lá. “Acordar no reset” precisa da leitura da cota no cartão do Antigravity, que diz a hora do reset; sem ela, “Ficar acordado” segura por até 5 horas."),
+                        info: String(localized: "O Antigravity não continua sozinho quando o limite volta. “Retomar sozinho” lê a cota para saber quando ela volta e só então age: retoma em segundo plano as conversas do Antigravity CLI (na pasta da conversa, podendo editar arquivos, com o terminal restrito) e avisa para você continuar as do app e da IDE. Se a cota ainda não voltou, espera mais; se bater no limite de novo logo depois, para de tentar. “Acordar no reset” deixa o Mac dormir e o acorda 2 min antes do reset; “Ficar acordado” segura o Mac até lá (até 5 horas sem a hora do reset). A hora vem da leitura da cota pelo app ou pela IDE do Antigravity abertos."),
                         warning: true) {   // ele não continua sozinho depois do limite
-                        QuotaModePicker(selection: engine.antigravityQuotaMode, recommendWake: false) { engine.antigravityQuotaMode = $0 }
+                        QuotaModePicker(selection: engine.antigravityQuotaMode, modes: QuotaMode.resumable,
+                                        recommendWake: false) { engine.antigravityQuotaMode = $0 }
+                    }
+                    ForEach(agResume.pending.filter(\.launches), id: \.stop.key) { p in
+                        CardDivider()
+                        Row(title: String(localized: "Retomada do Antigravity agendada"), subtitle: p.stop.folder) {
+                            Text(UsageFormat.when(p.at)).foregroundStyle(Theme.muted)
+                        }
                     }
                 }
-                // Codex: não continua sozinho; o LlMBO pode retomar a sessão (opcional, desligado por padrão).
-                if engine.codexAutoResume || engine.agents.contains(where: { $0.id == "codex" }) {
+                if engine.agents.contains(where: { $0.id == "codex" }) {
                     CardDivider()
-                    ToggleRow(title: String(localized: "Retomar o Codex depois do limite"),
-                              info: String(localized: "O Codex não continua sozinho quando o limite de uso volta. Ligado, quando uma sessão do Codex para no limite, o LlMBO avisa, acorda o Mac no reset e retoma a sessão em segundo plano com “codex exec resume”, com permissão para editar só a pasta da sessão. O trabalho continua na mesma sessão, mas fora da janela que estava aberta: abra a sessão no Codex para ver o resultado. Você recebe um aviso ao agendar, ao retomar e ao terminar. Com o LlMBO desligado, a bateria no mínimo ou o Mac quente, espera isso passar para retomar. Desligado, o LlMBO não faz nada com o Codex."),
-                              isOn: $engine.codexAutoResume)
+                    Row(title: "Codex",
+                        info: String(localized: "O Codex não continua sozinho quando o limite volta. “Retomar sozinho” acorda o Mac no reset e retoma a sessão em segundo plano com “codex exec resume”, podendo editar só a pasta da sessão; abra a sessão no Codex para ver o resultado. Você recebe um aviso ao agendar, ao retomar e ao terminar. “Acordar no reset” e “Ficar acordado” só ajudam se você for retomar a sessão (por exemplo, à distância). Limites que voltam em mais de 24 h não são esperados."),
+                        warning: true) {
+                        QuotaModePicker(selection: engine.codexQuotaMode, modes: QuotaMode.resumable,
+                                        recommendWake: false) { engine.codexQuotaMode = $0 }
+                    }
                     ForEach(codexResume.pending, id: \.stop.key) { p in
                         CardDivider()
                         Row(title: String(localized: "Retomada do Codex agendada"), subtitle: p.folder) {
@@ -56,7 +66,10 @@ struct UsageTab: View {
                         }
                     }
                 }
-                if engine.quotaMode == .wake || (engine.antigravityListed && engine.antigravityQuotaMode == .wake) || engine.codexAutoResume, engine.helperInstalled, !engine.canScheduleWake {
+                if engine.quotaMode == .wake
+                    || (engine.antigravityListed && [.wake, .resume].contains(engine.antigravityQuotaMode))
+                    || [.wake, .resume].contains(engine.codexQuotaMode),
+                   engine.helperInstalled, !engine.canScheduleWake {
                     CardDivider()
                     Row(title: String(localized: "Permissão"),
                         subtitle: String(localized: "Para acordar o Mac, a permissão precisa ser atualizada (pede a senha uma vez).")) {
@@ -116,6 +129,8 @@ struct UsageTab: View {
 /// Lista do que fazer no limite. "(recomendado)" só onde o agente continua sozinho depois do reset (Claude Code).
 private struct QuotaModePicker: View {
     let selection: QuotaMode
+    /// Opções da lista: "Retomar sozinho" só para quem o LlMBO retoma (Codex, Antigravity).
+    let modes: [QuotaMode]
     let recommendWake: Bool
     let onSelect: (QuotaMode) -> Void
 
@@ -124,7 +139,7 @@ private struct QuotaModePicker: View {
     }
 
     var body: some View {
-        Dropdown(groups: [DropdownGroup(items: QuotaMode.allCases.map { DropdownItem(id: $0, title: title($0)) })],
+        Dropdown(groups: [DropdownGroup(items: modes.map { DropdownItem(id: $0, title: title($0)) })],
                  selection: selection, width: 250, onSelect: onSelect) {
             DropdownLabel(text: title(selection))
         }

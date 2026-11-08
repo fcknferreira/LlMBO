@@ -79,7 +79,8 @@ final class Engine: ObservableObject {
     /// Última vez que o LlMBO apagou a tela; nil com a tampa aberta.
     private var darkenedAt: Date?
     /// Retomar sessões do Codex paradas no limite, em segundo plano (CodexResume.swift). Desligado por padrão.
-    @Published var codexAutoResume: Bool { didSet { UserDefaults.standard.set(codexAutoResume, forKey: "codexAutoResume") } }
+    /// "Retomar sozinho" escolhido para o Codex (antes era um interruptor à parte, chave "codexAutoResume").
+    var codexAutoResume: Bool { codexQuotaMode == .resume }
     /// Limites do Claude Code pelo `claude -p /usage` (ClaudeUsageCLI); desligado por padrão.
     @Published var claudeUsageCLI: Bool {
         didSet {
@@ -99,14 +100,32 @@ final class Engine: ObservableObject {
     }
     var antigravityListed: Bool { agents.contains { $0.id.hasPrefix("antigravity") && $0.isEnabled } }
     let codexResume = CodexResume()
+    /// Retomar conversas do Antigravity paradas no limite, guiado pela cota (AntigravityResume.swift). Desligado
+    /// por padrão; ligar também liga a leitura da cota, que é quem diz quando ela volta.
+    /// "Retomar sozinho" escolhido para o Antigravity (antes um interruptor à parte, chave "antigravityAutoResume").
+    var antigravityAutoResume: Bool { antigravityQuotaMode == .resume }
+    let antigravityResume = AntigravityResume()
     /// O que fazer quando o Claude Code bate no limite de uso (aba Uso). Chave antiga "quotaMode", de quando valia para todos.
     @Published var quotaMode: QuotaMode { didSet { UserDefaults.standard.set(quotaMode.rawValue, forKey: "quotaMode") } }
     /// O mesmo para o Antigravity (app, IDE e CLI). Padrão "Não esperar": ele não continua sozinho depois do limite.
     @Published var antigravityQuotaMode: QuotaMode {
-        didSet { UserDefaults.standard.set(antigravityQuotaMode.rawValue, forKey: "antigravityQuotaMode") }
+        didSet {
+            UserDefaults.standard.set(antigravityQuotaMode.rawValue, forKey: "antigravityQuotaMode")
+            // A retomada depende da leitura da cota, que diz quando ela volta.
+            if antigravityQuotaMode == .resume, !antigravityQuota { antigravityQuota = true }
+        }
+    }
+    /// O mesmo para o Codex. Antes ele seguia, sem mostrar, a escolha do Claude Code. Padrão "Não esperar":
+    /// ele não continua sozinho.
+    @Published var codexQuotaMode: QuotaMode {
+        didSet { UserDefaults.standard.set(codexQuotaMode.rawValue, forKey: "codexQuotaMode") }
     }
     /// Escolha de cada agente para o limite de uso.
-    func quotaMode(for id: String) -> QuotaMode { id.hasPrefix("antigravity") ? antigravityQuotaMode : quotaMode }
+    func quotaMode(for id: String) -> QuotaMode {
+        if id.hasPrefix("antigravity") { return antigravityQuotaMode }
+        if id == "codex" { return codexQuotaMode }
+        return quotaMode
+    }
     /// A regra do sudo já libera `pmset schedule wake` (instalada por esta versão).
     @Published private(set) var canScheduleWake = false
     /// Despertar agendado pelo LlMBO para o agente continuar depois do limite.
@@ -182,9 +201,21 @@ final class Engine: ObservableObject {
         maxHoursAC = d.object(forKey: "maxHoursAC") as? Int ?? 12
         thermalLimit = ThermalLimit(rawValue: d.object(forKey: "thermalLimit") as? Int ?? -1) ?? .recommended
         darkenLidClosed = d.object(forKey: "darkenLidClosed") as? Bool ?? true
-        quotaMode = QuotaMode(rawValue: d.object(forKey: "quotaMode") as? Int ?? -1) ?? .wake
-        antigravityQuotaMode = QuotaMode(rawValue: d.object(forKey: "antigravityQuotaMode") as? Int ?? -1) ?? .ignore
-        codexAutoResume = d.bool(forKey: "codexAutoResume")
+        let savedMode = QuotaMode(rawValue: d.object(forKey: "quotaMode") as? Int ?? -1) ?? .wake
+        quotaMode = savedMode == .resume ? .wake : savedMode   // o Claude Code continua sozinho: não tem "Retomar"
+        let agMode: QuotaMode = d.bool(forKey: "antigravityAutoResume") ? .resume
+            : QuotaMode(rawValue: d.object(forKey: "antigravityQuotaMode") as? Int ?? -1) ?? .ignore
+        antigravityQuotaMode = agMode
+        // Migração (08/11/2026): os interruptores de retomada viraram a opção "Retomar sozinho" da lista.
+        let codexMode: QuotaMode = d.bool(forKey: "codexAutoResume") ? .resume
+            : QuotaMode(rawValue: d.object(forKey: "codexQuotaMode") as? Int ?? -1) ?? .ignore
+        codexQuotaMode = codexMode
+        if d.object(forKey: "codexAutoResume") != nil || d.object(forKey: "antigravityAutoResume") != nil {
+            d.set(codexMode.rawValue, forKey: "codexQuotaMode")   // no init o didSet não roda
+            d.set(agMode.rawValue, forKey: "antigravityQuotaMode")
+            d.removeObject(forKey: "codexAutoResume")
+            d.removeObject(forKey: "antigravityAutoResume")
+        }
         antigravityQuota = d.bool(forKey: AntigravityQuota.defaultsKey)
         // Quem só tinha a barra de status ligada (antes eram duas opções) passa a ter as duas leituras.
         claudeUsageCLI = d.bool(forKey: ClaudeUsageCLI.defaultsKey) || Hooks.statusLineInstalled
@@ -283,6 +314,7 @@ final class Engine: ObservableObject {
     }
 
     func shutdown() {
+        LogoLight.shared.stop()
         // Atualização em andamento: sai segurando o Mac; a versão nova assume em segundos. Se ela não abrir,
         // o vigia devolve o repouso (o arquivo `holding` continua e o sinal de vida para).
         if holding, handoffPending() { return }
@@ -387,6 +419,7 @@ final class Engine: ObservableObject {
         if helperInstalled { Watchdog.install() }
         watchdogStatus = Watchdog.status
         canScheduleWake = helperInstalled && Power.canScheduleWake
+        LogoLight.shared.refreshPermission()
         if helperInstalled, !armed { arm(quietly: true) }
     }
 
@@ -737,6 +770,7 @@ final class Engine: ObservableObject {
         }
         // Em ordem alfabética: popover, aba Agentes e hooks seguem esta ordem.
         statuses = list.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        LogoLight.shared.agentsUpdate(statuses)   // modo Agentes da luz da maçã
         // Só com a opção ligada e o Codex na lista (ativado); senão não faz nada.
         let codexOn = codexAutoResume && agents.contains { $0.id == "codex" && $0.isEnabled }
         UsageStore.shared.readAntigravityQuota = antigravityQuota && antigravityListed
@@ -746,6 +780,12 @@ final class Engine: ObservableObject {
         let blocked = !armed || travaBlocks
         let codexHold = codexResume.tick(now: now, enabled: codexOn, blocked: blocked,
                                          stops: UsageStore.shared.codexStops, usage: UsageStore.shared.codex)
+        // Antigravity: paradas no limite (sinal "quota" da sessão), e a cota lida pelo hub diz quando volta.
+        let agStops = signals.filter { $0.quota && $0.agent.hasPrefix("antigravity") && !$0.session.isEmpty }
+            .map { AntigravityResume.Stop(agent: $0.agent, session: $0.session, cwd: $0.cwd, at: $0.time) }
+        let agGroups = UsageStore.shared.byAgent["antigravity"]?.groups
+        let agHold = antigravityResume.tick(now: now, enabled: antigravityAutoResume && antigravityListed, blocked: blocked,
+                                            stops: agStops, groups: agGroups?.isEmpty == false ? agGroups : nil)
         updateWake(list, now: now, blocked: blocked)
         let liveHolds = Holds.read()
         if liveHolds != holds { holds = liveHolds }
@@ -753,7 +793,7 @@ final class Engine: ObservableObject {
         // Assumiu o Mac de uma atualização mas ficou desligado (sem permissão, por exemplo): devolve o repouso.
         guard armed else { if holding { release() }; return }
 
-        let anyActive = list.contains(where: \.active) || !holds.isEmpty || codexHold
+        let anyActive = list.contains(where: \.active) || !holds.isEmpty || codexHold || agHold
         if anyActive { quietSince = nil; notifiedEarly = false; hold() }
         // Sem agente trabalhando, o repouso é o normal do Mac: nada a vigiar.
         guard holding, let holdingSince else { return }
@@ -808,6 +848,7 @@ final class Engine: ObservableObject {
                 // e o atraso valem só para devolver o repouso, que depois volta sem outro aviso.
                 notifiedEarly = true
                 lastFinishedAt = now
+                LogoLight.shared.agentsFinished()
                 let f = DateFormatter()
                 f.timeStyle = .short
                 let back = q.addingTimeInterval(confirmQuiet + TimeInterval(sleepDelaySeconds))
@@ -838,7 +879,7 @@ final class Engine: ObservableObject {
         case .stayAwake:
             if let r = reset { return now < r.addingTimeInterval(600) }
             return now.timeIntervalSince(hitAt) < 5 * 3600
-        case .wake:
+        case .wake, .resume:
             guard let r = reset else { return false }
             return now >= r.addingTimeInterval(-300) && now < r.addingTimeInterval(600)
         }
@@ -870,6 +911,8 @@ final class Engine: ObservableObject {
         check("acordado: sem reset, 6 h depois solta", !quotaHolds(mode: .stayAwake, hitAt: now.addingTimeInterval(-6 * 3600), reset: nil, now: now))
         check("acordado: reset em 2 dias não segura", !quotaHolds(mode: .stayAwake, hitAt: hit, reset: now.addingTimeInterval(2 * 86400), now: now))
         check("não esperar: nunca segura", !quotaHolds(mode: .ignore, hitAt: hit, reset: r3, now: now))
+        check("retomar: 3 min antes segura, como acordar", quotaHolds(mode: .resume, hitAt: hit, reset: r3, now: now))
+        check("retomar: fora da lista do Claude", !QuotaMode.continuesAlone.contains(.resume) && QuotaMode.resumable.first == .resume)
         try? out.joined(separator: "\n").write(to: Paths.support.appendingPathComponent("quota-test.log"), atomically: true, encoding: .utf8)
     }
 
@@ -877,10 +920,11 @@ final class Engine: ObservableObject {
     private func updateWake(_ list: [AgentStatus], now: Date, blocked: Bool) {
         var candidates: [Date] = []
         if !blocked, canScheduleWake {
-            candidates += list.filter { $0.waitingQuota && quotaMode(for: $0.id) == .wake }.compactMap(\.quotaReset)
+            candidates += list.filter { $0.waitingQuota && [.wake, .resume].contains(quotaMode(for: $0.id)) }.compactMap(\.quotaReset)
                 .filter { $0.timeIntervalSince(now) > 180 && $0.timeIntervalSince(now) < 24 * 3600 }
                 .map { $0.addingTimeInterval(-120) }
             candidates += codexResume.wakeTimes(now: now)   // vazio com a opção desligada
+            candidates += antigravityResume.wakeTimes(now: now)
         }
         let target = candidates.min()
         guard target != scheduledWake else { return }
@@ -1077,16 +1121,25 @@ enum QuotaMode: Int, CaseIterable, Identifiable {
     case stayAwake = 1
     /// Conta como parado: o Mac dorme e o Claude Code espera você.
     case ignore = 2
+    /// Só Codex e Antigravity (não continuam sozinhos): acorda no reset e o LlMBO retoma a sessão
+    /// (CodexResume / AntigravityResume). Para o Mac, vale como "Acordar no reset".
+    case resume = 3
 
     var id: Int { rawValue }
     /// Nome fixo (sem tradução) para o quota-events.log.
-    var logName: String { switch self { case .wake: "acordar"; case .stayAwake: "acordado"; case .ignore: "nao-esperar" } }
+    var logName: String {
+        switch self { case .wake: "acordar"; case .stayAwake: "acordado"; case .ignore: "nao-esperar"; case .resume: "retomar" }
+    }
+    /// Escolhas de quem continua sozinho (Claude Code) e de quem o LlMBO retoma (Codex, Antigravity).
+    static let continuesAlone: [QuotaMode] = [.wake, .stayAwake, .ignore]
+    static let resumable: [QuotaMode] = [.resume, .wake, .stayAwake, .ignore]
 
     var title: String {
         switch self {
         case .wake: return String(localized: "Acordar no reset (recomendado)")
         case .stayAwake: return String(localized: "Ficar acordado até o reset")
         case .ignore: return String(localized: "Não esperar")
+        case .resume: return String(localized: "Retomar sozinho")
         }
     }
 }

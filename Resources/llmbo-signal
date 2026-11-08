@@ -228,7 +228,15 @@ case "$agent" in antigravity*)
 esac
 
 # Grava ao lado e troca com mv: a troca avisa o LlMBO na hora (ele vigia a pasta) e ele nunca lê o arquivo pela metade.
-printf '%s %s\n' "$state" "$(date +%s)" > "$dir/.$name.$$" && mv -f "$dir/.$name.$$" "$dir/$name"
+# No limite, a 2ª linha guarda a pasta do agente (campo "cwd" do aviso, senão a pasta do próprio hook): a retomada
+# do Antigravity CLI roda nela, porque o agy usa a pasta atual como espaço de trabalho.
+if [ "$state" = "quota" ]; then
+  wd=$(printf '%s' "$payload" | tr -d '\n' | sed -E -n 's/.*"cwd"[[:space:]]*:[[:space:]]*"([^"]*)".*/\1/p')
+  [ -z "$wd" ] && wd="$PWD"
+  printf '%s %s\n%s\n' "$state" "$(date +%s)" "$wd" > "$dir/.$name.$$" && mv -f "$dir/.$name.$$" "$dir/$name"
+else
+  printf '%s %s\n' "$state" "$(date +%s)" > "$dir/.$name.$$" && mv -f "$dir/.$name.$$" "$dir/$name"
+fi
 # Histórico curto dos limites estourados (só hora, agente e estado, nada da conversa), para conferir depois
 # como o LlMBO reagiu: o arquivo de sinal é sobrescrito a cada aviso.
 if [ "$state" = "quota" ]; then

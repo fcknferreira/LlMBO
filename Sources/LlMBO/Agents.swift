@@ -86,7 +86,7 @@ struct AgentConfig: Codable, Hashable {
                     executables: ["cursor-agent"], argsContains: ["Cursor.app/Contents/MacOS/"], cpuThreshold: 20),
         // Windsurf virou Devin Desktop; o nome do pacote novo não está na doc (palpite: Devin.app).
         AgentConfig(id: "windsurf", name: "Windsurf",
-                    executables: [], argsContains: ["Windsurf.app/Contents/MacOS/", "Devin.app/Contents/MacOS/",
+                    executables: ["devin"], argsContains: ["Windsurf.app/Contents/MacOS/", "Devin.app/Contents/MacOS/",
                                                     "Devin Desktop.app/Contents/MacOS/"], cpuThreshold: 20),
         AgentConfig(id: "kiro", name: "Kiro",
                     executables: [], argsContains: ["Kiro.app/Contents/MacOS/"], cpuThreshold: 20),
@@ -447,6 +447,9 @@ struct HookSignal {
     /// Bateu no limite de uso e espera o reset para continuar sozinho (Claude Code: StopFailure "rate_limit").
     var quota = false
     let time: Date
+    /// Sessão (o que vem depois do primeiro ponto no nome do arquivo) e, no limite, a pasta do agente (2ª linha).
+    var session = ""
+    var cwd: String?
 }
 
 /// Lê os arquivos escritos pelo llmbo-signal. Nome do arquivo: "<agente>" ou "<agente>.<sessão>".
@@ -463,9 +466,14 @@ func readSignals(now: Date) -> [HookSignal] {
             try? fm.removeItem(at: url)
             continue
         }
-        let agent = String(url.lastPathComponent.split(separator: ".").first ?? "")
+        let fileName = url.lastPathComponent
+        let agent = String(fileName.split(separator: ".").first ?? "")
+        let session = fileName.firstIndex(of: ".").map { String(fileName[fileName.index(after: $0)...]) } ?? ""
+        let lines = text.split(separator: "\n", omittingEmptySubsequences: true)
+        let cwd = lines.count > 1 ? String(lines[1]).trimmingCharacters(in: .whitespaces) : nil
         result.append(HookSignal(agent: agent, busy: parts[0] == "busy", waiting: parts[0] == "waiting",
-                                 quota: parts[0] == "quota", time: time))
+                                 quota: parts[0] == "quota", time: time, session: session,
+                                 cwd: cwd?.isEmpty == false ? cwd : nil))
     }
     return result
 }

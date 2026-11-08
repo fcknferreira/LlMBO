@@ -16,16 +16,38 @@ enum Power {
     static func installHelper() -> Bool {
         let user = NSUserName()
         // schedule wake: acordar o Mac antes do reset do limite de uso (aba Uso).
+        // Luz da maçã (BETA): só nos Macs que têm a maçã acesa entram os comandos de apagar e voltar ao padrão.
+        let logo = LogoLight.shared.isSupported && !LogoLight.fake
         let rule = "\(user) ALL=(root) NOPASSWD: /usr/bin/pmset -a disablesleep 0, /usr/bin/pmset -a disablesleep 1, "
             + "/usr/bin/pmset schedule wake *, /usr/bin/pmset schedule cancel wake *"
+            + (logo ? ", " + LogoLight.sudoersCommands.joined(separator: ", ") : "")
         let cmd = "t=$(/usr/bin/mktemp /tmp/llmbo.XXXXXX) && /bin/echo '\(rule)' > $t && /usr/sbin/visudo -cf $t && /usr/sbin/chown root:wheel $t && /bin/chmod 440 $t && /bin/mv $t \(sudoersPath)"
-        return runAsAdmin(cmd)
+        let ok = runAsAdmin(cmd)
+        if ok { UserDefaults.standard.set(logo, forKey: "sudoersLogo") }
+        return ok
     }
 
+    /// A regra instalada já tem os comandos da maçã. O arquivo é do root (440), então vale o que esta instalação gravou.
+    static var ruleCoversLogo: Bool {
+        LogoLight.fake || (helperInstalled && UserDefaults.standard.bool(forKey: "sudoersLogo"))
+    }
+
+    /// Tira a regra; se o LlMBO mexeu na maçã, devolve o padrão da Apple no mesmo pedido de senha.
     @discardableResult
     static func uninstallHelper() -> Bool {
         setSleepDisabled(false)
-        return runAsAdmin("/bin/rm -f \(sudoersPath)")
+        var cmd = "/bin/rm -f \(sudoersPath)"
+        let logo = LogoLight.shared.isSupported && !LogoLight.fake && LogoLight.shared.touched
+        if logo {
+            cmd = [LogoLight.onArgs, LogoLight.clearMappingArgs, LogoLight.restartArgs]
+                .map { $0.joined(separator: " ") + " ; " }.joined() + cmd
+        }
+        let ok = runAsAdmin(cmd)
+        if ok {
+            UserDefaults.standard.set(false, forKey: "sudoersLogo")
+            if logo { LogoLight.shared.didRestoreDefaults() }
+        }
+        return ok
     }
 
     private static func runAsAdmin(_ cmd: String) -> Bool {
